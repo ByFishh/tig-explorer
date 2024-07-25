@@ -1,0 +1,5 @@
+dist
+.env
+README.md
+node_modules
+.next
