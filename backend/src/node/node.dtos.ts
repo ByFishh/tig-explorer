@@ -9,6 +9,11 @@ export class GetRoundBalancesDto {
   addresses: Address[];
 }
 
+export class GetLastBlockRewardsDto {
+  addresses: Address[];
+  count: number;
+}
+
 export class GetLastRewardsDto {
   addresses: Address[];
 }

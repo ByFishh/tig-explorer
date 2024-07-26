@@ -46,6 +46,30 @@ export class NodeService {
 
   async getRoundBalances(addresses: Address[], round?: number) {}
 
+  async getLastBlockRewards(addresses: Address[], count: number) {
+    return await Promise.all(
+      addresses.map(async (address) => {
+        const rewards = await this.blockRewardEntityRepository.find({
+          where: { address: address.toLowerCase() },
+          order: { height: 'DESC' },
+          take: count,
+        });
+
+        return rewards.map((reward) => {
+          return {
+            height: reward.height,
+            round: reward.round,
+            block_id: reward.block_id,
+            c001: reward.c001,
+            c002: reward.c002,
+            c003: reward.c003,
+            reward: reward.reward,
+          };
+        });
+      }),
+    );
+  }
+
   async getLastRewards(addresses: Address[]) {
     return await Promise.all(
       addresses.map(async (address) => {

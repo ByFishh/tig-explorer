@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { NodeService } from './node.service';
 import {
+  GetLastBlockRewardsDto,
   GetLastRewardsDto,
   GetRoundBalancesDto,
   GetWalletBalancesDto,
@@ -21,6 +22,18 @@ export class NodeController {
   async getRoundBalance(@Body() { addresses, round }: GetRoundBalancesDto) {
     return {
       round_token: await this.nodeService.getRoundBalances(addresses, round),
+    };
+  }
+
+  @Post('/last-block-rewards')
+  async getLastBlockRewards(
+    @Body() { addresses, count }: GetLastBlockRewardsDto,
+  ) {
+    return {
+      last_rewards: await this.nodeService.getLastBlockRewards(
+        addresses,
+        count,
+      ),
     };
   }
 
