@@ -12,14 +12,14 @@ export class NodeController {
   constructor(private readonly nodeService: NodeService) {}
 
   @Post('/wallet-balances')
-  async getWalletBalance(@Body() { addresses }: GetWalletBalancesDto) {
+  async getWalletBalances(@Body() { addresses }: GetWalletBalancesDto) {
     return {
       wallet_balances: await this.nodeService.getWalletBalances(addresses),
     };
   }
 
   @Post('/round-balances')
-  async getRoundBalance(@Body() { addresses, round }: GetRoundBalancesDto) {
+  async getRoundBalances(@Body() { addresses, round }: GetRoundBalancesDto) {
     return {
       round_token: await this.nodeService.getRoundBalances(addresses, round),
     };
@@ -30,7 +30,7 @@ export class NodeController {
     @Body() { addresses, count }: GetLastBlockRewardsDto,
   ) {
     return {
-      last_rewards: await this.nodeService.getLastBlockRewards(
+      last_block_rewards: await this.nodeService.getLastBlockRewards(
         addresses,
         count,
       ),

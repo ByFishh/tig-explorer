@@ -83,13 +83,13 @@ export class NodeService {
         let lastDay = BigInt(0);
 
         rewards.forEach((reward, index) => {
-          if (index < 60 * 10) lastHour += BigInt(reward.reward);
+          if (index < 60) lastHour += BigInt(reward.reward);
 
           lastDay += BigInt(reward.reward);
         });
 
         return {
-          last_hour: ((Number(lastHour) / 10) * 10 ** -18).toString(),
+          last_hour: lastHour.toString(),
           last_day: lastDay.toString(),
         };
       }),
