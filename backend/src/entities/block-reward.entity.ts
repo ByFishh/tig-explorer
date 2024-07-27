@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class BlockRewardEntity {
+export class BlockReward {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -26,6 +26,8 @@ export class BlockRewardEntity {
   @Column()
   c003: number;
 
-  @Column('bigint')
-  reward: bigint;
+  @Column({
+    type: 'decimal',
+  })
+  reward: number;
 }
