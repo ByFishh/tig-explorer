@@ -8,15 +8,20 @@ export default function Page({ params }: { params: { address: string } }) {
     <>
       <p>Address: {logic.address}</p>
       <p>
-        Wallet balance: {logic.walletBalanceSWR.data} TIG (balance in your base
-        wallet)
+        Wallet balance: {logic.walletBalanceSWR.data?.balance} TIG (balance in
+        your base wallet)
       </p>
       <p>
-        Round balance: {logic.roundBalancesSWR.data} TIG (balance in the current
-        round)
+        Round rewards: {logic.roundRewardsSWR.data?.reward} TIG (reward from the
+        last round)
       </p>
-      <p>{logic.lastRewardsSWR.data?.last_hour} / hour (last 1 hour)</p>
-      <p>{logic.lastRewardsSWR.data?.last_day} / day (last 1 day)</p>
+      <p>
+        Total earned: {logic.totalEarnedSWR.data?.reward} TIG (total reward
+        earned)
+      </p>
+      <p>{logic.lastRewardsSWR.data?.reward.hourly} / hour (last 1 hour)</p>
+      <p>{logic.lastRewardsSWR.data?.reward.daily} / day (last 1 day)</p>
+      <p>{logic.lastRewardsSWR.data?.reward.weekly} / week (last 1 week)</p>
     </>
   );
 }

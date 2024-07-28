@@ -1,26 +1,28 @@
 export type WalletBalancesResponse = {
-  wallet_balances: string[];
+  wallet_balances: { address: string; balance: number }[];
 };
 
-export type RoundBalancesResponse = {
-  round_token: string[];
+export type RoundRewardsResponse = {
+  round_rewards: {
+    address: string;
+    reward: number;
+  }[];
 };
 
-export type LastBlockRewardsResponse = {
-  last_block_rewards: {
-    height: number;
-    round: number;
-    block_id: string;
-    c001: number;
-    c002: number;
-    c003: number;
-    reward: string;
-  }[][];
+export type TotalEarnedResponse = {
+  total_earned: {
+    address: string;
+    reward: number;
+  }[];
 };
 
 export type LastRewardsResponse = {
   last_rewards: {
-    last_hour: string;
-    last_day: string;
+    address: string;
+    reward: {
+      hourly: number;
+      daily: number;
+      weekly: number;
+    };
   }[];
 };

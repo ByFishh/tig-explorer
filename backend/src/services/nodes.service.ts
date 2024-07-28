@@ -109,48 +109,21 @@ export class NodesService {
     );
   }
 
-  async getBlockRewards(
-    addresses: string[],
-    timeframe: 'minute' | 'hour' | 'day',
-  ) {
-    const intervals = {
-      minute: 1,
-      hour: 60,
-      day: 1440,
-    };
+  async getBlockRewards(addresses: string[]) {
+    const latestBlockReward = await this.blockRewardsRepository.findOne({
+      order: { height: 'DESC' },
+    });
+    const latestRound = latestBlockReward?.height || 0;
 
-    const numBars = {
-      minute: 60,
-      hour: 24,
-      day: 7,
-    }[timeframe];
-
-    const intervalLength = intervals[timeframe];
+    console.log('latestRound', latestRound);
 
     return await Promise.all(
       addresses.map(async (address) => {
-        const blockRewards = await this.blockRewardsRepository.find({
+        return await this.blockRewardsRepository.find({
           where: { address },
           order: { round: 'DESC' },
-          take: numBars * intervalLength,
+          take: 60 * 24 * 7,
         });
-
-        console.log(blockRewards.length);
-
-        //const rewardsPerInterval = new Array(numBars).map((_, i) => {
-        //  const intervalRewards = blockRewards.slice(
-        //    i * intervalLength,
-        //    (i + 1) * intervalLength,
-        //  );
-        //  return intervalRewards.reduce(
-        //    (roundReward, { reward }) => roundReward + Number(reward),
-        //    0,
-        //  );
-        //});
-
-        //console.log(rewardsPerInterval);
-
-        return {};
       }),
     );
   }

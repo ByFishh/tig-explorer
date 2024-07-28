@@ -41,9 +41,6 @@ export class NodesController {
 
   @Post('block-rewards')
   async getBlockRewards(@Body() params: GetLastRewardsDto) {
-    return await this.nodesService.getBlockRewards(
-      params.addresses,
-      params.timeframe,
-    );
+    return await this.nodesService.getBlockRewards(params.addresses);
   }
 }
