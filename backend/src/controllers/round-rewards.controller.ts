@@ -13,6 +13,6 @@ export class RoundRewardsController {
 
   @Get('retrieve-round-rewards')
   async retrieveBlockRewards() {
-    await this.roundRewardsService.retrieveRoundRewards();
+    this.roundRewardsService.retrieveRoundRewards();
   }
 }
