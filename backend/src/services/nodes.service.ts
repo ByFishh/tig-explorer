@@ -78,7 +78,7 @@ export class NodesService {
       addresses.map(async (address) => {
         const blockRewards = await this.blockRewardsRepository.find({
           where: { address },
-          order: { round: 'DESC' },
+          order: { height: 'DESC' },
           take: 60 * 24 * 7,
         });
 
