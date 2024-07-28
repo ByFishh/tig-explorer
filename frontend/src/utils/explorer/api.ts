@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+  BlockRewardsResponse,
   LastRewardsResponse,
   RoundRewardsResponse,
   TotalEarnedResponse,
@@ -12,7 +13,7 @@ export const getWalletBalances = async (addresses: string[]) => {
   const response = await axios.post<WalletBalancesResponse>(
     `${baseApiUrl}/nodes/wallet-balances`,
     {
-      addresses: addresses,
+      addresses,
     },
   );
 
@@ -23,7 +24,7 @@ export const getRoundRewards = async (addresses: string[]) => {
   const response = await axios.post<RoundRewardsResponse>(
     `${baseApiUrl}/nodes/round-rewards`,
     {
-      addresses: addresses,
+      addresses,
     },
   );
 
@@ -34,7 +35,7 @@ export const getTotalEarned = async (addresses: string[]) => {
   const response = await axios.post<TotalEarnedResponse>(
     `${baseApiUrl}/nodes/total-earned`,
     {
-      addresses: addresses,
+      addresses,
     },
   );
 
@@ -45,7 +46,19 @@ export const getLastRewards = async (addresses: string[]) => {
   const response = await axios.post<LastRewardsResponse>(
     `${baseApiUrl}/nodes/last-rewards`,
     {
-      addresses: addresses,
+      addresses,
+    },
+  );
+
+  return response.data;
+};
+
+export const getBlockRewards = async (addresses: string[], length: number) => {
+  const response = await axios.post<BlockRewardsResponse>(
+    `${baseApiUrl}/nodes/block-rewards`,
+    {
+      addresses,
+      length,
     },
   );
 

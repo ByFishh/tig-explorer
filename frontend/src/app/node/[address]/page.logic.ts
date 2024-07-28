@@ -2,6 +2,7 @@
 
 import useSWR from 'swr';
 import {
+  getBlockRewards,
   getLastRewards,
   getRoundRewards,
   getTotalEarned,
@@ -25,6 +26,11 @@ export const usePageLogic = (address: string) => {
     const response = await getLastRewards([address.toLowerCase()]);
     return response.last_rewards[0];
   });
+  const blockRewardsSWR = useSWR('blockRewards', async () => {
+    const response = await getBlockRewards([address.toLowerCase()], 60);
+
+    return response.block_rewards[0];
+  });
 
   return {
     address,
@@ -32,5 +38,6 @@ export const usePageLogic = (address: string) => {
     roundRewardsSWR,
     totalEarnedSWR,
     lastRewardsSWR,
+    blockRewardsSWR,
   };
 };

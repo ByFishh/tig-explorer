@@ -26,3 +26,17 @@ export type LastRewardsResponse = {
     };
   }[];
 };
+
+export type BlockRewardsResponse = {
+  block_rewards: {
+    height: number;
+    id: string;
+    round: number;
+    block_id: string;
+    address: string;
+    c001: number;
+    c002: number;
+    c003: number;
+    reward: number;
+  }[][];
+};
