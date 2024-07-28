@@ -11,22 +11,32 @@ export class NodesController {
 
   @Post('wallet-balances')
   async getWalletBalances(@Body() params: GetWalletBalancesDto) {
-    return await this.nodesService.getWalletBalances(params.addresses);
+    return {
+      wallet_balances: await this.nodesService.getWalletBalances(
+        params.addresses,
+      ),
+    };
   }
 
   @Post('round-rewards')
   async getRoundRewards(@Body() params: GetRoundRewardsDto) {
-    return await this.nodesService.getRoundRewards(params.addresses);
+    return {
+      round_rewards: await this.nodesService.getRoundRewards(params.addresses),
+    };
   }
 
   @Post('total-earned')
   async getTotalEarned(@Body() params: GetTotalEarnedDto) {
-    return await this.nodesService.getTotalEarned(params.addresses);
+    return {
+      total_earned: await this.nodesService.getTotalEarned(params.addresses),
+    };
   }
 
   @Post('last-rewards')
   async getLastRewards(@Body() params: GetLastRewardsDto) {
-    return await this.nodesService.getLastRewards(params.addresses);
+    return {
+      last_rewards: await this.nodesService.getLastRewards(params.addresses),
+    };
   }
 
   @Post('block-rewards')
