@@ -42,9 +42,11 @@ export class NodesController {
 
   @Post('block-rewards')
   async getBlockRewards(@Body() params: GetBlockRewardsDto) {
-    return await this.nodesService.getBlockRewards(
-      params.addresses,
-      params.length,
-    );
+    return {
+      block_rewards: await this.nodesService.getBlockRewards(
+        params.addresses,
+        params.length,
+      ),
+    };
   }
 }
