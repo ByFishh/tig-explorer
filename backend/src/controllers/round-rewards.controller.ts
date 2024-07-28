@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { RoundRewardsService } from '../services';
 
@@ -9,5 +9,10 @@ export class RoundRewardsController {
   @Cron(CronExpression.EVERY_MINUTE)
   async retrieveLatestRoundRewards() {
     await this.roundRewardsService.retrieveLatestRoundRewards();
+  }
+
+  @Get('retrieve-round-rewards')
+  async retrieveBlockRewards() {
+    await this.roundRewardsService.retrieveRoundRewards();
   }
 }

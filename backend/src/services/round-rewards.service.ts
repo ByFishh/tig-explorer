@@ -32,6 +32,36 @@ export class RoundRewardsService {
     await this.roundRewardsRepository.save(currentRoundRewards);
   }
 
+  async retrieveRoundRewards() {
+    const {
+      block: {
+        details: { round },
+      },
+    } = await this.tigService.getBlock();
+
+    for (let i = 25; i <= round; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const roundId = await this.getRoundId(i);
+      const roundExist = await this.roundRewardsRepository.findOne({
+        where: { round: i },
+      });
+
+      if (roundExist) continue;
+
+      const roundRewards = await this.getRoundRewards(roundId);
+      await this.roundRewardsRepository.save(roundRewards);
+      console.log(`Round ${i} rewards saved`);
+    }
+  }
+
+  // 1
+  async getRoundId(round: number) {
+    const {
+      block: { id },
+    } = await this.tigService.getBlock(round);
+    return id;
+  }
+
   // 1
   async getRoundRewards(id: string) {
     const {
