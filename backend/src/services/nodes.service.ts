@@ -109,20 +109,31 @@ export class NodesService {
     );
   }
 
-  async getBlockRewards(addresses: string[]) {
+  async getBlockRewards(addresses: string[], length: number) {
     const latestBlockReward = await this.blockRewardsRepository.findOne({
+      where: {},
       order: { height: 'DESC' },
     });
-    const latestRound = latestBlockReward?.height || 0;
-
-    console.log('latestRound', latestRound);
+    const latestBlock = latestBlockReward?.height || 0;
+    const emptyArray = Array.from({ length }, (_, i) => latestBlock - i);
 
     return await Promise.all(
       addresses.map(async (address) => {
-        return await this.blockRewardsRepository.find({
+        const blockRewards = await this.blockRewardsRepository.find({
           where: { address },
-          order: { round: 'DESC' },
-          take: 60 * 24 * 7,
+          order: { height: 'DESC' },
+          take: length,
+        });
+
+        return [...emptyArray].map((height) => {
+          const blockReward = blockRewards.find(
+            ({ height: blockRound }) => blockRound === height,
+          );
+          return {
+            height,
+            reward: Number(blockReward?.reward) || 0,
+            ...blockReward,
+          };
         });
       }),
     );
