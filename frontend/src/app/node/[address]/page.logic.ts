@@ -27,7 +27,7 @@ export const usePageLogic = (address: string) => {
     return response.last_rewards[0];
   });
   const blockRewardsSWR = useSWR('blockRewards', async () => {
-    const response = await getBlockRewards([address.toLowerCase()], 60);
+    const response = await getBlockRewards([address.toLowerCase()], 120);
 
     return response.block_rewards[0].reverse();
   });
