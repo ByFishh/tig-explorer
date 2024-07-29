@@ -7,7 +7,7 @@ import {
   WalletBalancesResponse,
 } from '@/utils/explorer/types';
 
-const baseApiUrl = 'http://byfish.fr:8083';
+const baseApiUrl = 'https://api.tig-explorer.com';
 
 export const getWalletBalances = async (addresses: string[]) => {
   const response = await axios.post<WalletBalancesResponse>(
