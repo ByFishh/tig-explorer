@@ -29,7 +29,7 @@ export const usePageLogic = (address: string) => {
   const blockRewardsSWR = useSWR('blockRewards', async () => {
     const response = await getBlockRewards([address.toLowerCase()], 60);
 
-    return response.block_rewards[0];
+    return response.block_rewards[0].reverse();
   });
 
   return {
