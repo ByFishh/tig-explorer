@@ -1,12 +1,5 @@
 import { ICard } from '@/types/ICard/ICard';
-import {
-  Box,
-  Text,
-  Card as RadixCard,
-  Flex,
-  Avatar,
-  Badge,
-} from '@radix-ui/themes';
+import { Box, Text, Card as RadixCard, Flex, Badge } from '@radix-ui/themes';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useCard } from './Card.logic';
