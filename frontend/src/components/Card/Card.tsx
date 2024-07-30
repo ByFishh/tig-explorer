@@ -26,23 +26,29 @@ const Card = (props: ICard) => {
           gapY={'6'}
           wrap={'wrap'}
         >
-          {props.data.map((d) => (
-            <Flex key={uuidv4()} style={{ flexFlow: 'column' }}>
-              <Text as="p" size="2" mb="0" color="gray">
-                {d.title} ({d.unit}){' '}
-                {d.percentage && (
-                  <Badge
-                    color={d.percentage > 0 ? 'jade' : 'ruby'}
-                    radius="full"
-                  >
-                    {d.percentage > 0 && '+'}
-                    {d.percentage}%
-                  </Badge>
-                )}
-              </Text>
-              {logic.getValue(d.value, d.unit)}
-            </Flex>
-          ))}
+          {props.content ? (
+            <>{props.content}</>
+          ) : (
+            <>
+              {props.data.map((d) => (
+                <Flex key={uuidv4()} style={{ flexFlow: 'column' }}>
+                  <Text as="p" size="2" mb="0" color="gray">
+                    {d.title} ({d.unit}){' '}
+                    {d.percentage && (
+                      <Badge
+                        color={d.percentage > 0 ? 'jade' : 'ruby'}
+                        radius="full"
+                      >
+                        {d.percentage > 0 && '+'}
+                        {d.percentage.toFixed(1)}%
+                      </Badge>
+                    )}
+                  </Text>
+                  {logic.getValue(d.value, d.unit)}
+                </Flex>
+              ))}
+            </>
+          )}
         </Flex>
       </RadixCard>
     </Box>

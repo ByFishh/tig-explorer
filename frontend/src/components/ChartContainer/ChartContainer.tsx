@@ -4,6 +4,7 @@ import React from 'react';
 import BarChart from '../BarChart/BarChart';
 import { IChartType } from '@/types/IChartType.ts/IChartType';
 import LineChart from '../LineChart/LineChart';
+import { ChartData } from 'chart.js';
 
 const ChartContainer = (props: IChartContainer) => {
   return (
@@ -26,8 +27,14 @@ const ChartContainer = (props: IChartContainer) => {
           gapY={'6'}
           wrap={'wrap'}
         >
-          {props.type === IChartType.BAR && <BarChart />}
-          {props.type === IChartType.LINE && <LineChart />}
+          {props.type === IChartType.BAR && (
+            <BarChart data={props.data as ChartData<'bar', number[], string>} />
+          )}
+          {props.type === IChartType.LINE && (
+            <LineChart
+              data={props.data as ChartData<'line', number[], string>}
+            />
+          )}
         </Flex>
       </Card>
     </Box>

@@ -4,7 +4,7 @@ import { getEntireNode } from '@/apis/api';
 import { INode } from '@/types/INode/INode';
 import { useEffect, useState } from 'react';
 
-export const usePageLogic = (address: string) => {
+export const usePage = (address: string) => {
   const [node, setNode] = useState<INode | null>(null);
 
   useEffect(() => {
@@ -12,11 +12,12 @@ export const usePageLogic = (address: string) => {
   }, []);
 
   const getNode = async () => {
-    const node = await getEntireNode(address, 120);
+    const node = await getEntireNode(address, 500);
     setNode(node);
   };
 
   return {
     address,
+    node,
   };
 };
