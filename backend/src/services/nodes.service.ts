@@ -51,14 +51,14 @@ export class NodesService {
     });
     return await Promise.all(
       addresses.map(async (address) => {
-        const { reward } = await this.roundRewardsRepository.findOne({
+        const roundReward = await this.roundRewardsRepository.findOne({
           where: { address: address.toLowerCase(), round },
           order: { round: 'DESC' },
         });
         return {
           address,
           round,
-          reward: Number(reward),
+          reward: roundReward?.reward ?? 0,
         };
       }),
     );
@@ -73,7 +73,7 @@ export class NodesService {
         return {
           address,
           reward: roundRewards.reduce(
-            (roundReward, { reward }) => roundReward + Number(reward),
+            (roundReward, { reward }) => roundReward + (Number(reward) || 0),
             0,
           ),
         };
@@ -116,7 +116,8 @@ export class NodesService {
               current: filledArray
                 .slice(0, 60)
                 .reduce(
-                  (roundReward, { reward }) => roundReward + Number(reward),
+                  (roundReward, { reward }) =>
+                    roundReward + Number(reward) || 0,
                   0,
                 ),
               previous: filledArray
@@ -190,6 +191,9 @@ export class NodesService {
               ...blockReward,
               height,
               reward: Number(blockReward?.reward) || 0,
+              c001: blockReward?.c001 || 0,
+              c002: blockReward?.c002 || 0,
+              c003: blockReward?.c003 || 0,
             };
           }),
         };
