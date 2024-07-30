@@ -1,15 +1,24 @@
 'use client';
 
-import { usePageLogic } from '@/app/node/[address]/page.logic';
+import { usePage } from '@/app/node/[address]/page.logic';
 import Card from '@/components/Card/Card';
 import ChartContainer from '@/components/ChartContainer/ChartContainer';
 import Configure from '@/components/Configure/Configure';
 import { IChartType } from '@/types/IChartType.ts/IChartType';
 import { IUnit } from '@/types/IUnit/IUnit';
-import { Badge, Box, Container, Flex, Grid, Section } from '@radix-ui/themes';
+import {
+  Badge,
+  Box,
+  Container,
+  Flex,
+  Grid,
+  Section,
+  Spinner,
+  Text,
+} from '@radix-ui/themes';
 
 export default function Page({ params }: { params: { address: string } }) {
-  const logic = usePageLogic(params.address);
+  const logic = usePage(params.address);
 
   const items = [
     {
@@ -18,12 +27,12 @@ export default function Page({ params }: { params: { address: string } }) {
       data: [
         {
           title: 'Wallet balance',
-          value: 170.3,
+          value: logic.node?.walletBalance.balance,
           unit: IUnit.TIG,
         },
         {
           title: 'Wallet balance',
-          value: 193.23,
+          value: 0,
           unit: IUnit.DOLLARD,
         },
       ],
@@ -34,12 +43,12 @@ export default function Page({ params }: { params: { address: string } }) {
       data: [
         {
           title: 'Total earned',
-          value: 855.3,
+          value: logic.node?.totalEarned.reward,
           unit: IUnit.TIG,
         },
         {
           title: 'Total earned',
-          value: 1023.62,
+          value: 0,
           unit: IUnit.DOLLARD,
         },
       ],
@@ -50,12 +59,12 @@ export default function Page({ params }: { params: { address: string } }) {
       data: [
         {
           title: 'Current round reward',
-          value: 85.3,
+          value: logic.node?.roundRewards.reward,
           unit: IUnit.TIG,
         },
         {
           title: 'Current round reward',
-          value: 102.62,
+          value: 0,
           unit: IUnit.DOLLARD,
         },
       ],
@@ -63,20 +72,23 @@ export default function Page({ params }: { params: { address: string } }) {
     {
       title: 'Average',
       description: 'Review here global information about your node',
-      data: [
-        {
-          title: 'Cost',
-          value: 0.3,
-          unit: IUnit.TIG,
-        },
-        {
-          title: 'Average earned',
-          value: 0.24,
-          unit: IUnit.TIG_PER_HOUR,
-        },
-      ],
+      data: [],
+      content: (
+        <Text size="2" color="red">
+          You must enter a server cost in the{' '}
+          <span style={{ textDecoration: 'underline' }}>Configure Node</span>{' '}
+          before you can access this data.
+        </Text>
+      ),
     },
   ];
+
+  if (!logic.node)
+    return (
+      <Flex align="center" justify="center" style={{ height: '100vh' }}>
+        <Spinner />
+      </Flex>
+    );
 
   return (
     <Box py="8">
@@ -99,36 +111,34 @@ export default function Page({ params }: { params: { address: string } }) {
               data={[
                 {
                   title: 'Tig earned last hour',
-                  value: 10.3,
+                  value: logic.node.lastRewards.reward.hourly.current,
                   unit: IUnit.TIG,
-                  percentage: 22.3,
+                  percentage: logic.node.lastRewards.reward.hourly.change,
                 },
                 {
                   title: 'Tig earned last hour',
-                  value: 12.62,
+                  value: 0,
                   unit: IUnit.DOLLARD,
-                  percentage: 22.3,
                 },
                 {
                   title: 'Tig earned last day',
-                  value: 17.3,
+                  value: logic.node.lastRewards.reward.daily.current,
                   unit: IUnit.TIG,
-                  percentage: -22.3,
+                  percentage: logic.node.lastRewards.reward.daily.change,
                 },
                 {
                   title: 'Tig earned last day',
-                  value: 102.62,
+                  value: 0,
                   unit: IUnit.DOLLARD,
-                  percentage: -2.3,
                 },
                 {
                   title: 'Tig earned last week',
-                  value: 130.3,
+                  value: logic.node.lastRewards.reward.weekly.current,
                   unit: IUnit.TIG,
                 },
                 {
                   title: 'Tig earned last week',
-                  value: 823.62,
+                  value: 0,
                   unit: IUnit.DOLLARD,
                 },
               ]}
@@ -142,18 +152,54 @@ export default function Page({ params }: { params: { address: string } }) {
               title="Qualifier"
               description="Review here global information about your node"
               type={IChartType.LINE}
+              data={{
+                labels: logic.node.blockRewards.blocks.map((b) =>
+                  String(b.height),
+                ),
+                datasets: [
+                  {
+                    label: 'c001',
+                    data: logic.node.blockRewards.blocks.map((b) => b.c001),
+                    borderWidth: 1,
+                    borderColor: '#0DFFE0',
+                    fill: true,
+                  },
+                  {
+                    label: 'c002',
+                    data: logic.node.blockRewards.blocks.map((b) => b.c002),
+                    borderWidth: 1,
+                    borderColor: '#0096FF',
+                    fill: true,
+                  },
+                  {
+                    label: 'c003',
+                    data: logic.node.blockRewards.blocks.map((b) => b.c003),
+                    borderWidth: 1,
+                    borderColor: '#FF9592',
+                    fill: true,
+                  },
+                ],
+              }}
             />
 
             <ChartContainer
               title="Earned TIG"
               description="Review here global information about your node"
               type={IChartType.BAR}
-            />
-
-            <ChartContainer
-              title="Earned TIG"
-              description="Review here global information about your node"
-              type={IChartType.BAR}
+              data={{
+                labels: logic.node.blockRewards.blocks.map((b) =>
+                  String(b.height),
+                ),
+                datasets: [
+                  {
+                    label: 'First dataset',
+                    data: logic.node.blockRewards.blocks.map((b) => b.reward),
+                    borderRadius: 2,
+                    borderWidth: 1,
+                    borderColor: '#3D63DD',
+                  },
+                ],
+              }}
             />
           </Flex>
         </Container>

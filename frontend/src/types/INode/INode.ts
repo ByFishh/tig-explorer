@@ -43,7 +43,7 @@ type ILastRewards = {
 
 type IBlockRewards = {
   address: string;
-  blocks: IBlock;
+  blocks: IBlock[];
 };
 
 type IBlock = {
