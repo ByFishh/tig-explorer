@@ -1,11 +1,12 @@
 import axios from 'axios';
 import {
+  WalletBalancesResponse,
   BlockRewardsResponse,
   LastRewardsResponse,
   RoundRewardsResponse,
   TotalEarnedResponse,
-  WalletBalancesResponse,
-} from '@/utils/explorer/types';
+} from '@/types/types';
+import { INode } from '@/types/INode/INode';
 
 const baseApiUrl = 'https://api.tig-explorer.com';
 
@@ -61,6 +62,15 @@ export const getBlockRewards = async (addresses: string[], length: number) => {
       length,
     },
   );
+
+  return response.data;
+};
+
+export const getEntireNode = async (address: string, length: number) => {
+  const response = await axios.post<INode>(`${baseApiUrl}/nodes/entire-node`, {
+    address,
+    length,
+  });
 
   return response.data;
 };
