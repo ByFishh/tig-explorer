@@ -183,19 +183,21 @@ export class NodesService {
 
         return {
           address,
-          blocks: [...emptyArray].map((height) => {
-            const blockReward = blockRewards.find(
-              ({ height: blockRound }) => blockRound === height,
-            );
-            return {
-              ...blockReward,
-              height,
-              reward: Number(blockReward?.reward) || 0,
-              c001: blockReward?.c001 || 0,
-              c002: blockReward?.c002 || 0,
-              c003: blockReward?.c003 || 0,
-            };
-          }),
+          blocks: [...emptyArray]
+            .map((height) => {
+              const blockReward = blockRewards.find(
+                ({ height: blockRound }) => blockRound === height,
+              );
+              return {
+                ...blockReward,
+                height,
+                reward: Number(blockReward?.reward) || 0,
+                c001: blockReward?.c001 || 0,
+                c002: blockReward?.c002 || 0,
+                c003: blockReward?.c003 || 0,
+              };
+            })
+            .reverse(),
         };
       }),
     );
