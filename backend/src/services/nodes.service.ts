@@ -52,7 +52,7 @@ export class NodesService {
     return await Promise.all(
       addresses.map(async (address) => {
         const { reward } = await this.roundRewardsRepository.findOne({
-          where: { address, round },
+          where: { address: address.toLowerCase(), round },
           order: { round: 'DESC' },
         });
         return {
@@ -68,7 +68,7 @@ export class NodesService {
     return await Promise.all(
       addresses.map(async (address) => {
         const roundRewards = await this.roundRewardsRepository.find({
-          where: { address },
+          where: { address: address.toLowerCase() },
         });
         return {
           address,
@@ -89,7 +89,7 @@ export class NodesService {
     return await Promise.all(
       addresses.map(async (address) => {
         const blockRewards = await this.blockRewardsRepository.find({
-          where: { address },
+          where: { address: address.toLowerCase() },
           order: { height: 'DESC' },
           take: 60 * 24 * 7,
         });
@@ -175,7 +175,7 @@ export class NodesService {
     return await Promise.all(
       addresses.map(async (address) => {
         const blockRewards = await this.blockRewardsRepository.find({
-          where: { address },
+          where: { address: address.toLowerCase() },
           order: { height: 'DESC' },
           take: length,
         });
@@ -201,7 +201,7 @@ export class NodesService {
     return await Promise.all(
       addresses.map(async (address) => {
         const blockRewards = await this.blockRewardsRepository.find({
-          where: { address },
+          where: { address: address.toLowerCase() },
           order: { height: 'DESC' },
           take: length,
         });
