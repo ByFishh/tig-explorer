@@ -1,11 +1,16 @@
-import Card from '@/components/Card/Card';
+'use client';
 import Configure from '@/components/Configure/Configure';
-import { IUnit } from '@/types/IUnit/IUnit';
-import { Box, Button, Flex, Heading, Inset, Text } from '@radix-ui/themes';
+import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
+import { initializeStorage } from '@/utils/localStorage';
+import { Flex } from '@radix-ui/themes';
 
-import Image from 'next/image';
+import { useEffect } from 'react';
 
 export default function Home() {
+  useEffect(() => {
+    initializeStorage({ key: ILocalStorageKey.NODES, defaultValue: [] });
+  }, []);
+
   return (
     <main>
       <Flex direction="column" gap="2">

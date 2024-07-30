@@ -1,11 +1,11 @@
 import axios from 'axios';
 import {
+  WalletBalancesResponse,
   BlockRewardsResponse,
   LastRewardsResponse,
   RoundRewardsResponse,
   TotalEarnedResponse,
-  WalletBalancesResponse,
-} from '@/utils/explorer/types';
+} from '@/types/types';
 
 const baseApiUrl = 'https://api.tig-explorer.com';
 
