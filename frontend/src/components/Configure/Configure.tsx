@@ -17,7 +17,7 @@ import { useConfigure } from './Configure.logic';
 const Configure = () => {
   const logic = useConfigure();
   return (
-    <Box maxWidth="500px" width="100%">
+    <Box width="100%">
       <Card size="4">
         <Flex gap="3" align="center" mb="7">
           <Box>

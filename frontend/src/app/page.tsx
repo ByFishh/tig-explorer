@@ -1,5 +1,5 @@
 'use client';
-import Configure from '@/components/Configure/Configure';
+import ChartContainer from '@/components/ChartContainer/ChartContainer';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { initializeStorage } from '@/utils/localStorage';
 import { Flex } from '@radix-ui/themes';
@@ -13,9 +13,7 @@ export default function Home() {
 
   return (
     <main>
-      <Flex direction="column" gap="2">
-        <Configure />
-      </Flex>
+      <Flex direction="column" gap="2"></Flex>
     </main>
   );
 }

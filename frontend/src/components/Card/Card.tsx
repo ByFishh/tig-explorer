@@ -7,8 +7,8 @@ import { useCard } from './Card.logic';
 const Card = (props: ICard) => {
   const logic = useCard();
   return (
-    <Box maxWidth="500px" width="100%">
-      <RadixCard size="4">
+    <Box width="100%" style={{ height: '100%' }}>
+      <RadixCard size="4" style={{ height: '100%' }}>
         <Flex gap="3" align="center" mb="7">
           <Box>
             <Text as="p" size="6" weight="medium" mb="1">
