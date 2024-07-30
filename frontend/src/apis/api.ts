@@ -66,9 +66,9 @@ export const getBlockRewards = async (addresses: string[], length: number) => {
   return response.data;
 };
 
-export const getEntireNode = async (addresses: string[], length: number) => {
+export const getEntireNode = async (address: string, length: number) => {
   const response = await axios.post<INode>(`${baseApiUrl}/nodes/entire-node`, {
-    addresses,
+    address,
     length,
   });
 
