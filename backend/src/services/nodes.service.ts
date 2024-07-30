@@ -58,7 +58,7 @@ export class NodesService {
         return {
           address,
           round,
-          reward: roundReward?.reward ?? 0,
+          reward: roundReward ? Number(roundReward.reward) : 0,
         };
       }),
     );
