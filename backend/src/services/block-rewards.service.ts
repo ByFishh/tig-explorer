@@ -13,7 +13,6 @@ export class BlockRewardsService {
     private blockRewardsRepository: Repository<BlockReward>,
   ) {}
 
-  // 2
   async retrieveLatestBlockRewards() {
     const {
       block: { id },
@@ -28,7 +27,6 @@ export class BlockRewardsService {
     await this.blockRewardsRepository.save(blockRewards);
   }
 
-  // 1
   async getBlockRewards(id: string) {
     const getPlayersResponse = await this.tigService.getPlayers(
       'benchmarker',

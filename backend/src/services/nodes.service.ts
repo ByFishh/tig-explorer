@@ -4,6 +4,7 @@ import { base } from 'viem/chains';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BlockReward, RoundReward } from '../entities';
 import { Repository } from 'typeorm';
+import { TigService } from './tig.service';
 
 @Injectable()
 export class NodesService {
@@ -23,15 +24,17 @@ export class NodesService {
     try {
       return await Promise.all(
         addresses.map(async (address) => ({
-          balance: formatEther(
-            await this._publicClient.readContract({
-              address: '0x0c03ce270b4826ec62e7dd007f0b716068639f7b',
-              abi: parseAbi([
-                'function balanceOf(address) public view returns (uint256)',
-              ]),
-              functionName: 'balanceOf',
-              args: [address as Address],
-            }),
+          balance: Number(
+            formatEther(
+              await this._publicClient.readContract({
+                address: '0x0c03ce270b4826ec62e7dd007f0b716068639f7b',
+                abi: parseAbi([
+                  'function balanceOf(address) public view returns (uint256)',
+                ]),
+                functionName: 'balanceOf',
+                args: [address as Address],
+              }),
+            ),
           ),
           address,
         })),
@@ -42,15 +45,20 @@ export class NodesService {
   }
 
   async getRoundRewards(addresses: string[]) {
+    const { round } = await this.roundRewardsRepository.findOne({
+      where: {},
+      order: { round: 'DESC' },
+    });
     return await Promise.all(
       addresses.map(async (address) => {
         const { reward } = await this.roundRewardsRepository.findOne({
-          where: { address },
+          where: { address, round },
           order: { round: 'DESC' },
         });
         return {
           address,
-          reward,
+          round,
+          reward: Number(reward),
         };
       }),
     );
@@ -74,6 +82,10 @@ export class NodesService {
   }
 
   async getLastRewards(addresses: string[]) {
+    const { height } = await this.blockRewardsRepository.findOne({
+      where: {},
+      order: { height: 'DESC' },
+    });
     return await Promise.all(
       addresses.map(async (address) => {
         const blockRewards = await this.blockRewardsRepository.find({
@@ -82,29 +94,72 @@ export class NodesService {
           take: 60 * 24 * 7,
         });
 
-        return {
+        const emptyArray = new Array(60 * 24 * 7)
+          .fill(0)
+          .map((_, i) => height - i);
+
+        const filledArray = [...emptyArray].map((height) => {
+          const blockReward = blockRewards.find(
+            ({ height: blockRound }) => blockRound === height,
+          );
+          return {
+            height,
+            reward: Number(blockReward?.reward) || 0,
+            ...blockReward,
+          };
+        });
+
+        const tmp = {
           address,
           reward: {
-            hourly: blockRewards
-              .slice(0, 60)
-              .reduce(
-                (roundReward, { reward }) => roundReward + Number(reward),
-                0,
-              ),
-            daily: blockRewards
-              .slice(0, 60 * 24)
-              .reduce(
-                (roundReward, { reward }) => roundReward + Number(reward),
-                0,
-              ),
-            weekly: blockRewards
-              .slice(0, 60 * 24 * 7)
-              .reduce(
-                (roundReward, { reward }) => roundReward + Number(reward),
-                0,
-              ),
+            hourly: {
+              current: filledArray
+                .slice(0, 60)
+                .reduce(
+                  (roundReward, { reward }) => roundReward + Number(reward),
+                  0,
+                ),
+              previous: filledArray
+                .slice(60, 60 * 2)
+                .reduce(
+                  (roundReward, { reward }) => roundReward + Number(reward),
+                  0,
+                ),
+              change: 0,
+            },
+            daily: {
+              current: filledArray
+                .slice(0, 60 * 24)
+                .reduce(
+                  (roundReward, { reward }) => roundReward + Number(reward),
+                  0,
+                ),
+              previous: filledArray
+                .slice(60 * 24, 60 * 24 * 2)
+                .reduce(
+                  (roundReward, { reward }) => roundReward + Number(reward),
+                  0,
+                ),
+              change: 0,
+            },
+            weekly: {
+              current: filledArray
+                .slice(0, 60 * 24 * 7)
+                .reduce(
+                  (roundReward, { reward }) => roundReward + Number(reward),
+                  0,
+                ),
+            },
           },
         };
+
+        tmp.reward.hourly.change =
+          ((tmp.reward.hourly.current - tmp.reward.hourly.previous) /
+            tmp.reward.hourly.previous || 1) * 100;
+        tmp.reward.daily.change =
+          ((tmp.reward.daily.current - tmp.reward.daily.previous) /
+            tmp.reward.daily.previous || 1) * 100;
+        return tmp;
       }),
     );
   }
@@ -125,17 +180,59 @@ export class NodesService {
           take: length,
         });
 
-        return [...emptyArray].map((height) => {
-          const blockReward = blockRewards.find(
-            ({ height: blockRound }) => blockRound === height,
-          );
-          return {
-            height,
-            reward: Number(blockReward?.reward) || 0,
-            ...blockReward,
-          };
-        });
+        return {
+          address,
+          blocks: [...emptyArray].map((height) => {
+            const blockReward = blockRewards.find(
+              ({ height: blockRound }) => blockRound === height,
+            );
+            return {
+              ...blockReward,
+              height,
+              reward: Number(blockReward?.reward) || 0,
+            };
+          }),
+        };
       }),
     );
+  }
+
+  async getAverageRewards(addresses: string[], length: number) {
+    return await Promise.all(
+      addresses.map(async (address) => {
+        const blockRewards = await this.blockRewardsRepository.find({
+          where: { address },
+          order: { height: 'DESC' },
+          take: length,
+        });
+
+        return {
+          address,
+          reward:
+            (blockRewards.reduce(
+              (roundReward, { reward }) => roundReward + Number(reward),
+              0,
+            ) /
+              blockRewards.length) *
+            60,
+        };
+      }),
+    );
+  }
+
+  async getEntireNode(addresses: string, length: number) {
+    const walletBalance = (await this.getWalletBalances([addresses]))[0];
+    const roundRewards = (await this.getRoundRewards([addresses]))[0];
+    const totalEarned = (await this.getTotalEarned([addresses]))[0];
+    const lastRewards = (await this.getLastRewards([addresses]))[0];
+    const blockRewards = (await this.getBlockRewards([addresses], length))[0];
+
+    return {
+      walletBalance,
+      roundRewards,
+      totalEarned,
+      lastRewards,
+      blockRewards,
+    };
   }
 }

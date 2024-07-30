@@ -5,6 +5,7 @@ import { GetRoundRewardsDto } from '../dtos/get-round-rewards';
 import { GetWalletBalancesDto } from '../dtos/get-wallet-balances';
 import { GetTotalEarnedDto } from '../dtos/get-total-earned';
 import { GetBlockRewardsDto } from '../dtos/get-block-rewards.dto';
+import { GetEntireNodeDto } from '../dtos/get-entire-node.dto';
 
 @Controller('nodes')
 export class NodesController {
@@ -45,6 +46,26 @@ export class NodesController {
     return {
       block_rewards: await this.nodesService.getBlockRewards(
         params.addresses,
+        params.length,
+      ),
+    };
+  }
+
+  @Post('average-rewards')
+  async getAverageRewards(@Body() params: GetBlockRewardsDto) {
+    return {
+      average_rewards: await this.nodesService.getAverageRewards(
+        params.addresses,
+        params.length,
+      ),
+    };
+  }
+
+  @Post('entire-node')
+  async getEntireNode(@Body() params: GetEntireNodeDto) {
+    return {
+      entire_node: await this.nodesService.getEntireNode(
+        params.address,
         params.length,
       ),
     };
