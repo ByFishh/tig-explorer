@@ -12,7 +12,7 @@ export const usePage = (address: string) => {
   }, []);
 
   const getNode = async () => {
-    const node = await getEntireNode(address, 500);
+    const node = await getEntireNode(address, 120);
     setNode(node);
   };
 
