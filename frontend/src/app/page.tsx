@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 export default function Home() {
   useEffect(() => {
     initializeStorage({ key: ILocalStorageKey.NODES, defaultValue: [] });
+    initializeStorage({ key: ILocalStorageKey.TIG_PRICE, defaultValue: 0 });
   }, []);
 
   return (
