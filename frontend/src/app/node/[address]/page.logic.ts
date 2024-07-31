@@ -1,6 +1,6 @@
 'use client';
 
-import { getEntireNode } from '@/apis/api';
+import { getBalance, getBaseNode } from '@/apis/api';
 import { useTigPrice } from '@/store/tigPriceReducer/tigPriceReducer';
 import { INode } from '@/types/INode/INode';
 import { useEffect, useState } from 'react';
@@ -14,8 +14,16 @@ export const usePage = (address: string) => {
   }, []);
 
   const getNode = async () => {
-    const node = await getEntireNode(address, 120);
-    setNode(node);
+    const node = await getBaseNode(address);
+    const balance = await getBalance(address);
+
+    setNode({
+      ...node,
+      wallet_balance: {
+        balance,
+        address,
+      },
+    });
   };
 
   return {

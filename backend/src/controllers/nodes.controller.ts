@@ -1,11 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { NodesService } from '../services';
 import { GetLastRewardsDto } from '../dtos/get-last-rewards.dto';
 import { GetRoundRewardsDto } from '../dtos/get-round-rewards';
 import { GetWalletBalancesDto } from '../dtos/get-wallet-balances';
 import { GetTotalEarnedDto } from '../dtos/get-total-earned';
 import { GetBlockRewardsDto } from '../dtos/get-block-rewards.dto';
-import { GetEntireNodeDto } from '../dtos/get-entire-node.dto';
 
 @Controller('nodes')
 export class NodesController {
@@ -61,13 +60,10 @@ export class NodesController {
     };
   }
 
-  @Post('entire-node')
-  async getEntireNode(@Body() params: GetEntireNodeDto) {
+  @Get(':address')
+  async getNode(@Param('address') id: string) {
     return {
-      entire_node: await this.nodesService.getEntireNode(
-        params.address,
-        params.length,
-      ),
+      node: await this.nodesService.getNode(id),
     };
   }
 }

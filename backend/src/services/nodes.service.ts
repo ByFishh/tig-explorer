@@ -225,18 +225,17 @@ export class NodesService {
     );
   }
 
-  async getEntireNode(addresses: string, length: number) {
-    const walletBalance = (await this.getWalletBalances([addresses]))[0];
-    const roundRewards = (await this.getRoundRewards([addresses]))[0];
-    const totalEarned = (await this.getTotalEarned([addresses]))[0];
-    const lastRewards = (await this.getLastRewards([addresses]))[0];
-    const averageRewards = (
-      await this.getAverageRewards([addresses], length)
-    )[0];
-    const blockRewards = (await this.getBlockRewards([addresses], length))[0];
+  async getNode(address: string) {
+    if (!address || address.length !== 42)
+      throw new BadRequestException('Invalid address');
+
+    const roundRewards = (await this.getRoundRewards([address]))[0];
+    const totalEarned = (await this.getTotalEarned([address]))[0];
+    const lastRewards = (await this.getLastRewards([address]))[0];
+    const averageRewards = (await this.getAverageRewards([address], 120))[0];
+    const blockRewards = (await this.getBlockRewards([address], 120))[0];
 
     return {
-      wallet_balance: walletBalance,
       round_rewards: roundRewards,
       total_earned: totalEarned,
       last_rewards: lastRewards,
