@@ -4,7 +4,6 @@ import { base } from 'viem/chains';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BlockReward, RoundReward } from '../entities';
 import { Repository } from 'typeorm';
-import { TigService } from './tig.service';
 
 @Injectable()
 export class NodesService {
