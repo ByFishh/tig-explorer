@@ -231,6 +231,9 @@ export class NodesService {
     const roundRewards = (await this.getRoundRewards([addresses]))[0];
     const totalEarned = (await this.getTotalEarned([addresses]))[0];
     const lastRewards = (await this.getLastRewards([addresses]))[0];
+    const averageRewards = (
+      await this.getAverageRewards([addresses], length)
+    )[0];
     const blockRewards = (await this.getBlockRewards([addresses], length))[0];
 
     return {
@@ -238,6 +241,7 @@ export class NodesService {
       round_rewards: roundRewards,
       total_earned: totalEarned,
       last_rewards: lastRewards,
+      average_rewards: averageRewards,
       block_rewards: blockRewards,
     };
   }
