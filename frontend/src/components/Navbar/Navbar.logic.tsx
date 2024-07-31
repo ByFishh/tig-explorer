@@ -1,7 +1,19 @@
-import { useState } from 'react';
+import { useDialogs } from '@/store/dialogsReducer/dialogsReducer';
+import { IAction } from '@/store/dialogsReducer/dialogsReducer.types';
+import { useTigPrice } from '@/store/tigPriceReducer/tigPriceReducer';
+import { IModals } from '@/types/IModals/IModals';
+import { useCallback } from 'react';
 
 export const useNavbar = () => {
-  const [tigValue, setTigValue] = useState<number>(0);
+  const { tigPrice } = useTigPrice();
+  const { dispatch } = useDialogs();
 
-  return { tigValue };
+  const openDollarDialog = useCallback(() => {
+    dispatch({
+      action: IAction.OPEN_MODAL,
+      payload: { isOpen: IModals.TIG_PRICE },
+    });
+  }, []);
+
+  return { tigPrice, openDollarDialog };
 };
