@@ -5,6 +5,8 @@ import { IAction as TigPriceAction } from '@/store/tigPriceReducer/tigPriceReduc
 import { IAction as DialogAction } from '@/store/dialogsReducer/dialogsReducer.types';
 import { useCallback } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import * as ls from '../../utils/localStorage';
+import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 
 export const useDollarDialog = () => {
   const { handleSubmit, control } = useForm<{ tigPrice: number }>();
@@ -18,6 +20,7 @@ export const useDollarDialog = () => {
       action: TigPriceAction.SET_TIG_PRICE,
       payload: data.tigPrice,
     });
+    ls.setItem({ key: ILocalStorageKey.TIG_PRICE, item: data.tigPrice });
     closeModal();
   };
 

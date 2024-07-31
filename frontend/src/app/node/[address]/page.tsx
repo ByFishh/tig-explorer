@@ -6,6 +6,7 @@ import ChartContainer from '@/components/ChartContainer/ChartContainer';
 import Configure from '@/components/Configure/Configure';
 import { IChartType } from '@/types/IChartType.ts/IChartType';
 import { IUnit } from '@/types/IUnit/IUnit';
+import { convertUnit } from '@/utils/convertUnit';
 import {
   Badge,
   Box,
@@ -32,7 +33,10 @@ export default function Page({ params }: { params: { address: string } }) {
         },
         {
           title: 'Wallet balance',
-          value: 0,
+          value: convertUnit(
+            logic.node?.wallet_balance.balance ?? 0,
+            logic.tigPrice,
+          ),
           unit: IUnit.DOLLARD,
         },
       ],
@@ -48,7 +52,10 @@ export default function Page({ params }: { params: { address: string } }) {
         },
         {
           title: 'Total earned',
-          value: 0,
+          value: convertUnit(
+            logic.node?.total_earned.reward ?? 0,
+            logic.tigPrice,
+          ),
           unit: IUnit.DOLLARD,
         },
       ],
@@ -64,7 +71,10 @@ export default function Page({ params }: { params: { address: string } }) {
         },
         {
           title: 'Current round rewards',
-          value: 0,
+          value: convertUnit(
+            logic.node?.round_rewards.reward ?? 0,
+            logic.tigPrice,
+          ),
           unit: IUnit.DOLLARD,
         },
       ],
@@ -117,8 +127,12 @@ export default function Page({ params }: { params: { address: string } }) {
                 },
                 {
                   title: 'Tig earned last hour',
-                  value: 0,
+                  value: convertUnit(
+                    logic.node.last_rewards.reward.hourly.current ?? 0,
+                    logic.tigPrice,
+                  ),
                   unit: IUnit.DOLLARD,
+                  percentage: logic.node.last_rewards.reward.hourly.change,
                 },
                 {
                   title: 'Tig earned last day',
@@ -128,8 +142,12 @@ export default function Page({ params }: { params: { address: string } }) {
                 },
                 {
                   title: 'Tig earned last day',
-                  value: 0,
+                  value: convertUnit(
+                    logic.node.last_rewards.reward.daily.current ?? 0,
+                    logic.tigPrice,
+                  ),
                   unit: IUnit.DOLLARD,
+                  percentage: logic.node.last_rewards.reward.daily.change,
                 },
                 {
                   title: 'Tig earned last week',
@@ -138,7 +156,10 @@ export default function Page({ params }: { params: { address: string } }) {
                 },
                 {
                   title: 'Tig earned last week',
-                  value: 0,
+                  value: convertUnit(
+                    logic.node.last_rewards.reward.weekly.current ?? 0,
+                    logic.tigPrice,
+                  ),
                   unit: IUnit.DOLLARD,
                 },
               ]}

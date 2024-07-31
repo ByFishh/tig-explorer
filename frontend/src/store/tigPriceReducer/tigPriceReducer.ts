@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import { IAction, S } from './tigPriceReducer.types';
+import * as ls from '../../utils/localStorage';
+import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 
 const reducer = (
   state: S,
@@ -13,8 +15,17 @@ const reducer = (
   }
 };
 
+const getInitialPriceTig = (): number => {
+  try {
+    return Number(ls.getItem({ key: ILocalStorageKey.TIG_PRICE }));
+  } catch (error) {
+    ls.initializeStorage({ key: ILocalStorageKey.TIG_PRICE, defaultValue: 0 });
+    return 0;
+  }
+};
+
 export const useTigPrice = create<S>()((set) => ({
-  tigPrice: 0,
+  tigPrice: getInitialPriceTig(),
   dispatch: (args: { action: IAction; payload?: any }) =>
     set((state: S) => ({
       ...state,
