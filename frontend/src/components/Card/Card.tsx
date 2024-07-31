@@ -7,9 +7,12 @@ import {
   Badge,
   Grid,
 } from '@radix-ui/themes';
-import React from 'react';
+import React, { memo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useCard } from './Card.logic';
+
+const propsAreEqual = (prevProps: Readonly<ICard>): boolean =>
+  !prevProps.forceRender;
 
 const Card = (props: ICard) => {
   const logic = useCard();
@@ -72,4 +75,4 @@ const Card = (props: ICard) => {
   );
 };
 
-export default Card;
+export default memo(Card, propsAreEqual);

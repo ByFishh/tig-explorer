@@ -25,6 +25,7 @@ export default function Page({ params }: { params: { address: string } }) {
     {
       title: 'Wallet Balance',
       description: 'Review here your node wallet balance',
+      forceRender: true,
       data: [
         {
           title: 'Wallet balance',
@@ -44,6 +45,7 @@ export default function Page({ params }: { params: { address: string } }) {
     {
       title: 'Total earned',
       description: 'Review here the total earned by your node',
+      forceRender: true,
       data: [
         {
           title: 'Total earned',
@@ -63,6 +65,7 @@ export default function Page({ params }: { params: { address: string } }) {
     {
       title: 'Current round',
       description: 'Review here the current round rewards',
+      forceRender: true,
       close: (
         <Text size="6" weight="medium">
           {logic.node?.round_rewards.round ?? 'Error'}
@@ -88,23 +91,36 @@ export default function Page({ params }: { params: { address: string } }) {
       title: 'Average rewards',
       description: 'Review here the average rewards',
       data: [],
+      forceRender: true,
       content: (
         <>
           <Flex pr="2">
-            <Text size="2" color="red">
-              You must enter a server cost in the{' '}
-              <span style={{ textDecoration: 'underline' }}>
-                Configure Node
-              </span>{' '}
-              before you can access this data.
-            </Text>
+            {logic.nodeIsConfigured() ? (
+              <Flex style={{ flexFlow: 'column' }}>
+                <Text as="p" size="2" mb="0" color="gray">
+                  Cost per {IUnit.TIG} ({IUnit.DOLLARD})
+                </Text>
+                <Text as="p" size="7" weight="medium">
+                  <span style={{ fontSize: '.825rem' }}>{IUnit.DOLLARD}</span>
+                  {logic.getCostPerTig().toFixed(2)}
+                </Text>
+              </Flex>
+            ) : (
+              <Text size="2" color="red">
+                You must enter a server cost in the{' '}
+                <span style={{ textDecoration: 'underline' }}>
+                  Configure Node
+                </span>{' '}
+                before you can access this data.
+              </Text>
+            )}
           </Flex>
           <Flex style={{ flexFlow: 'column' }}>
             <Text as="p" size="2" mb="0" color="gray">
               Average earned ({IUnit.TIG_PER_HOUR})
             </Text>
             <Text as="p" size="7" weight="medium">
-              {logic.node?.average_rewards.reward.toFixed(2)}
+              {Number(logic.node?.average_rewards.reward).toFixed(2)}
               <span style={{ fontSize: '.825rem' }}>{IUnit.TIG_PER_HOUR}</span>
             </Text>
           </Flex>
@@ -143,6 +159,7 @@ export default function Page({ params }: { params: { address: string } }) {
             <Card
               title="Last TIG earned"
               description="Review here the last TIG earned by your node"
+              forceRender={true}
               data={[
                 {
                   title: 'Tig earned last hour',
@@ -189,7 +206,7 @@ export default function Page({ params }: { params: { address: string } }) {
                 },
               ]}
             />
-            <Configure />
+            <Configure invokeCardRender={logic.renderCards} />
           </Flex>
         </Grid>
         <Container mt="4">

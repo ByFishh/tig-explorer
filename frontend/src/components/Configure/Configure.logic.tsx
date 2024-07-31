@@ -5,9 +5,19 @@ import * as ls from '../../utils/localStorage';
 import { useNode } from '@/store/nodeReducer/nodeReducer';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { useEffect, useState } from 'react';
+import { IConfigure } from '@/types/IConfigure/IConfigure';
 
-export const useConfigure = () => {
-  const { handleSubmit, control } = useForm<INodeInputs>();
+const inputs: INodeInputs = {
+  notes: '',
+  serverCost: 0,
+  coreNumber: 0,
+  startDate: undefined,
+};
+
+export const useConfigure = (props: IConfigure) => {
+  const { handleSubmit, control, setValue } = useForm<INodeInputs>({
+    defaultValues: inputs,
+  });
   const { node } = useNode();
 
   useEffect(() => {
@@ -19,14 +29,14 @@ export const useConfigure = () => {
   const getInitialConfig = () => {
     const id = node?.wallet_balance.address;
     if (!id) return;
-    const currentConfig: INodeInputs = ls.findItemById();
-
-    const config: INodeInputs = {
-      notes: currentConfig.notes ?? '',
-      serverCost: currentConfig.serverCost ?? 0,
-      coreNumber: currentConfig.coreNumber ?? 0,
-      startDate: currentConfig.startDate ?? undefined,
-    };
+    const currentConfig: INodeInputs = ls.findItemById({
+      key: ILocalStorageKey.NODES,
+      id,
+    });
+    const config: INodeInputs = handleFormData(currentConfig);
+    Object.keys(inputs).map((i) =>
+      setValue(i as any, config[i as keyof INodeInputs]),
+    );
   };
 
   const onSubmit: SubmitHandler<INodeInputs> = (data: INodeInputs) => {
@@ -45,6 +55,8 @@ export const useConfigure = () => {
         item: newItem,
       });
     }
+
+    if (data.serverCost) props.invokeCardRender && props.invokeCardRender();
     getInitialConfig();
   };
 
