@@ -2,17 +2,15 @@ import { isArray } from './isArray';
 import { tryCatch } from './tryCatch';
 
 const _initializeStorage = (data: { key: string; defaultValue: unknown }) => {
-  try {
-    _getItem({ key: data.key });
-  } catch (error) {
-    localStorage.setItem(data.key, JSON.stringify(data.defaultValue));
-  }
+  const item = _getItem({ key: data.key });
+  if (item) return;
+  localStorage.setItem(data.key, JSON.stringify(data.defaultValue));
 };
 
-const _getItem = <T>(data: { key: string }): T | T[] => {
+const _getItem = <T>(data: { key: string }): T | T[] | null => {
   if (!data.key) throw new Error('local storage key is empty');
   const item = localStorage.getItem(data.key);
-  if (!item) throw new Error('Local storage value is empty');
+  if (!item) return null;
   return JSON.parse(item);
 };
 

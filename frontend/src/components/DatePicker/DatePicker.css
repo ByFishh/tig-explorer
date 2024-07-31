@@ -8,5 +8,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
   width: 100%;
   padding: 0.5rem;
   border-radius: 5px;
-  border: 1px solid rgb(80, 80, 80);
+  border: 1px solid rgb(74, 74, 78);
+  background-color: var(--gray-1);
+}
+
+.radix-ui-date-picker:focus {
+  outline: none !important;
+  border: 1.5px solid #435db1;
 }

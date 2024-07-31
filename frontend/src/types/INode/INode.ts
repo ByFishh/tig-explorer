@@ -4,6 +4,7 @@ export type INode = {
   total_earned: ITotalEarned;
   last_rewards: ILastRewards;
   block_rewards: IBlockRewards;
+  average_rewards: IAverageRewards;
 };
 
 type IWalletBalance = {
@@ -55,5 +56,10 @@ type IBlock = {
   c001: number;
   c002: number;
   c003: number;
+  reward: number;
+};
+
+type IAverageRewards = {
+  address: string;
   reward: number;
 };
