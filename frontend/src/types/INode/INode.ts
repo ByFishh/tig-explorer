@@ -3,26 +3,27 @@ export type INode = {
   round_rewards: IRoundRewards;
   total_earned: ITotalEarned;
   last_rewards: ILastRewards;
+  average_rewards: IAverageRewards;
   block_rewards: IBlockRewards;
 };
 
-type IWalletBalance = {
+export type IWalletBalance = {
   balance: number;
   address: string;
 };
 
-type IRoundRewards = {
+export type IRoundRewards = {
   address: string;
   round: number;
   reward: number;
 };
 
-type ITotalEarned = {
+export type ITotalEarned = {
   address: string;
   reward: number;
 };
 
-type ILastRewards = {
+export type ILastRewards = {
   address: string;
   reward: {
     hourly: {
@@ -41,12 +42,17 @@ type ILastRewards = {
   };
 };
 
-type IBlockRewards = {
+export type IAverageRewards = {
+  address: string;
+  reward: number;
+};
+
+export type IBlockRewards = {
   address: string;
   blocks: IBlock[];
 };
 
-type IBlock = {
+export type IBlock = {
   id: string;
   height: number;
   round: number;

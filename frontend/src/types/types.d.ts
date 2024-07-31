@@ -4,6 +4,7 @@ export type WalletBalancesResponse = {
 
 export type RoundRewardsResponse = {
   round_rewards: {
+    round: number;
     address: string;
     reward: number;
   }[];
@@ -24,6 +25,13 @@ export type LastRewardsResponse = {
       daily: number;
       weekly: number;
     };
+  }[];
+};
+
+export type AverageRewardsResponse = {
+  average_rewards: {
+    address: string;
+    reward: number;
   }[];
 };
 
