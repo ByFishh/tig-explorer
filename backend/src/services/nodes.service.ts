@@ -234,11 +234,11 @@ export class NodesService {
     const blockRewards = (await this.getBlockRewards([addresses], length))[0];
 
     return {
-      walletBalance,
-      roundRewards,
-      totalEarned,
-      lastRewards,
-      blockRewards,
+      wallet_balance: walletBalance,
+      round_rewards: roundRewards,
+      total_earned: totalEarned,
+      last_rewards: lastRewards,
+      block_rewards: blockRewards,
     };
   }
 }

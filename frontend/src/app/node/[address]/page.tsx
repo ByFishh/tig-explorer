@@ -27,7 +27,7 @@ export default function Page({ params }: { params: { address: string } }) {
       data: [
         {
           title: 'Wallet balance',
-          value: logic.node?.walletBalance.balance,
+          value: logic.node?.wallet_balance.balance,
           unit: IUnit.TIG,
         },
         {
@@ -43,7 +43,7 @@ export default function Page({ params }: { params: { address: string } }) {
       data: [
         {
           title: 'Total earned',
-          value: logic.node?.totalEarned.reward,
+          value: logic.node?.total_earned.reward,
           unit: IUnit.TIG,
         },
         {
@@ -59,7 +59,7 @@ export default function Page({ params }: { params: { address: string } }) {
       data: [
         {
           title: 'Current round rewards',
-          value: logic.node?.roundRewards.reward,
+          value: logic.node?.round_rewards.reward,
           unit: IUnit.TIG,
         },
         {
@@ -111,9 +111,9 @@ export default function Page({ params }: { params: { address: string } }) {
               data={[
                 {
                   title: 'Tig earned last hour',
-                  value: logic.node.lastRewards.reward.hourly.current,
+                  value: logic.node.last_rewards.reward.hourly.current,
                   unit: IUnit.TIG,
-                  percentage: logic.node.lastRewards.reward.hourly.change,
+                  percentage: logic.node.last_rewards.reward.hourly.change,
                 },
                 {
                   title: 'Tig earned last hour',
@@ -122,9 +122,9 @@ export default function Page({ params }: { params: { address: string } }) {
                 },
                 {
                   title: 'Tig earned last day',
-                  value: logic.node.lastRewards.reward.daily.current,
+                  value: logic.node.last_rewards.reward.daily.current,
                   unit: IUnit.TIG,
-                  percentage: logic.node.lastRewards.reward.daily.change,
+                  percentage: logic.node.last_rewards.reward.daily.change,
                 },
                 {
                   title: 'Tig earned last day',
@@ -133,7 +133,7 @@ export default function Page({ params }: { params: { address: string } }) {
                 },
                 {
                   title: 'Tig earned last week',
-                  value: logic.node.lastRewards.reward.weekly.current,
+                  value: logic.node.last_rewards.reward.weekly.current,
                   unit: IUnit.TIG,
                 },
                 {
@@ -153,27 +153,27 @@ export default function Page({ params }: { params: { address: string } }) {
               description="The numlber of qualifiers during the last 120 blocks (2 hours)"
               type={IChartType.LINE}
               data={{
-                labels: logic.node.blockRewards.blocks.map((b) =>
+                labels: logic.node.block_rewards.blocks.map((b) =>
                   String(b.height),
                 ),
                 datasets: [
                   {
                     label: 'c001',
-                    data: logic.node.blockRewards.blocks.map((b) => b.c001),
+                    data: logic.node.block_rewards.blocks.map((b) => b.c001),
                     borderWidth: 1,
                     borderColor: '#0DFFE0',
                     fill: true,
                   },
                   {
                     label: 'c002',
-                    data: logic.node.blockRewards.blocks.map((b) => b.c002),
+                    data: logic.node.block_rewards.blocks.map((b) => b.c002),
                     borderWidth: 1,
                     borderColor: '#0096FF',
                     fill: true,
                   },
                   {
                     label: 'c003',
-                    data: logic.node.blockRewards.blocks.map((b) => b.c003),
+                    data: logic.node.block_rewards.blocks.map((b) => b.c003),
                     borderWidth: 1,
                     borderColor: '#FF9592',
                     fill: true,
@@ -187,13 +187,13 @@ export default function Page({ params }: { params: { address: string } }) {
               description="The number of TIG earned during the last 120 blocks (2 hours)"
               type={IChartType.BAR}
               data={{
-                labels: logic.node.blockRewards.blocks.map((b) =>
+                labels: logic.node.block_rewards.blocks.map((b) =>
                   String(b.height),
                 ),
                 datasets: [
                   {
                     label: 'Reward by block',
-                    data: logic.node.blockRewards.blocks.map((b) => b.reward),
+                    data: logic.node.block_rewards.blocks.map((b) => b.reward),
                     borderRadius: 2,
                     borderWidth: 1,
                     borderColor: '#3D63DD',

@@ -1,9 +1,9 @@
 export type INode = {
-  walletBalance: IWalletBalance;
-  roundRewards: IRoundRewards;
-  totalEarned: ITotalEarned;
-  lastRewards: ILastRewards;
-  blockRewards: IBlockRewards;
+  wallet_balance: IWalletBalance;
+  round_rewards: IRoundRewards;
+  total_earned: ITotalEarned;
+  last_rewards: ILastRewards;
+  block_rewards: IBlockRewards;
 };
 
 type IWalletBalance = {
