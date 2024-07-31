@@ -1,5 +1,12 @@
 import { ICard } from '@/types/ICard/ICard';
-import { Box, Text, Card as RadixCard, Flex, Badge } from '@radix-ui/themes';
+import {
+  Box,
+  Text,
+  Card as RadixCard,
+  Flex,
+  Badge,
+  Grid,
+} from '@radix-ui/themes';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useCard } from './Card.logic';
@@ -10,21 +17,31 @@ const Card = (props: ICard) => {
     <Box width="100%" style={{ height: '100%' }}>
       <RadixCard size="4" style={{ height: '100%' }}>
         <Flex gap="3" align="center" mb="7">
-          <Box>
-            <Text as="p" size="6" weight="medium" mb="1">
-              {props.title}
-            </Text>
+          <Box width="100%">
+            <Flex justify="between" align="center">
+              <Text as="p" size="6" weight="medium" mb="1">
+                {props.title}
+              </Text>
+              {props.close && props.close}
+            </Flex>
             <Text as="p" size="2" color="gray">
               {props.description}
             </Text>
           </Box>
         </Flex>
-        <Flex
+        <Grid
+          columns={{
+            xl: '2',
+            lg: '2',
+            md: '2',
+            sm: '1',
+            xs: '2',
+            initial: '1',
+          }}
           align={'center'}
           justify={'start'}
-          gapX={'8'}
+          gapX={'2'}
           gapY={'6'}
-          wrap={'wrap'}
         >
           {props.content ? (
             <>{props.content}</>
@@ -49,7 +66,7 @@ const Card = (props: ICard) => {
               ))}
             </>
           )}
-        </Flex>
+        </Grid>
       </RadixCard>
     </Box>
   );

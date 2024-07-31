@@ -16,12 +16,12 @@ const reducer = (
 };
 
 const getInitialPriceTig = (): number => {
-  try {
-    return Number(ls.getItem({ key: ILocalStorageKey.TIG_PRICE }));
-  } catch (error) {
+  if (typeof window !== 'undefined') {
+    const price = ls.getItem({ key: ILocalStorageKey.TIG_PRICE });
+    if (price) return price;
     ls.initializeStorage({ key: ILocalStorageKey.TIG_PRICE, defaultValue: 0 });
-    return 0;
   }
+  return 0;
 };
 
 export const useTigPrice = create<S>()((set) => ({

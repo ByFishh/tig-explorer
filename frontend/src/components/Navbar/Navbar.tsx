@@ -12,6 +12,7 @@ import { useNavbar } from './Navbar.logic';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import { usePathname } from 'next/navigation';
 import DollarDialog from '../DollarDialog/DollarDialog';
+import Link from 'next/link';
 
 const Navbar = () => {
   const logic = useNavbar();
@@ -31,21 +32,23 @@ const Navbar = () => {
               <Separator orientation="vertical" size="2" />
             </Flex>
             <Flex justify="between" align="center">
-              <Badge
-                color="gray"
-                variant={pathname === '/' ? 'solid' : 'soft'}
-                size="3"
-                radius="full"
-                highContrast
-              >
-                All Nodes
-              </Badge>
+              <Link href="/">
+                <Badge
+                  color="gray"
+                  variant={pathname === '/' ? 'solid' : 'soft'}
+                  size="3"
+                  radius="full"
+                  highContrast
+                >
+                  Overview
+                </Badge>
+              </Link>
             </Flex>
             <Flex justify="between" align="center">
               <Text weight="regular">
                 TIG Value:{' '}
                 <span style={{ fontWeight: 'bold' }}>
-                  {logic.tigPrice.toFixed(2)}$
+                  {Number(logic.tigPrice).toFixed(2)}$
                 </span>
               </Text>
               <IconButton ml="2" onClick={logic.openDollarDialog}>

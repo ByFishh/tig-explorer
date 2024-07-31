@@ -63,6 +63,11 @@ export default function Page({ params }: { params: { address: string } }) {
     {
       title: 'Current round',
       description: 'Review here the current round rewards',
+      close: (
+        <Text size="6" weight="medium">
+          {logic.node?.round_rewards.round ?? 'Error'}
+        </Text>
+      ),
       data: [
         {
           title: 'Current round rewards',
@@ -84,11 +89,26 @@ export default function Page({ params }: { params: { address: string } }) {
       description: 'Review here the average rewards',
       data: [],
       content: (
-        <Text size="2" color="red">
-          You must enter a server cost in the{' '}
-          <span style={{ textDecoration: 'underline' }}>Configure Node</span>{' '}
-          before you can access this data.
-        </Text>
+        <>
+          <Flex pr="2">
+            <Text size="2" color="red">
+              You must enter a server cost in the{' '}
+              <span style={{ textDecoration: 'underline' }}>
+                Configure Node
+              </span>{' '}
+              before you can access this data.
+            </Text>
+          </Flex>
+          <Flex style={{ flexFlow: 'column' }}>
+            <Text as="p" size="2" mb="0" color="gray">
+              Average earned ({IUnit.TIG_PER_HOUR})
+            </Text>
+            <Text as="p" size="7" weight="medium">
+              {logic.node?.average_rewards.reward.toFixed(2)}
+              <span style={{ fontSize: '.825rem' }}>{IUnit.TIG_PER_HOUR}</span>
+            </Text>
+          </Flex>
+        </>
       ),
     },
   ];
@@ -104,7 +124,12 @@ export default function Page({ params }: { params: { address: string } }) {
     <Box py="8">
       <Section size="2">
         <Flex mb="4">
-          <Badge size="3" color="indigo" radius="full">
+          <Badge
+            size="3"
+            color="indigo"
+            radius="full"
+            style={{ padding: '.5rem 1rem' }}
+          >
             {logic.address}
           </Badge>
         </Flex>
