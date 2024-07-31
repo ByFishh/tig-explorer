@@ -23,7 +23,7 @@ export default function Page({ params }: { params: { address: string } }) {
   const items = [
     {
       title: 'Wallet Balance',
-      description: 'Review here global information about your node',
+      description: 'Review here your node wallet balance',
       data: [
         {
           title: 'Wallet balance',
@@ -39,7 +39,7 @@ export default function Page({ params }: { params: { address: string } }) {
     },
     {
       title: 'Total earned',
-      description: 'Review here global information about your node',
+      description: 'Review here the total earned by your node',
       data: [
         {
           title: 'Total earned',
@@ -55,23 +55,23 @@ export default function Page({ params }: { params: { address: string } }) {
     },
     {
       title: 'Current round',
-      description: 'Review here global information about your node',
+      description: 'Review here the current round rewards',
       data: [
         {
-          title: 'Current round reward',
+          title: 'Current round rewards',
           value: logic.node?.roundRewards.reward,
           unit: IUnit.TIG,
         },
         {
-          title: 'Current round reward',
+          title: 'Current round rewards',
           value: 0,
           unit: IUnit.DOLLARD,
         },
       ],
     },
     {
-      title: 'Average',
-      description: 'Review here global information about your node',
+      title: 'Average rewards',
+      description: 'Review here the average rewards',
       data: [],
       content: (
         <Text size="2" color="red">
@@ -107,7 +107,7 @@ export default function Page({ params }: { params: { address: string } }) {
           <Flex gap="4" wrap={'wrap'} style={{ flexFlow: 'column' }}>
             <Card
               title="Last TIG earned"
-              description="Review here global information about your node"
+              description="Review here the last TIG earned by your node"
               data={[
                 {
                   title: 'Tig earned last hour',
@@ -149,8 +149,8 @@ export default function Page({ params }: { params: { address: string } }) {
         <Container mt="4">
           <Flex gap="4" style={{ flexFlow: 'column' }}>
             <ChartContainer
-              title="Qualifier"
-              description="Review here global information about your node"
+              title="Qualifiers"
+              description="The numlber of qualifiers during the last 120 blocks (2 hours)"
               type={IChartType.LINE}
               data={{
                 labels: logic.node.blockRewards.blocks.map((b) =>
@@ -184,7 +184,7 @@ export default function Page({ params }: { params: { address: string } }) {
 
             <ChartContainer
               title="Earned TIG"
-              description="Review here global information about your node"
+              description="The number of TIG earned during the last 120 blocks (2 hours)"
               type={IChartType.BAR}
               data={{
                 labels: logic.node.blockRewards.blocks.map((b) =>
@@ -192,7 +192,7 @@ export default function Page({ params }: { params: { address: string } }) {
                 ),
                 datasets: [
                   {
-                    label: 'First dataset',
+                    label: 'Reward by block',
                     data: logic.node.blockRewards.blocks.map((b) => b.reward),
                     borderRadius: 2,
                     borderWidth: 1,
