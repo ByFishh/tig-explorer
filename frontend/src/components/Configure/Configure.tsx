@@ -49,6 +49,7 @@ const Configure = () => {
                   style={{ width: '100%' }}
                   mb="4"
                   onChange={field.onChange}
+                  value={field.value}
                 />
               </>
             )}
@@ -87,6 +88,7 @@ const Configure = () => {
                       size="3"
                       type="number"
                       onChange={field.onChange}
+                      value={field.value}
                     />
                   )}
                 ></Controller>
@@ -107,6 +109,7 @@ const Configure = () => {
                     type="number"
                     style={{ paddingLeft: '0' }}
                     onChange={field.onChange}
+                    value={field.value}
                   >
                     <TextField.Slot
                       style={{ paddingLeft: '0' }}

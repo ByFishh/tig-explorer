@@ -1,12 +1,13 @@
 'use client';
 
 import { getBalance, getBaseNode } from '@/apis/api';
+import { useNode } from '@/store/nodeReducer/nodeReducer';
+import { IAction } from '@/store/nodeReducer/nodeReducer.types';
 import { useTigPrice } from '@/store/tigPriceReducer/tigPriceReducer';
-import { INode } from '@/types/INode/INode';
 import { useEffect, useState } from 'react';
 
 export const usePage = (address: string) => {
-  const [node, setNode] = useState<INode | null>(null);
+  const { node, dispatch } = useNode();
   const { tigPrice } = useTigPrice();
 
   useEffect(() => {
@@ -15,15 +16,7 @@ export const usePage = (address: string) => {
 
   const getNode = async () => {
     const node = await getBaseNode(address);
-    const balance = await getBalance(address);
-
-    setNode({
-      ...node,
-      wallet_balance: {
-        balance,
-        address,
-      },
-    });
+    dispatch({ action: IAction.SET_NODE, payload: node });
   };
 
   return {

@@ -1,12 +1,9 @@
+/* eslint-disable react/no-children-prop */
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@radix-ui/themes/styles.css';
-import { Theme, Container } from '@radix-ui/themes';
-import dynamic from 'next/dynamic';
-
-const Navbar = dynamic(() => import('../components/Navbar/Navbar'), {
-  ssr: false,
-});
+import { Theme } from '@radix-ui/themes';
+import App from '@/components/App/App';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,8 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Theme appearance="dark" scaling="90%">
-          <Navbar />
-          <Container>{children}</Container>
+          <App children={children} />
         </Theme>
       </body>
     </html>

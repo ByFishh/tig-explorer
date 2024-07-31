@@ -48,10 +48,10 @@ const _updateItem = <T extends { id: string }>(data: {
 const _findItemById = <T extends { id: string }>(data: {
   key: string;
   id: string;
-}): T => {
+}): T | null => {
   const oldItems = getArray<T>(data.key);
   const findById = oldItems.find((item) => item.id === data.id);
-  if (!findById) throw new Error('No item was found with this id');
+  if (!findById) return null;
   return findById;
 };
 
