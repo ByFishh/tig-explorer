@@ -6,4 +6,5 @@ export type ICard = {
   description: string;
   data: ICardData[];
   content?: JSX.Element;
+  forceRender?: boolean;
 };

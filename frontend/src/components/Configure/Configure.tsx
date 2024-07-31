@@ -13,9 +13,11 @@ import { ArrowTopRightIcon } from '@radix-ui/react-icons';
 import DatePicker from '../DatePicker/DatePicker';
 import { Controller } from 'react-hook-form';
 import { useConfigure } from './Configure.logic';
+import { IConfigure } from '@/types/IConfigure/IConfigure';
+import { memo } from 'react';
 
-const Configure = () => {
-  const logic = useConfigure();
+const Configure = (props: IConfigure) => {
+  const logic = useConfigure(props);
   return (
     <Box width="100%">
       <Card size="4">
@@ -49,6 +51,7 @@ const Configure = () => {
                   style={{ width: '100%' }}
                   mb="4"
                   onChange={field.onChange}
+                  value={field.value}
                 />
               </>
             )}
@@ -71,7 +74,9 @@ const Configure = () => {
               <Controller
                 name="startDate"
                 control={logic.control}
-                render={({ field }) => <DatePicker onChange={field.onChange} />}
+                render={({ field }) => (
+                  <DatePicker onChange={field.onChange} value={field.value} />
+                )}
               ></Controller>
             </Flex>
             <Flex width="100%" style={{ flexFlow: 'column' }}>
@@ -87,6 +92,7 @@ const Configure = () => {
                       size="3"
                       type="number"
                       onChange={field.onChange}
+                      value={field.value}
                     />
                   )}
                 ></Controller>
@@ -107,6 +113,7 @@ const Configure = () => {
                     type="number"
                     style={{ paddingLeft: '0' }}
                     onChange={field.onChange}
+                    value={field.value}
                   >
                     <TextField.Slot
                       style={{ paddingLeft: '0' }}
@@ -134,4 +141,4 @@ const Configure = () => {
   );
 };
 
-export default Configure;
+export default memo(Configure, () => true);

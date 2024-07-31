@@ -6,12 +6,14 @@ const inter = Inter({ subsets: ['latin'] });
 
 const DatePicker = (props: {
   onChange: ChangeEventHandler<HTMLInputElement>;
+  value: Date | undefined;
 }) => {
   return (
     <input
       onChange={props.onChange}
       type="date"
       className={`radix-ui-date-picker ${inter.className}`}
+      value={String(props.value)}
     />
   );
 };
