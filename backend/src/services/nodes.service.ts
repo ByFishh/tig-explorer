@@ -243,4 +243,17 @@ export class NodesService {
       block_rewards: blockRewards,
     };
   }
+
+  async getNodePreview(address: string) {
+    if (!address || address.length !== 42)
+      throw new BadRequestException('Invalid address');
+
+    const totalEarned = (await this.getTotalEarned([address]))[0];
+    const averageRewards = (await this.getAverageRewards([address], 120))[0];
+
+    return {
+      total_earned: totalEarned,
+      average_rewards: averageRewards,
+    };
+  }
 }

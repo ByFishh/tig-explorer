@@ -66,4 +66,11 @@ export class NodesController {
       node: await this.nodesService.getNode(id),
     };
   }
+
+  @Get(':address/preview')
+  async getNodePreview(@Param('address') id: string) {
+    return {
+      node: await this.nodesService.getNodePreview(id),
+    };
+  }
 }
