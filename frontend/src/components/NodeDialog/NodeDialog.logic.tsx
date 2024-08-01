@@ -3,9 +3,11 @@ import { INodeInputs } from '@/types/INodeInputs/INodeInputs';
 import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { IAction as DialogAction } from '../../store/dialogsReducer/dialogsReducer.types';
+import { IAction as NodesAction } from '../../store/nodesReducer/nodesReducer.types';
 import * as ls from '../../utils/localStorage';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { handleFormData } from '../Configure/Configure.utils';
+import { useNodes } from '@/store/nodesReducer/nodesReducer';
 
 const inputs: INodeInputs & { address: string } = {
   address: '',
@@ -16,12 +18,15 @@ const inputs: INodeInputs & { address: string } = {
 };
 
 export const useNodeDialog = () => {
-  const { handleSubmit, control } = useForm<INodeInputs & { address: string }>({
+  const { handleSubmit, control, reset } = useForm<
+    INodeInputs & { address: string }
+  >({
     mode: 'onChange',
     defaultValues: inputs,
   });
 
   const { isOpen, dispatch: dialogsDispatch } = useDialogs();
+  const { dispatch: nodesDispatch } = useNodes();
 
   const nodeAlreadyExist = (fieldValue: string) => {
     const alreadyExist = ls.findItemById({
@@ -46,11 +51,13 @@ export const useNodeDialog = () => {
       key: ILocalStorageKey.NODES,
       item: newItem,
     });
+    nodesDispatch({ action: NodesAction.ADD_NODE, payload: newItem });
     closeModal();
   };
 
   const closeModal = useCallback(() => {
     dialogsDispatch({ action: DialogAction.CLOSE_MODAL });
+    reset();
   }, []);
 
   return {

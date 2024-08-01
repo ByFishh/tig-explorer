@@ -9,6 +9,8 @@ const reducer = (
   switch (action) {
     case IAction.SET_NODES:
       return { nodes: payload };
+    case IAction.ADD_NODE:
+      return { nodes: [...state.nodes, payload] };
     default:
       return state;
   }

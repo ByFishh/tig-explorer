@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { usePage } from './page.logic';
 import { Controller } from 'react-hook-form';
 import { PlusIcon } from '@radix-ui/react-icons';
+import Link from 'next/link';
 
 export default function Home() {
   const logic = usePage();
@@ -24,18 +25,17 @@ export default function Home() {
     {
       title: 'Total earned',
       description: 'Review here the total earned by your node',
-      forceRender: true,
       data: [
         {
           title: 'Total earned',
-          value: 100,
+          value: logic.getTotalEarned,
           unit: IUnit.TIG,
         },
-        // {
-        //   title: 'Total earned',
-        //   value: convertUnit(100 ?? 0, logic.tigPrice),
-        //   unit: IUnit.DOLLARD,
-        // },
+        {
+          title: 'Total earned',
+          value: convertUnit(logic.getTotalEarned, logic.tigPrice),
+          unit: IUnit.DOLLARD,
+        },
       ],
     },
 
@@ -43,27 +43,28 @@ export default function Home() {
       title: 'Average rewards',
       description: 'Review here the average rewards',
       data: [],
-      forceRender: true,
       content: (
         <>
           <Flex pr="2">
-            {logic.nodeIsConfigured() ? (
+            {logic.allNodesAreConfigured ? (
               <Flex style={{ flexFlow: 'column' }}>
-                {/* <Text as="p" size="2" mb="0" color="gray">
+                <Text as="p" size="2" mb="0" color="gray">
                   Cost per {IUnit.TIG} ({IUnit.DOLLARD})
                 </Text>
                 <Text as="p" size="7" weight="medium">
                   <span style={{ fontSize: '.825rem' }}>{IUnit.DOLLARD}</span>
-                  {logic.getCostPerTig().toFixed(2)}
-                </Text> */}
+                  {logic
+                    .getCostPerTig(
+                      logic.getAllServerCost,
+                      logic.getAverageEarned,
+                    )
+                    .toFixed(2)}
+                </Text>
               </Flex>
             ) : (
               <Text size="2" color="red">
-                You must enter a server cost in the{' '}
-                <span style={{ textDecoration: 'underline' }}>
-                  Configure Node
-                </span>{' '}
-                before you can access this data.
+                You need to enter a server cost on ALL your nodes before you can
+                access this data.
               </Text>
             )}
           </Flex>
@@ -72,7 +73,7 @@ export default function Home() {
               Average earned ({IUnit.TIG_PER_HOUR})
             </Text>
             <Text as="p" size="7" weight="medium">
-              {Number(100).toFixed(2)}
+              {Number(logic.getAverageEarned).toFixed(2)}
               <span style={{ fontSize: '.825rem' }}>{IUnit.TIG_PER_HOUR}</span>
             </Text>
           </Flex>
@@ -124,7 +125,7 @@ export default function Home() {
               Total
             </Heading>
           </Flex>
-          <Grid gap="4" columns="2">
+          <Grid gap="4" columns={{ sm: '2' }}>
             {items.map((i) => (
               <Card key={uuidv4()} {...i} />
             ))}
@@ -145,6 +146,7 @@ export default function Home() {
                   type="text"
                   onChange={field.onChange}
                   defaultValue={''}
+                  disabled
                 ></TextField.Root>
               )}
             ></Controller>
@@ -154,7 +156,9 @@ export default function Home() {
           </Flex>
           <Flex direction="column" py="4" my="6">
             <Flex justify="end">
-              <Text size="3">Loaded nodes 0/6</Text>
+              <Text size="3">
+                Loaded nodes {logic.tableData.length}/{logic.nodes?.length ?? 0}
+              </Text>
             </Flex>
             <Flex my="4">
               <Table.Root size="3" style={{ width: '100%' }} variant="surface">
@@ -174,6 +178,37 @@ export default function Home() {
                     ))}
                   </Table.Row>
                 </Table.Header>
+
+                <Table.Body>
+                  {logic.tableData.map((td) => (
+                    <Table.Row
+                      key={uuidv4()}
+                      onClick={() => logic.redirectToNode(td.id)}
+                    >
+                      <Table.RowHeaderCell>{td.id}</Table.RowHeaderCell>
+                      <Table.Cell>
+                        {Number(td.total_earned.reward).toFixed(2)}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {Number(td.average_rewards.reward).toFixed(2)}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {logic
+                          .getCostPerTig(
+                            td.serverCost,
+                            td.average_rewards.reward,
+                          )
+                          .toFixed(2)}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {Number(td.serverCost).toFixed(2)}
+                      </Table.Cell>
+                      <Table.Cell>{Number(td.coreNumber)}</Table.Cell>
+                      <Table.Cell>{String(td.startDate)}</Table.Cell>
+                      <Table.Cell>{String(td.notes)}</Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
               </Table.Root>
             </Flex>
           </Flex>

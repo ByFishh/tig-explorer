@@ -7,4 +7,5 @@ export type S = {
 
 export enum IAction {
   SET_NODES = 'set_node',
+  ADD_NODE = 'add_node',
 }

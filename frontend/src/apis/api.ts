@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IBaseNode } from '@/types/INode/INode';
+import { IAverageRewards, IBaseNode, ITotalEarned } from '@/types/INode/INode';
 import { Address, createPublicClient, formatEther, http, parseAbi } from 'viem';
 import { base } from 'viem/chains';
 
@@ -31,4 +31,14 @@ export const getBalance = async (address: string) => {
       }),
     ),
   );
+};
+
+export const getNodePreview = async (address: string) => {
+  const res = await axios.get<{
+    node: {
+      total_earned: ITotalEarned;
+      average_rewards: IAverageRewards;
+    };
+  }>(`${baseApiUrl}/nodes/${address}/preview`);
+  return res.data.node;
 };
