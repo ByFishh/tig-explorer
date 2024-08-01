@@ -9,7 +9,7 @@ type IRoundRewards = {
   reward: number;
 };
 
-type ITotalEarned = {
+export type ITotalEarned = {
   address: string;
   reward: number;
 };
@@ -50,7 +50,7 @@ type IBlock = {
   reward: number;
 };
 
-type IAverageRewards = {
+export type IAverageRewards = {
   address: string;
   reward: number;
 };
