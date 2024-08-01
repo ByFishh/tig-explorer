@@ -23,7 +23,6 @@ export const usePage = (address: string) => {
 
   const getNode = async () => {
     const node = await getBaseNode(address);
-    console.log(node, 'NODE');
     const balance = await getBalance(address);
     dispatch({
       action: IAction.SET_NODE,
@@ -38,6 +37,7 @@ export const usePage = (address: string) => {
   };
 
   const nodeIsConfigured = () => {
+    if (!ls.getItem({ key: ILocalStorageKey.NODES })) return false;
     const item: INodeInputs = ls.findItemById({
       key: ILocalStorageKey.NODES,
       id: address,
