@@ -30,6 +30,7 @@ export const useCard = () => {
           <span style={{ fontSize: '.825rem' }}>TIG/h</span>
         </Text>
       ),
+      [IUnit.DOLLARD_PER_MONTH]: <></>,
     };
     return map[unit];
   };
