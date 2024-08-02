@@ -10,6 +10,7 @@ import {
   Grid,
   Heading,
   Section,
+  Spinner,
   Table,
   Text,
   TextField,
@@ -17,8 +18,14 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { usePage } from './page.logic';
 import { Controller } from 'react-hook-form';
-import { CircleBackslashIcon, PlusIcon } from '@radix-ui/react-icons';
+import {
+  CircleBackslashIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+} from '@radix-ui/react-icons';
 import Link from 'next/link';
+import { displayAddress } from '@/utils/displayAddress';
+import Address from '@/components/Address/Address';
 
 export default function Home() {
   const logic = usePage();
@@ -114,6 +121,13 @@ export default function Home() {
     },
   ];
 
+  if (logic.isLoading)
+    return (
+      <Flex width="100%" p="6" align="center" justify="center" height="100vh">
+        <Spinner />
+      </Flex>
+    );
+
   return (
     <Section>
       <Flex direction="column" gap="2">
@@ -136,86 +150,130 @@ export default function Home() {
               Nodes
             </Heading>
           </Flex>
-          <Flex gap="4">
-            <Controller
-              name="search"
-              control={logic.control}
-              render={({ field }) => (
-                <TextField.Root
-                  style={{ width: '100%' }}
-                  size="3"
-                  type="text"
-                  onChange={field.onChange}
-                  defaultValue={''}
-                  disabled
-                ></TextField.Root>
-              )}
-            ></Controller>
-            <Button size="3" onClick={logic.openNodeDialog}>
-              <PlusIcon /> Add node
-            </Button>
-          </Flex>
-          <Flex direction="column" py="4" my="6">
-            <Flex justify="end">
-              <Text size="3">
-                Loaded nodes {logic.tableData.length}/
-                {Number(logic.nodes?.length - logic.invalidNodes.length) ?? 0}
-              </Text>
-            </Flex>
-            <Flex my="4">
-              <Table.Root size="3" style={{ width: '100%' }} variant="surface">
-                <Table.Header>
-                  <Table.Row>
-                    {tableHeaders.map((h) => (
-                      <Table.ColumnHeaderCell key={uuidv4()}>
-                        <Text size="2">
-                          {h.txt}{' '}
-                          {h.unit && (
-                            <span style={{ fontSize: '.725rem' }}>
-                              ({h.unit})
-                            </span>
-                          )}
-                        </Text>
-                      </Table.ColumnHeaderCell>
-                    ))}
-                  </Table.Row>
-                </Table.Header>
+          {logic.anyNode && (
+            <Flex gap="4">
+              <form
+                onSubmit={logic.handleSubmit(logic.onSubmit)}
+                style={{ width: '100%' }}
+              >
+                <Controller
+                  name="search"
+                  control={logic.control}
+                  render={({ field }) => (
+                    <TextField.Root
+                      style={{ width: '100%', minHeight: '35px' }}
+                      size="2"
+                      type="text"
+                      onChange={field.onChange}
+                      defaultValue={''}
+                    >
+                      <TextField.Slot>
+                        <MagnifyingGlassIcon height="16" width="16" />
+                      </TextField.Slot>
+                    </TextField.Root>
+                  )}
+                ></Controller>
+              </form>
 
-                <Table.Body>
-                  {logic.tableData.map((td) => (
-                    <Table.Row key={uuidv4()}>
-                      <Table.RowHeaderCell>
-                        <Link
-                          style={{ color: 'white' }}
-                          href={`/node/${td.id}`}
-                        >
-                          {td.id}
-                        </Link>
-                      </Table.RowHeaderCell>
-                      <Table.Cell>
-                        {Number(td.total_earned.reward).toFixed(2)}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {Number(td.average_rewards.reward).toFixed(2)}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {logic
-                          .getCostPerTig(
-                            td.serverCost,
-                            td.average_rewards.reward,
-                          )
-                          .toFixed(2)}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {Number(td.serverCost).toFixed(2)}
-                      </Table.Cell>
-                      <Table.Cell>{Number(td.coreNumber)}</Table.Cell>
-                      <Table.Cell>{String(td.startDate)}</Table.Cell>
-                      <Table.Cell>{String(td.notes)}</Table.Cell>
+              <Button
+                size="2"
+                onClick={logic.openNodeDialog}
+                style={{ minHeight: '35px' }}
+              >
+                <PlusIcon /> Add node
+              </Button>
+            </Flex>
+          )}
+
+          <Flex direction="column" py="4" my="6">
+            {!!logic.getTableData.length && (
+              <Flex justify="end">
+                <Text size="3">
+                  Loaded nodes {logic.tableData.length}/
+                  {Number(logic.nodes?.length - logic.invalidNodes.length) ?? 0}
+                </Text>
+              </Flex>
+            )}
+            <Flex my="4">
+              {!!logic.getTableData.length ? (
+                <Table.Root
+                  size="3"
+                  style={{ width: '100%' }}
+                  variant="surface"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      {tableHeaders.map((h) => (
+                        <Table.ColumnHeaderCell key={uuidv4()}>
+                          <Text size="2">
+                            {h.txt}{' '}
+                            {h.unit && (
+                              <span style={{ fontSize: '.725rem' }}>
+                                ({h.unit})
+                              </span>
+                            )}
+                          </Text>
+                        </Table.ColumnHeaderCell>
+                      ))}
                     </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table.Root>
+                  </Table.Header>
+
+                  <Table.Body>
+                    {logic.getTableData.map((td) => (
+                      <Table.Row key={uuidv4()}>
+                        <Table.RowHeaderCell>
+                          <Link
+                            style={{ color: 'white' }}
+                            href={`/node/${td.id}`}
+                          >
+                            <Address address={td.id} />
+                          </Link>
+                        </Table.RowHeaderCell>
+                        <Table.Cell>
+                          {Number(td.total_earned.reward).toFixed(2)}
+                        </Table.Cell>
+                        <Table.Cell>
+                          {Number(td.average_rewards.reward).toFixed(2)}
+                        </Table.Cell>
+                        <Table.Cell>
+                          {logic
+                            .getCostPerTig(
+                              td.serverCost,
+                              td.average_rewards.reward,
+                            )
+                            .toFixed(2)}
+                        </Table.Cell>
+                        <Table.Cell>
+                          {Number(td.serverCost).toFixed(2)}
+                        </Table.Cell>
+                        <Table.Cell>{Number(td.coreNumber)}</Table.Cell>
+                        <Table.Cell>{String(td.startDate)}</Table.Cell>
+                        <Table.Cell>{String(td.notes)}</Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table.Root>
+              ) : (
+                <Flex align="center" justify="center" width="100%">
+                  {logic.keyword ? (
+                    <Text color="red">No node was found with this address</Text>
+                  ) : (
+                    <Flex direction="column" align="center" gap="4">
+                      <Text>
+                        you don&apos;t have a node yet, you can create one right
+                        here
+                      </Text>
+                      <Button
+                        size="2"
+                        onClick={logic.openNodeDialog}
+                        style={{ minHeight: '35px', maxWidth: '110px' }}
+                      >
+                        <PlusIcon /> Add node
+                      </Button>
+                    </Flex>
+                  )}
+                </Flex>
+              )}
             </Flex>
           </Flex>
           {!!logic.invalidNodes.length && (
