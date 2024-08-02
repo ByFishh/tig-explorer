@@ -18,6 +18,10 @@ const App = ({
   useEffect(() => {
     initializeStorage({ key: ILocalStorageKey.NODES, defaultValue: [] });
     initializeStorage({ key: ILocalStorageKey.TIG_PRICE, defaultValue: 0 });
+    initializeStorage({
+      key: ILocalStorageKey.SHOW_INVALID_NODES,
+      defaultValue: true,
+    });
   }, []);
 
   return (

@@ -6,6 +6,7 @@ import { convertUnit } from '@/utils/convertUnit';
 import {
   Button,
   Callout,
+  Checkbox,
   Flex,
   Grid,
   Heading,
@@ -279,50 +280,66 @@ export default function Home() {
           {!!logic.invalidNodes.length && (
             <Flex mt="4" direction="column">
               <Flex direction="column">
-                <Heading as="h2" weight="medium">
-                  Invalid nodes
-                </Heading>
-                <Callout.Root mt="4" color="red">
-                  <Callout.Icon>
-                    <CircleBackslashIcon />
-                  </Callout.Icon>
-                  <Callout.Text>
-                    This is where you&apos;ll find all your invalid nodes. They
-                    represent all the nodes that have an invalid address or that
-                    have not been correctly loaded by the server. If this is the
-                    case, you can contact us here:{' '}
-                    <a
-                      style={{ textDecoration: 'underline' }}
-                      href="https://twitter.com/ByFishh"
-                    >
-                      https://twitter.com/ByFishh
-                    </a>
-                  </Callout.Text>
-                </Callout.Root>
+                <Flex align="center" justify="between">
+                  <Heading as="h2" weight="medium">
+                    Invalid nodes
+                  </Heading>
+                  <Text as="label" size="1" color="gray">
+                    <Flex gap="2">
+                      <Checkbox
+                        checked={logic.showInvalidNodes}
+                        onClick={logic.handleShowInvalidNodes}
+                      />
+                      Show invalid nodes
+                    </Flex>
+                  </Text>
+                </Flex>
               </Flex>
-              <Flex my="4">
-                <Table.Root
-                  size="3"
-                  style={{ width: '100%' }}
-                  variant="surface"
-                >
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.ColumnHeaderCell key={uuidv4()}>
-                        <Text size="2">Address</Text>
-                      </Table.ColumnHeaderCell>
-                    </Table.Row>
-                  </Table.Header>
 
-                  <Table.Body>
-                    {logic.invalidNodes.map((td) => (
-                      <Table.Row key={uuidv4()}>
-                        <Table.RowHeaderCell>{td.id}</Table.RowHeaderCell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table.Root>
-              </Flex>
+              {logic.showInvalidNodes && (
+                <>
+                  <Callout.Root mt="4" color="red">
+                    <Callout.Icon>
+                      <CircleBackslashIcon />
+                    </Callout.Icon>
+                    <Callout.Text>
+                      This is where you&apos;ll find all your invalid nodes.
+                      They represent all the nodes that have an invalid address
+                      or that have not been correctly loaded by the server. If
+                      this is the case, you can contact us here:{' '}
+                      <a
+                        style={{ textDecoration: 'underline' }}
+                        href="https://twitter.com/ByFishh"
+                      >
+                        https://twitter.com/ByFishh
+                      </a>
+                    </Callout.Text>
+                  </Callout.Root>
+                  <Flex my="4">
+                    <Table.Root
+                      size="3"
+                      style={{ width: '100%' }}
+                      variant="surface"
+                    >
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.ColumnHeaderCell key={uuidv4()}>
+                            <Text size="2">Address</Text>
+                          </Table.ColumnHeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+
+                      <Table.Body>
+                        {logic.invalidNodes.map((td) => (
+                          <Table.Row key={uuidv4()}>
+                            <Table.RowHeaderCell>{td.id}</Table.RowHeaderCell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table.Root>
+                  </Flex>
+                </>
+              )}
             </Flex>
           )}
         </Flex>

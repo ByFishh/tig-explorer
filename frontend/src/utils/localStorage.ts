@@ -4,7 +4,7 @@ import { tryCatch } from './tryCatch';
 const _initializeStorage = (data: { key: string; defaultValue: unknown }) => {
   if (typeof window === 'undefined') return;
   const item = _getItem({ key: data.key });
-  if (item) return;
+  if (item && typeof item !== 'boolean') return;
   localStorage.setItem(data.key, JSON.stringify(data.defaultValue));
 };
 

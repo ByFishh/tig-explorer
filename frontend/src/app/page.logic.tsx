@@ -31,6 +31,7 @@ export const usePage = () => {
   const [keyword, setKeyword] = useState<string>('');
   const [tableData, setTableData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [showInvalidNodes, setShowInvalidNodes] = useState<boolean>(true);
 
   const [invalidNodes, setInvalidNodes] = useState<
     Array<INodeInputs & { id: string }>
@@ -39,6 +40,7 @@ export const usePage = () => {
   useEffect(() => {
     if (nodes.length) return;
     getAllNodes();
+    getShowInvalidNodes();
   }, []);
 
   useEffect(() => {
@@ -50,18 +52,25 @@ export const usePage = () => {
     handleIsLoading();
   }, [tableData, invalidNodes, nodes, isLoading]);
 
-  const handleIsLoading = () => {
-    if (!isLoading || !nodes.length) return;
-    if (tableData.length !== 0) setIsLoading(false);
-    if (invalidNodes.length === nodes.length) setIsLoading(false);
-  };
-
   const onSubmit: SubmitHandler<{ search: string }> = (data: {
     search: string;
   }) => {
     setKeyword(data.search);
   };
 
+  const handleIsLoading = () => {
+    if (!isLoading || !nodes.length) return;
+    if (tableData.length !== 0) setIsLoading(false);
+    if (invalidNodes.length === nodes.length) setIsLoading(false);
+  };
+
+  const getShowInvalidNodes = () => {
+    const bool: boolean | null = ls.getItem({
+      key: ILocalStorageKey.SHOW_INVALID_NODES,
+    });
+    if (typeof bool !== 'boolean') return;
+    setShowInvalidNodes(bool);
+  };
   const getAllNodes = () => {
     const nodes = ls.getItem({ key: ILocalStorageKey.NODES });
     nodesDispatch({ action: NodesAction.SET_NODES, payload: nodes ?? [] });
@@ -138,6 +147,12 @@ export const usePage = () => {
 
   const anyNode = !!getTableData.length || !!invalidNodes.length;
 
+  const handleShowInvalidNodes = (e: React.FormEvent<HTMLButtonElement>) => {
+    const newValue = !showInvalidNodes;
+    setShowInvalidNodes(newValue);
+    ls.setItem({ key: ILocalStorageKey.SHOW_INVALID_NODES, item: newValue });
+  };
+
   return {
     tigPrice,
     control,
@@ -156,5 +171,7 @@ export const usePage = () => {
     isLoading,
     keyword,
     anyNode,
+    showInvalidNodes,
+    handleShowInvalidNodes,
   };
 };
