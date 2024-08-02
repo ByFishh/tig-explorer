@@ -181,11 +181,15 @@ export default function Home() {
 
                 <Table.Body>
                   {logic.tableData.map((td) => (
-                    <Table.Row
-                      key={uuidv4()}
-                      onClick={() => logic.redirectToNode(td.id)}
-                    >
-                      <Table.RowHeaderCell>{td.id}</Table.RowHeaderCell>
+                    <Table.Row key={uuidv4()}>
+                      <Table.RowHeaderCell>
+                        <Link
+                          style={{ color: 'white' }}
+                          href={`/node/${td.id}`}
+                        >
+                          {td.id}
+                        </Link>
+                      </Table.RowHeaderCell>
                       <Table.Cell>
                         {Number(td.total_earned.reward).toFixed(2)}
                       </Table.Cell>
