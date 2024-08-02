@@ -4,7 +4,7 @@ import { IAction as NodesAction } from '@/store/nodesReducer/nodesReducer.types'
 import { useTigPrice } from '@/store/tigPriceReducer/tigPriceReducer';
 import { IModals } from '@/types/IModals/IModals';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import * as ls from '../utils/localStorage';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { useNodes } from '@/store/nodesReducer/nodesReducer';
@@ -19,7 +19,7 @@ type T = INodeInputs & { id: string } & {
 };
 
 export const usePage = () => {
-  const { control } = useForm<{ search: string }>();
+  const { handleSubmit, control } = useForm<{ search: string }>();
   const { dispatch: dialogsDispatch } = useDialogs();
   const { nodes, dispatch: nodesDispatch } = useNodes();
   const { tigPrice } = useTigPrice();
@@ -28,7 +28,10 @@ export const usePage = () => {
   const tableDataRef = useRef<T[]>([]);
 
   // States
+  const [keyword, setKeyword] = useState<string>('');
   const [tableData, setTableData] = useState<T[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [invalidNodes, setInvalidNodes] = useState<
     Array<INodeInputs & { id: string }>
   >([]);
@@ -39,19 +42,39 @@ export const usePage = () => {
   }, []);
 
   useEffect(() => {
-    if (JSON.stringify(nodes) === JSON.stringify([]) || !nodes) return;
+    if (!nodes || JSON.stringify(nodes) === JSON.stringify([])) return;
     getAllServerNodes();
   }, [nodes]);
+
+  useEffect(() => {
+    handleIsLoading();
+  }, [tableData, invalidNodes, nodes, isLoading]);
+
+  const handleIsLoading = () => {
+    if (!isLoading || !nodes.length) return;
+    if (tableData.length !== 0) setIsLoading(false);
+    if (invalidNodes.length === nodes.length) setIsLoading(false);
+  };
+
+  const onSubmit: SubmitHandler<{ search: string }> = (data: {
+    search: string;
+  }) => {
+    setKeyword(data.search);
+  };
 
   const getAllNodes = () => {
     const nodes = ls.getItem({ key: ILocalStorageKey.NODES });
     nodesDispatch({ action: NodesAction.SET_NODES, payload: nodes ?? [] });
+    if (JSON.stringify(nodes) === JSON.stringify([]) || !nodes)
+      setIsLoading(false);
   };
 
   const getAllServerNodes = async () => {
     const nodesPreview: T[] = tableDataRef.current;
     for (const n of nodes) {
       try {
+        const nodeIsAlreadyInvalid = invalidNodes.find((i) => i.id === n.id);
+        if (nodeIsAlreadyInvalid) continue;
         const alreadyFetched = tableDataRef.current.find(
           (tb) => tb.id === n.id,
         );
@@ -105,6 +128,16 @@ export const usePage = () => {
     }, 0);
   }, [tableData]);
 
+  const getTableData = useMemo(() => {
+    return tableData.filter((td) =>
+      keyword === undefined
+        ? td
+        : td.id.toLocaleLowerCase().includes(keyword.toLocaleLowerCase()) && td,
+    );
+  }, [keyword, tableData]);
+
+  const anyNode = !!getTableData.length || !!invalidNodes.length;
+
   return {
     tigPrice,
     control,
@@ -117,5 +150,11 @@ export const usePage = () => {
     allNodesAreConfigured,
     getAllServerCost,
     invalidNodes,
+    getTableData,
+    onSubmit,
+    handleSubmit,
+    isLoading,
+    keyword,
+    anyNode,
   };
 };
