@@ -12,7 +12,6 @@ import { IAverageRewards, ITotalEarned } from '@/types/INode/INode';
 import { getNodePreview } from '@/apis/api';
 import { INodeInputs } from '@/types/INodeInputs/INodeInputs';
 import { convertMonthToHour } from '@/utils/convertMonthToHour';
-import { useRouter } from 'next/navigation';
 
 type T = INodeInputs & { id: string } & {
   total_earned: ITotalEarned;
@@ -30,6 +29,9 @@ export const usePage = () => {
 
   // States
   const [tableData, setTableData] = useState<T[]>([]);
+  const [invalidNodes, setInvalidNodes] = useState<
+    Array<INodeInputs & { id: string }>
+  >([]);
 
   useEffect(() => {
     if (nodes.length) return;
@@ -55,11 +57,15 @@ export const usePage = () => {
         );
         if (alreadyFetched) continue;
         const node = await getNodePreview(n.id);
-        if (!node) continue;
+        if (!node || typeof node === 'string') throw n.id;
         const data: T = { ...node, ...n };
         tableDataRef.current.push(data);
         setTableData(JSON.parse(JSON.stringify(nodesPreview)));
       } catch (error) {
+        if (typeof error === 'string') {
+          const item = nodes.find((n) => n.id === error);
+          if (item) setInvalidNodes((prev) => [...prev, item]);
+        }
         continue;
       }
     }
@@ -110,5 +116,6 @@ export const usePage = () => {
     getAverageEarned,
     allNodesAreConfigured,
     getAllServerCost,
+    invalidNodes,
   };
 };
