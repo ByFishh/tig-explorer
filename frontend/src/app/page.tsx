@@ -5,6 +5,7 @@ import { IUnit } from '@/types/IUnit/IUnit';
 import { convertUnit } from '@/utils/convertUnit';
 import {
   Button,
+  Callout,
   Flex,
   Grid,
   Heading,
@@ -16,7 +17,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { usePage } from './page.logic';
 import { Controller } from 'react-hook-form';
-import { PlusIcon } from '@radix-ui/react-icons';
+import { CircleBackslashIcon, PlusIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 
 export default function Home() {
@@ -82,7 +83,7 @@ export default function Home() {
     },
   ];
 
-  const headers: { txt: string; unit?: IUnit }[] = [
+  const tableHeaders: { txt: string; unit?: IUnit }[] = [
     {
       txt: 'Address',
     },
@@ -157,14 +158,15 @@ export default function Home() {
           <Flex direction="column" py="4" my="6">
             <Flex justify="end">
               <Text size="3">
-                Loaded nodes {logic.tableData.length}/{logic.nodes?.length ?? 0}
+                Loaded nodes {logic.tableData.length}/
+                {Number(logic.nodes?.length - logic.invalidNodes.length) ?? 0}
               </Text>
             </Flex>
             <Flex my="4">
               <Table.Root size="3" style={{ width: '100%' }} variant="surface">
                 <Table.Header>
                   <Table.Row>
-                    {headers.map((h) => (
+                    {tableHeaders.map((h) => (
                       <Table.ColumnHeaderCell key={uuidv4()}>
                         <Text size="2">
                           {h.txt}{' '}
@@ -216,6 +218,55 @@ export default function Home() {
               </Table.Root>
             </Flex>
           </Flex>
+          {!!logic.invalidNodes.length && (
+            <Flex mt="4" direction="column">
+              <Flex direction="column">
+                <Heading as="h2" weight="medium">
+                  Invalid nodes
+                </Heading>
+                <Callout.Root mt="4" color="red">
+                  <Callout.Icon>
+                    <CircleBackslashIcon />
+                  </Callout.Icon>
+                  <Callout.Text>
+                    This is where you&apos;ll find all your invalid nodes. They
+                    represent all the nodes that have an invalid address or that
+                    have not been correctly loaded by the server. If this is the
+                    case, you can contact us here:{' '}
+                    <a
+                      style={{ textDecoration: 'underline' }}
+                      href="https://twitter.com/ByFishh"
+                    >
+                      https://twitter.com/ByFishh
+                    </a>
+                  </Callout.Text>
+                </Callout.Root>
+              </Flex>
+              <Flex my="4">
+                <Table.Root
+                  size="3"
+                  style={{ width: '100%' }}
+                  variant="surface"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.ColumnHeaderCell key={uuidv4()}>
+                        <Text size="2">Address</Text>
+                      </Table.ColumnHeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+
+                  <Table.Body>
+                    {logic.invalidNodes.map((td) => (
+                      <Table.Row key={uuidv4()}>
+                        <Table.RowHeaderCell>{td.id}</Table.RowHeaderCell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table.Root>
+              </Flex>
+            </Flex>
+          )}
         </Flex>
       </Flex>
     </Section>

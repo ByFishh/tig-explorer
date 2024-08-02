@@ -34,11 +34,19 @@ export const getBalance = async (address: string) => {
 };
 
 export const getNodePreview = async (address: string) => {
-  const res = await axios.get<{
-    node: {
-      total_earned: ITotalEarned;
-      average_rewards: IAverageRewards;
-    };
-  }>(`${baseApiUrl}/nodes/${address}/preview`);
-  return res.data.node;
+  try {
+    const res = await axios.get<
+      | string
+      | {
+          node: {
+            total_earned: ITotalEarned;
+            average_rewards: IAverageRewards;
+          };
+        }
+    >(`${baseApiUrl}/nodes/${address}/preview`);
+    if (typeof res.data === 'string') throw 'Unable to fetch data';
+    return res.data.node;
+  } catch (error) {
+    return address;
+  }
 };
