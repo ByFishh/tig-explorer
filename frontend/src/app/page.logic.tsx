@@ -24,7 +24,6 @@ export const usePage = () => {
   const { dispatch: dialogsDispatch } = useDialogs();
   const { nodes, dispatch: nodesDispatch } = useNodes();
   const { tigPrice } = useTigPrice();
-  const router = useRouter();
 
   // Refs
   const tableDataRef = useRef<T[]>([]);
@@ -33,6 +32,7 @@ export const usePage = () => {
   const [tableData, setTableData] = useState<T[]>([]);
 
   useEffect(() => {
+    if (nodes.length) return;
     getAllNodes();
   }, []);
 
@@ -91,17 +91,13 @@ export const usePage = () => {
 
   const allNodesAreConfigured = useMemo(() => {
     return tableData.every((td) => td.serverCost);
-  }, [tableData, nodes]);
+  }, [tableData]);
 
   const getAllServerCost = useMemo(() => {
     return tableData.reduce((total, item) => {
       return total + item.serverCost;
     }, 0);
   }, [tableData]);
-
-  const redirectToNode = (nodeId: string) => {
-    // router.push(`/node/${nodeId}`)
-  };
 
   return {
     tigPrice,
@@ -114,6 +110,5 @@ export const usePage = () => {
     getAverageEarned,
     allNodesAreConfigured,
     getAllServerCost,
-    redirectToNode,
   };
 };
