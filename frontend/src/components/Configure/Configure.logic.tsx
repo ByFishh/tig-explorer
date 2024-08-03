@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { IConfigure } from '@/types/IConfigure/IConfigure';
 
 const inputs: INodeInputs = {
+  id: '',
   notes: '',
   serverCost: 0,
   coreNumber: 0,

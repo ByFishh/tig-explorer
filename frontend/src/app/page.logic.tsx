@@ -8,34 +8,30 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import * as ls from '../utils/localStorage';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { useNodes } from '@/store/nodesReducer/nodesReducer';
-import { IAverageRewards, ITotalEarned } from '@/types/INode/INode';
 import { getNodePreview } from '@/apis/api';
-import { INodeInputs } from '@/types/INodeInputs/INodeInputs';
 import { convertMonthToHour } from '@/utils/convertMonthToHour';
-
-type T = INodeInputs & { id: string } & {
-  total_earned: ITotalEarned;
-  average_rewards: IAverageRewards;
-};
+import { ITableData } from '@/types/ITableData/ITableData';
+import { useTableData } from '@/store/tableDataReducer/tableDataReducer';
+import { IAction as TableDataAction } from '@/store/tableDataReducer/tableDataReducer.types';
+import { IAction as InvalidNodesAction } from '@/store/invalidNodes/invalidNodes.types';
+import { useInvalidNodes } from '@/store/invalidNodes/invalidNodes';
+import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
 
 export const usePage = () => {
   const { handleSubmit, control } = useForm<{ search: string }>();
   const { dispatch: dialogsDispatch } = useDialogs();
   const { nodes, dispatch: nodesDispatch } = useNodes();
   const { tigPrice } = useTigPrice();
+  const { tableData, dispatch: tableDataDispatch } = useTableData();
+  const { invalidNodes, dispatch: invalidNodesDispatch } = useInvalidNodes();
 
   // Refs
-  const tableDataRef = useRef<T[]>([]);
+  const tableDataRef = useRef<ITableData[]>([]);
 
   // States
   const [keyword, setKeyword] = useState<string>('');
-  const [tableData, setTableData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showInvalidNodes, setShowInvalidNodes] = useState<boolean>(true);
-
-  const [invalidNodes, setInvalidNodes] = useState<
-    Array<INodeInputs & { id: string }>
-  >([]);
 
   useEffect(() => {
     if (nodes.length) return;
@@ -79,7 +75,7 @@ export const usePage = () => {
   };
 
   const getAllServerNodes = async () => {
-    const nodesPreview: T[] = tableDataRef.current;
+    const nodesPreview: ITableData[] = tableDataRef.current;
     for (const n of nodes) {
       try {
         const nodeIsAlreadyInvalid = invalidNodes.find((i) => i.id === n.id);
@@ -90,13 +86,20 @@ export const usePage = () => {
         if (alreadyFetched) continue;
         const node = await getNodePreview(n.id);
         if (!node || typeof node === 'string') throw n.id;
-        const data: T = { ...node, ...n };
+        const data: ITableData = { ...node, ...n };
         tableDataRef.current.push(data);
-        setTableData(JSON.parse(JSON.stringify(nodesPreview)));
+        tableDataDispatch({
+          action: TableDataAction.SET_TABLE_DATA,
+          payload: JSON.parse(JSON.stringify(nodesPreview)),
+        });
       } catch (error) {
         if (typeof error === 'string') {
           const item = nodes.find((n) => n.id === error);
-          if (item) setInvalidNodes((prev) => [...prev, item]);
+          if (!item) continue;
+          invalidNodesDispatch({
+            action: InvalidNodesAction.ADD_INVALID_NODES,
+            payload: item,
+          });
         }
         continue;
       }
@@ -106,7 +109,7 @@ export const usePage = () => {
   const openNodeDialog = useCallback(() => {
     dialogsDispatch({
       action: DialogsAction.OPEN_MODAL,
-      payload: { isOpen: IModals.NODE },
+      payload: { isOpen: IModals.NODE, data: { type: INodeDialogType.ADD } },
     });
   }, []);
 

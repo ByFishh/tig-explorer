@@ -25,8 +25,8 @@ import {
   PlusIcon,
 } from '@radix-ui/react-icons';
 import Link from 'next/link';
-import { displayAddress } from '@/utils/displayAddress';
 import Address from '@/components/Address/Address';
+import Menu from '@/components/Menu/Menu';
 
 export default function Home() {
   const logic = usePage();
@@ -120,6 +120,9 @@ export default function Home() {
     {
       txt: 'Notes',
     },
+    {
+      txt: '',
+    },
   ];
 
   if (logic.isLoading)
@@ -190,7 +193,7 @@ export default function Home() {
             {!!logic.getTableData.length && (
               <Flex justify="end">
                 <Text size="3">
-                  Loaded nodes {logic.tableData.length}/
+                  Total loaded nodes {logic.tableData.length}/
                   {Number(logic.nodes?.length - logic.invalidNodes.length) ?? 0}
                 </Text>
               </Flex>
@@ -250,6 +253,9 @@ export default function Home() {
                         <Table.Cell>{Number(td.coreNumber)}</Table.Cell>
                         <Table.Cell>{String(td.startDate)}</Table.Cell>
                         <Table.Cell>{String(td.notes)}</Table.Cell>
+                        <Table.Cell>
+                          <Menu address={td.id} />
+                        </Table.Cell>
                       </Table.Row>
                     ))}
                   </Table.Body>
@@ -323,9 +329,10 @@ export default function Home() {
                     >
                       <Table.Header>
                         <Table.Row>
-                          <Table.ColumnHeaderCell key={uuidv4()}>
+                          <Table.ColumnHeaderCell width="100%">
                             <Text size="2">Address</Text>
                           </Table.ColumnHeaderCell>
+                          <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
                         </Table.Row>
                       </Table.Header>
 
@@ -333,6 +340,9 @@ export default function Home() {
                         {logic.invalidNodes.map((td) => (
                           <Table.Row key={uuidv4()}>
                             <Table.RowHeaderCell>{td.id}</Table.RowHeaderCell>
+                            <Table.Cell>
+                              <Menu address={td.id} disable={{ edit: true }} />
+                            </Table.Cell>
                           </Table.Row>
                         ))}
                       </Table.Body>

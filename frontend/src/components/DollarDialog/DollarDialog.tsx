@@ -1,9 +1,5 @@
 'use client';
-import {
-  ArrowTopRightIcon,
-  Cross1Icon,
-  Cross2Icon,
-} from '@radix-ui/react-icons';
+import { ArrowTopRightIcon, Cross1Icon } from '@radix-ui/react-icons';
 import {
   Box,
   Dialog,
@@ -17,7 +13,6 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { useDollarDialog } from './DollarDialog.logic';
 import { IModals } from '@/types/IModals/IModals';
-import { DialogOverlay, DialogPortal } from '@radix-ui/react-dialog';
 
 const DollarDialog = () => {
   const logic = useDollarDialog();

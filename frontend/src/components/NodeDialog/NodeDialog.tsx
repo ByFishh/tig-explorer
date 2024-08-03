@@ -1,9 +1,8 @@
 import { IModals } from '@/types/IModals/IModals';
 import {
-  ArrowTopRightIcon,
   CircleBackslashIcon,
   Cross1Icon,
-  InfoCircledIcon,
+  Pencil1Icon,
   PlusIcon,
 } from '@radix-ui/react-icons';
 import {
@@ -18,18 +17,30 @@ import {
   TextArea,
   TextField,
 } from '@radix-ui/themes';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import { useNodeDialog } from './NodeDialog.logic';
 import DatePicker from '../DatePicker/DatePicker';
+import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
 
 const NodeDialog = () => {
   const logic = useNodeDialog();
+
+  const UI = useMemo(
+    () => ({
+      title: logic.type === INodeDialogType.ADD ? 'Add node' : 'Edit node',
+      buttonLabel: logic.type === INodeDialogType.ADD ? 'Add' : 'Edit',
+      buttonIcon:
+        logic.type === INodeDialogType.ADD ? <PlusIcon /> : <Pencil1Icon />,
+    }),
+    [logic.type],
+  );
+
   return (
     <Dialog.Root open={logic.isOpen === IModals.NODE}>
       <Dialog.Content size="4">
         <Flex justify="between" align="center">
-          <Dialog.Title size="5">Add node</Dialog.Title>
+          <Dialog.Title size="5">{UI.title}</Dialog.Title>
           <Dialog.Close>
             <Flex>
               <IconButton
@@ -42,14 +53,14 @@ const NodeDialog = () => {
           </Dialog.Close>
         </Flex>
         <Dialog.Description size="2" color="gray" mb="5">
-          Review here global information about your node
+          Handle every information relative to your node
         </Dialog.Description>
 
         <Flex width={'100%'} direction="column">
           <Flex direction="column" mb="5">
             <Box>
               <Controller
-                name="address"
+                name="id"
                 control={logic.control}
                 rules={{
                   required: {
@@ -79,6 +90,7 @@ const NodeDialog = () => {
                       type="text"
                       onChange={field.onChange}
                       value={field.value}
+                      disabled={logic.type === INodeDialogType.EDIT}
                     />
                     {fieldState.error && (
                       <Callout.Root mt="4" color="red">
@@ -190,8 +202,11 @@ const NodeDialog = () => {
             </Box>
             <Flex justify={'end'}>
               <Box>
-                <Button onClick={logic.handleSubmit(logic.onSubmit)}>
-                  <PlusIcon /> Add
+                <Button
+                  onClick={logic.handleSubmit(logic.onSubmit)}
+                  disabled={!logic.isValid}
+                >
+                  {UI.buttonIcon} {UI.buttonLabel}
                 </Button>
               </Box>
             </Flex>

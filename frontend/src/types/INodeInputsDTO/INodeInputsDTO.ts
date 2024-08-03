@@ -1,5 +1,4 @@
-export type INodeInputs = {
-  id: string;
+export type INodeInputDTO = {
   notes: string;
   startDate?: Date;
   coreNumber?: number;
