@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { IAction, S } from './nodesReducer.types';
+import * as array from '@/utils/array';
 
 const reducer = (
   state: S,
@@ -11,6 +12,12 @@ const reducer = (
       return { nodes: payload };
     case IAction.ADD_NODE:
       return { nodes: [...state.nodes, payload] };
+    case IAction.UPDATE_NODE:
+      const updatedArr = array._updateArray(state.nodes, payload);
+      if (!updatedArr) return state;
+      return { nodes: updatedArr };
+    case IAction.REMOVE_NODE:
+      return { nodes: state.nodes.filter((n) => n.id !== payload) };
     default:
       return state;
   }

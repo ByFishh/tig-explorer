@@ -2,7 +2,7 @@ import { IModals } from '@/types/IModals/IModals';
 
 export type S = {
   isOpen: IModals | null;
-  data: unknown | null;
+  data: any | null;
   dispatch: (args: { action: IAction; payload?: unknown }) => void;
 };
 
