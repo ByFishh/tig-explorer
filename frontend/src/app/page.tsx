@@ -226,12 +226,14 @@ export default function Home() {
                     {logic.getTableData.map((td) => (
                       <Table.Row key={uuidv4()}>
                         <Table.RowHeaderCell>
-                          <Link
+                          <a
+                            target="_blank"
+                            href={`https://tig-explorer.com/node/${td.id}`}
+                            rel="noopener noreferrer"
                             style={{ color: 'white' }}
-                            href={`/node/${td.id}`}
                           >
                             <Address address={td.id} />
-                          </Link>
+                          </a>
                         </Table.RowHeaderCell>
                         <Table.Cell>
                           {Number(td.total_earned.reward).toFixed(2)}
