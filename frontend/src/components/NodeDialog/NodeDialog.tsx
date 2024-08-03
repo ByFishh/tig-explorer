@@ -22,6 +22,8 @@ import { Controller } from 'react-hook-form';
 import { useNodeDialog } from './NodeDialog.logic';
 import DatePicker from '../DatePicker/DatePicker';
 import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
+import ImportExcel from '../ImportExcel/ImportExcel';
+import ImportExcelTemplate from '../ImportExcelTemplate/ImportExcelTemplate';
 
 const NodeDialog = () => {
   const logic = useNodeDialog();
@@ -212,6 +214,20 @@ const NodeDialog = () => {
             </Flex>
           </Flex>
         </Flex>
+        {logic.type === INodeDialogType.ADD && (
+          <>
+            <Flex my="4" justify="center" align="center">
+              <Text>OR</Text>
+            </Flex>
+            <Flex direction="column">
+              <Text size="4" weight="bold">
+                Import nodes from Excel
+              </Text>
+              <ImportExcelTemplate />
+              <ImportExcel title="Import nodes from Excel" />
+            </Flex>
+          </>
+        )}
       </Dialog.Content>
     </Dialog.Root>
   );

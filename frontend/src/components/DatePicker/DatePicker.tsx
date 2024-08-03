@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 const DatePicker = (props: {
   onChange: ChangeEventHandler<HTMLInputElement>;
-  value: Date | undefined;
+  value: Date | string | null | undefined;
 }) => {
   return (
     <input
