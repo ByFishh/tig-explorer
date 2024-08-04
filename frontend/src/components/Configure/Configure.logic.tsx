@@ -12,7 +12,7 @@ const inputs: INodeInputs = {
   notes: '',
   serverCost: 0,
   coreNumber: 0,
-  startDate: undefined,
+  startDate: '',
 };
 
 export const useConfigure = (props: IConfigure) => {

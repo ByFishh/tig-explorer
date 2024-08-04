@@ -20,7 +20,7 @@ const inputs: INodeInputs = {
   notes: '',
   serverCost: 0,
   coreNumber: 0,
-  startDate: new Date(''),
+  startDate: '',
 };
 
 export const useNodeDialog = () => {
