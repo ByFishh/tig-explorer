@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import * as XLSX from 'xlsx';
 import { z } from 'zod';
+import { removeDuplicate } from '@/utils/removeDuplicates';
 
 const nodeSchema = z.object({
   id: z.string().max(42).min(1),
@@ -41,7 +42,10 @@ export const useImportExcel = () => {
         coreNumber: row[3] ? Number(row[3]) : undefined,
         serverCost: row[4] ? Number(row[4]) : 0,
       }));
-      const datas = nodes.map((node) => nodeSchema.parse(node));
+      const removeBlanks = nodes.filter((i) => i.id);
+      const filteredData = removeDuplicate(removeBlanks);
+      if (!filteredData) return;
+      const datas = filteredData.map((node) => nodeSchema.parse(node));
       setNodesToLocalStorage(datas);
     };
     reader.readAsBinaryString(file);
