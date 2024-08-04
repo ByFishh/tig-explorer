@@ -1,7 +1,5 @@
-export type INodeInputs = {
-  id: string;
-  notes: string;
-  startDate?: Date | string | null;
-  coreNumber?: number;
-  serverCost: number;
-};
+import * as z from 'zod';
+import { nodeInputsSchema } from '../../schemas/NodeInputs.schema';
+
+export type INodeInputs = z.infer<typeof nodeInputsSchema>;
+export type INodeInputsDTO = Omit<INodeInputs, 'id'>;

@@ -29,7 +29,7 @@ export default function Page({ params }: { params: { address: string } }) {
       data: [
         {
           title: 'Wallet balance',
-          value: logic.node?.wallet_balance.balance,
+          value: logic.node?.wallet_balance.balance ?? null,
           unit: IUnit.TIG,
         },
         {
@@ -49,7 +49,7 @@ export default function Page({ params }: { params: { address: string } }) {
       data: [
         {
           title: 'Total earned',
-          value: logic.node?.total_earned.reward,
+          value: logic.node?.total_earned.reward ?? null,
           unit: IUnit.TIG,
         },
         {
@@ -74,7 +74,7 @@ export default function Page({ params }: { params: { address: string } }) {
       data: [
         {
           title: 'Current round rewards',
-          value: logic.node?.round_rewards.reward,
+          value: logic.node?.round_rewards.reward ?? null,
           unit: IUnit.TIG,
         },
         {

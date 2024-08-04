@@ -2,7 +2,7 @@ import { IUnit } from '@/types/IUnit/IUnit';
 import { Text } from '@radix-ui/themes';
 
 export const useCard = () => {
-  const getValue = (value: number | undefined, unit: IUnit): JSX.Element => {
+  const getValue = (value: number | null, unit: IUnit): JSX.Element => {
     if (typeof value !== 'number')
       return (
         <Text as="p" size="7" weight="medium" color="red">

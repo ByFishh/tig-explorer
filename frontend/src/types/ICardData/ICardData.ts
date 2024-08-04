@@ -1,8 +1,4 @@
-import { IUnit } from '../IUnit/IUnit';
+import { z } from 'zod';
+import { cardDataSchema } from '@/schemas/CardData.schema';
 
-export type ICardData = {
-  title: string;
-  value: number | undefined;
-  unit: IUnit;
-  percentage?: number;
-};
+export type ICardData = z.infer<typeof cardDataSchema>;

@@ -1,5 +1,7 @@
+import { IAverageRewards } from '@/types/IAverageRewards/IAverageRewards';
+import { IBaseNode } from '@/types/IBaseNode/IBaseNode';
+import { ITotalEarned } from '@/types/ITotalEarned/ITotalEarned';
 import axios from 'axios';
-import { IAverageRewards, IBaseNode, ITotalEarned } from '@/types/INode/INode';
 import { Address, createPublicClient, formatEther, http, parseAbi } from 'viem';
 import { base } from 'viem/chains';
 
