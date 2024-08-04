@@ -24,7 +24,6 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
 } from '@radix-ui/react-icons';
-import Link from 'next/link';
 import Address from '@/components/Address/Address';
 import Menu from '@/components/Menu/Menu';
 
@@ -154,7 +153,7 @@ export default function Home() {
               Nodes
             </Heading>
           </Flex>
-          {logic.anyNode && (
+          {!!logic.getNodes.valid.length && (
             <Flex gap="4">
               <form
                 onSubmit={logic.handleSubmit(logic.onSubmit)}
@@ -193,8 +192,10 @@ export default function Home() {
             {!!logic.getTableData.length && (
               <Flex justify="end">
                 <Text size="3">
-                  Total loaded nodes {logic.tableData.length}/
-                  {Number(logic.nodes?.length - logic.invalidNodes.length) ?? 0}
+                  Total loaded nodes {logic.getNodes.valid.length}/
+                  {Number(
+                    logic.nodes?.length - logic.getNodes.invalid.length,
+                  ) ?? 0}
                 </Text>
               </Flex>
             )}
@@ -285,7 +286,7 @@ export default function Home() {
               )}
             </Flex>
           </Flex>
-          {!!logic.invalidNodes.length && (
+          {!!logic.getNodes.invalid.length && (
             <Flex mt="4" direction="column">
               <Flex direction="column">
                 <Flex align="center" justify="between">
@@ -339,7 +340,7 @@ export default function Home() {
                       </Table.Header>
 
                       <Table.Body>
-                        {logic.invalidNodes.map((td) => (
+                        {logic.getNodes.invalid.map((td) => (
                           <Table.Row key={uuidv4()}>
                             <Table.RowHeaderCell>{td.id}</Table.RowHeaderCell>
                             <Table.Cell>

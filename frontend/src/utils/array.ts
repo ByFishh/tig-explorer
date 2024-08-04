@@ -6,7 +6,7 @@ export const _updateArray = <T extends { id: string }>(
   item: Immutable<T> | null,
 ): Immutable<T[]> | null => {
   if (!arr || !isArray(arr) || !item) return null;
-  return arr.map((a) => (a.id === item.id ? item : a));
+  return arr.map((a) => (a.id === item.id ? { ...a, ...item } : a));
 };
 
 export const _findById = <T extends { id: string }>(

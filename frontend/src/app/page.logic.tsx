@@ -12,8 +12,6 @@ import { convertMonthToHour } from '@/utils/convertMonthToHour';
 import { ITableData } from '@/types/ITableData/ITableData';
 import { useTableData } from '@/store/tableDataReducer/tableDataReducer';
 import { IAction as TableDataAction } from '@/store/tableDataReducer/tableDataReducer.types';
-import { IAction as InvalidNodesAction } from '@/store/invalidNodes/invalidNodes.types';
-import { useInvalidNodes } from '@/store/invalidNodes/invalidNodes';
 import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
 import { getNodePreview } from '@/apis/node/node.action';
 
@@ -23,7 +21,6 @@ export const usePage = () => {
   const { nodes, dispatch: nodesDispatch } = useNodes();
   const { tigPrice } = useTigPrice();
   const { tableData, dispatch: tableDataDispatch } = useTableData();
-  const { invalidNodes, dispatch: invalidNodesDispatch } = useInvalidNodes();
 
   // Refs
   const tableDataRef = useRef<ITableData[]>([]);
@@ -46,7 +43,7 @@ export const usePage = () => {
 
   useEffect(() => {
     handleIsLoading();
-  }, [tableData, invalidNodes, nodes, isLoading]);
+  }, [tableData, nodes, isLoading]);
 
   const onSubmit: SubmitHandler<{ search: string }> = (data: {
     search: string;
@@ -56,8 +53,8 @@ export const usePage = () => {
 
   const handleIsLoading = () => {
     if (!isLoading || !nodes.length) return;
-    if (tableData.length !== 0) setIsLoading(false);
-    if (invalidNodes.length === nodes.length) setIsLoading(false);
+    if (getNodes.valid.length !== 0) setIsLoading(false);
+    if (getNodes.invalid.length === nodes.length) setIsLoading(false);
   };
 
   const getShowInvalidNodes = () => {
@@ -77,33 +74,26 @@ export const usePage = () => {
   const getAllServerNodes = async () => {
     const nodesPreview: ITableData[] = tableDataRef.current;
     for (const n of nodes) {
-      try {
-        const nodeIsAlreadyInvalid = invalidNodes.find((i) => i.id === n.id);
-        if (nodeIsAlreadyInvalid) continue;
-        const alreadyFetched = tableDataRef.current.find(
-          (tb) => tb.id === n.id,
-        );
-        if (alreadyFetched) continue;
-        const node = await getNodePreview(n.id).catch(() => {
-          throw n.id;
+      const nodeIsAlreadyHere = tableDataRef.current.find((i) => i.id === n.id);
+      if (nodeIsAlreadyHere) continue;
+      let newNode: ITableData = {} as any;
+      await getNodePreview(n.id)
+        .then((node) => {
+          newNode = { ...node, ...n, invalid: false };
+        })
+        .catch(() => {
+          newNode = {
+            total_earned: { address: n.id, reward: 0 },
+            average_rewards: { address: n.id, reward: 0 },
+            ...n,
+            invalid: true,
+          };
         });
-        const data: ITableData = { ...node, ...n };
-        tableDataRef.current.push(data);
-        tableDataDispatch({
-          action: TableDataAction.SET_TABLE_DATA,
-          payload: JSON.parse(JSON.stringify(nodesPreview)),
-        });
-      } catch (error) {
-        if (typeof error === 'string') {
-          const item = nodes.find((n) => n.id === error);
-          if (!item) continue;
-          invalidNodesDispatch({
-            action: InvalidNodesAction.ADD_INVALID_NODES,
-            payload: item,
-          });
-        }
-        continue;
-      }
+      tableDataRef.current.push(newNode);
+      tableDataDispatch({
+        action: TableDataAction.SET_TABLE_DATA,
+        payload: JSON.parse(JSON.stringify(nodesPreview)),
+      });
     }
   };
 
@@ -141,15 +131,19 @@ export const usePage = () => {
     }, 0);
   }, [tableData]);
 
+  const getNodes = useMemo(() => {
+    const valid = tableData.filter((i) => !i.invalid);
+    const invalid = tableData.filter((i) => i.invalid);
+    return { valid, invalid };
+  }, [tableData]);
+
   const getTableData = useMemo(() => {
-    return tableData.filter((td) =>
+    return getNodes.valid.filter((td) =>
       keyword === undefined
         ? td
         : td.id.toLocaleLowerCase().includes(keyword.toLocaleLowerCase()) && td,
     );
-  }, [keyword, tableData]);
-
-  const anyNode = !!getTableData.length || !!invalidNodes.length;
+  }, [keyword, getNodes.valid]);
 
   const handleShowInvalidNodes = (e: React.FormEvent<HTMLButtonElement>) => {
     const newValue = !showInvalidNodes;
@@ -161,20 +155,18 @@ export const usePage = () => {
     tigPrice,
     control,
     openNodeDialog,
-    tableData,
     nodes,
     getCostPerTig,
     getTotalEarned,
     getAverageEarned,
     allNodesAreConfigured,
     getAllServerCost,
-    invalidNodes,
+    getNodes,
     getTableData,
     onSubmit,
     handleSubmit,
     isLoading,
     keyword,
-    anyNode,
     showInvalidNodes,
     handleShowInvalidNodes,
   };
