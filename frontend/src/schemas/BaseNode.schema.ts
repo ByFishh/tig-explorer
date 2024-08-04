@@ -11,5 +11,4 @@ export const baseNodeSchema = z.object({
   total_earned: totalEarnedSchema,
   last_rewards: lastRewardsSchema,
   block_rewards: blockRewardsSchema,
-  acerage_rewards: averageRewardsSchema,
 });
