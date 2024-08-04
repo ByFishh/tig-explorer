@@ -1,6 +1,5 @@
 'use client';
 
-import { getBalance, getBaseNode } from '@/apis/api';
 import { useNode } from '@/store/nodeReducer/nodeReducer';
 import { IAction } from '@/store/nodeReducer/nodeReducer.types';
 import { useTigPrice } from '@/store/tigPriceReducer/tigPriceReducer';
@@ -9,6 +8,8 @@ import * as ls from '../../../utils/localStorage';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { INodeInputs } from '@/types/INodeInputs/INodeInputs';
 import { convertMonthToHour } from '@/utils/convertMonthToHour';
+import { getNodeBase } from '@/apis/node/node.action';
+import { getBalance } from '@/apis/balance/balance.action';
 
 export const usePage = (address: string) => {
   const { node, dispatch } = useNode();
@@ -22,7 +23,7 @@ export const usePage = (address: string) => {
   }, []);
 
   const getNode = async () => {
-    const node = await getBaseNode(address);
+    const node = await getNodeBase(address);
     const balance = await getBalance(address);
     dispatch({
       action: IAction.SET_NODE,

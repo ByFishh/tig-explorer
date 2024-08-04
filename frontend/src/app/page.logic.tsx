@@ -8,7 +8,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import * as ls from '../utils/localStorage';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { useNodes } from '@/store/nodesReducer/nodesReducer';
-import { getNodePreview } from '@/apis/api';
 import { convertMonthToHour } from '@/utils/convertMonthToHour';
 import { ITableData } from '@/types/ITableData/ITableData';
 import { useTableData } from '@/store/tableDataReducer/tableDataReducer';
@@ -16,6 +15,7 @@ import { IAction as TableDataAction } from '@/store/tableDataReducer/tableDataRe
 import { IAction as InvalidNodesAction } from '@/store/invalidNodes/invalidNodes.types';
 import { useInvalidNodes } from '@/store/invalidNodes/invalidNodes';
 import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
+import { getNodePreview } from '@/apis/node/node.action';
 
 export const usePage = () => {
   const { handleSubmit, control } = useForm<{ search: string }>();
@@ -84,8 +84,9 @@ export const usePage = () => {
           (tb) => tb.id === n.id,
         );
         if (alreadyFetched) continue;
-        const node = await getNodePreview(n.id);
-        if (!node || typeof node === 'string') throw n.id;
+        const node = await getNodePreview(n.id).catch(() => {
+          throw n.id;
+        });
         const data: ITableData = { ...node, ...n };
         tableDataRef.current.push(data);
         tableDataDispatch({
