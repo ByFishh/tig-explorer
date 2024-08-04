@@ -11,9 +11,7 @@ import { useNodes } from '@/store/nodesReducer/nodesReducer';
 import * as array from '@/utils/array';
 import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
 import { useTableData } from '@/store/tableDataReducer/tableDataReducer';
-import { useInvalidNodes } from '@/store/invalidNodes/invalidNodes';
 import { IAction as TableDataAction } from '@/store/tableDataReducer/tableDataReducer.types';
-import { IAction as InvalidNodesAction } from '@/store/invalidNodes/invalidNodes.types';
 
 const inputs: INodeInputs = {
   id: '',
@@ -27,7 +25,6 @@ export const useNodeDialog = () => {
   const { isOpen, data, dispatch: dialogsDispatch } = useDialogs();
   const { dispatch: nodesDispatch } = useNodes();
   const { tableData, dispatch: tableDataDispatch } = useTableData();
-  const { dispatch: invalidNodesDispatch } = useInvalidNodes();
 
   const {
     handleSubmit,
@@ -79,10 +76,6 @@ export const useNodeDialog = () => {
       tableDataDispatch({
         action: TableDataAction.UPDATE_TABLE_DATA,
         payload: updatedItem,
-      });
-      invalidNodesDispatch({
-        action: InvalidNodesAction.EDIT_INVALID_NODES,
-        payload: data,
       });
     } else {
       const newItem = { ...item, id };
