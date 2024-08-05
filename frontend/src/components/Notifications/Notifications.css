@@ -1,0 +1,40 @@
+.notifications-container {
+  width: max-content;
+  max-width: 500px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: flex-end;
+  flex-flow: column nowrap;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.notifications-card {
+  animation-duration: 0.4s;
+  animation-name: slidein;
+}
+
+@media screen and (max-width: 500px) {
+  .notifications-container {
+    width: 100%;
+    min-width: initial;
+    align-items: flex-end;
+  }
+}
+
+@keyframes slidein {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
