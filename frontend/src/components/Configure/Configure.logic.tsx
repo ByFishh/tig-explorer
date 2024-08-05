@@ -6,6 +6,7 @@ import { useNode } from '@/store/nodeReducer/nodeReducer';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { useEffect, useState } from 'react';
 import { IConfigure } from '@/types/IConfigure/IConfigure';
+import { formatDate } from '@/utils/formatDate';
 
 const inputs: INodeInputs = {
   id: '',
@@ -41,6 +42,7 @@ export const useConfigure = (props: IConfigure) => {
   };
 
   const onSubmit: SubmitHandler<INodeInputs> = (data: INodeInputs) => {
+    data.startDate = formatDate(data.startDate);
     const item = handleFormData(data);
     const id = node?.wallet_balance.address;
     if (!id) return;

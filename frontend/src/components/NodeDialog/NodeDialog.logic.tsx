@@ -12,6 +12,7 @@ import * as array from '@/utils/array';
 import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
 import { useTableData } from '@/store/tableDataReducer/tableDataReducer';
 import { IAction as TableDataAction } from '@/store/tableDataReducer/tableDataReducer.types';
+import { formatDate } from '@/utils/formatDate';
 
 const inputs: INodeInputs = {
   id: '',
@@ -65,6 +66,7 @@ export const useNodeDialog = () => {
   };
 
   const onSubmit: SubmitHandler<INodeInputs> = (data: INodeInputs) => {
+    data.startDate = formatDate(data.startDate);
     const item = handleFormData(data);
     const id = data.id;
     if (!id) return;
