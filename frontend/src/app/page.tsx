@@ -233,7 +233,7 @@ export default function Home() {
                             rel="noopener noreferrer"
                             style={{ color: 'white' }}
                           >
-                            <Address address={td.id} />
+                            <Address address={td.id} copy />
                           </a>
                         </Table.RowHeaderCell>
                         <Table.Cell>

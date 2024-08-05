@@ -1,16 +1,33 @@
 import React, { useState } from 'react';
 import { displayAddress } from '@/utils/displayAddress';
-import { Popover, Text } from '@radix-ui/themes';
+import { Flex, IconButton, Popover, Text } from '@radix-ui/themes';
+import { CopyIcon } from '@radix-ui/react-icons';
+import { useAddress } from './Address.logic';
+import { IAddress } from '@/types/IAddress/IAddress';
 
-const Address = (props: { address: string }) => {
-  const [toggle, setToggle] = useState<boolean>(false);
+const Address = (props: IAddress) => {
+  const logic = useAddress(props);
   return (
-    <Popover.Root open={toggle}>
+    <Popover.Root open={logic.toggle}>
       <Popover.Trigger
-        onMouseEnter={() => setToggle(true)}
-        onMouseLeave={() => setToggle(false)}
+        onMouseEnter={logic.toggleView}
+        onMouseLeave={logic.toggleView}
       >
-        <Text>{displayAddress(props.address)}</Text>
+        <Flex align="center">
+          <Text>{displayAddress(props.address)}</Text>
+          {props.copy && (
+            <IconButton
+              size="1"
+              ml="1"
+              color="gray"
+              variant="soft"
+              onClick={logic.onCopy}
+              style={{ background: 'none' }}
+            >
+              <CopyIcon width="14" height="14" />
+            </IconButton>
+          )}
+        </Flex>
       </Popover.Trigger>
       <Popover.Content>
         <Text style={{ fontSize: '.85rem' }} size="1">
