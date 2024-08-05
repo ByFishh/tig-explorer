@@ -240,43 +240,58 @@ export default function Home() {
                   </Table.Header>
 
                   <Table.Body>
-                    {logic.getTableData.map((td) => (
-                      <Table.Row key={uuidv4()}>
-                        <Table.RowHeaderCell>
-                          <a
-                            target="_blank"
-                            href={`https://tig-explorer.com/node/${td.id}`}
-                            rel="noopener noreferrer"
-                            style={{ color: 'white' }}
-                          >
-                            <Address address={td.id} copy />
-                          </a>
-                        </Table.RowHeaderCell>
-                        <Table.Cell>
-                          {Number(td.total_earned.reward).toFixed(2)}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {Number(td.average_rewards.reward).toFixed(2)}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {logic
-                            .getCostPerTig(
-                              td.serverCost,
-                              td.average_rewards.reward,
-                            )
-                            .toFixed(2)}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {Number(td.serverCost).toFixed(2)}
-                        </Table.Cell>
-                        <Table.Cell>{Number(td.coreNumber)}</Table.Cell>
-                        <Table.Cell>{formatDate(td.startDate)}</Table.Cell>
-                        <Table.Cell>{String(td.notes)}</Table.Cell>
-                        <Table.Cell>
-                          <Menu address={td.id} />
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
+                    {logic.getTableData.map((td) => {
+                      const badNodes =
+                        logic.getCostPerTig(
+                          td.serverCost,
+                          td.average_rewards.reward,
+                        ) > logic.tigPrice;
+                      return (
+                        <Table.Row
+                          key={uuidv4()}
+                          style={{
+                            background: badNodes
+                              ? 'rgba(255, 0, 0, .03)'
+                              : 'initial',
+                            color: badNodes ? '#ff9592' : 'initial',
+                          }}
+                        >
+                          <Table.RowHeaderCell>
+                            <a
+                              target="_blank"
+                              href={`https://tig-explorer.com/node/${td.id}`}
+                              rel="noopener noreferrer"
+                              style={{ color: 'white' }}
+                            >
+                              <Address address={td.id} copy />
+                            </a>
+                          </Table.RowHeaderCell>
+                          <Table.Cell>
+                            {Number(td.total_earned.reward).toFixed(2)}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {Number(td.average_rewards.reward).toFixed(2)}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {logic
+                              .getCostPerTig(
+                                td.serverCost,
+                                td.average_rewards.reward,
+                              )
+                              .toFixed(2)}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {Number(td.serverCost).toFixed(2)}
+                          </Table.Cell>
+                          <Table.Cell>{Number(td.coreNumber)}</Table.Cell>
+                          <Table.Cell>{formatDate(td.startDate)}</Table.Cell>
+                          <Table.Cell>{String(td.notes)}</Table.Cell>
+                          <Table.Cell>
+                            <Menu address={td.id} />
+                          </Table.Cell>
+                        </Table.Row>
+                      );
+                    })}
                   </Table.Body>
                 </Table.Root>
               ) : (
