@@ -51,6 +51,30 @@ export const usePage = () => {
     setKeyword(data.search);
   };
 
+  const getNodes = useMemo(() => {
+    const valid = tableData.filter((i) => !i.invalid);
+    const invalid = tableData.filter((i) => i.invalid);
+    return { valid, invalid };
+  }, [tableData]);
+
+  const validNodesInformation = useMemo(() => {
+    const allServerCost = getNodes.valid.reduce((total, item) => {
+      return total + item.serverCost;
+    }, 0);
+
+    const allAreConfigured = getNodes.valid.every((td) => td.serverCost);
+
+    const averageEarned = getNodes.valid.reduce((total, item) => {
+      return total + item.average_rewards.reward;
+    }, 0);
+
+    const totalEarned = getNodes.valid.reduce((total, item) => {
+      return total + item.total_earned.reward;
+    }, 0);
+
+    return { allServerCost, allAreConfigured, averageEarned, totalEarned };
+  }, [getNodes.valid]);
+
   const handleIsLoading = () => {
     if (!isLoading || !nodes.length) return;
     if (getNodes.valid.length !== 0) setIsLoading(false);
@@ -104,38 +128,10 @@ export const usePage = () => {
     });
   }, []);
 
-  const getCostPerTig = (serverCost: number, reward: number): number => {
+  const getCostPerTig = (serverCost: number, reward: number) => {
     const serverCostInHour = convertMonthToHour(serverCost);
     return serverCostInHour / reward;
   };
-
-  const getTotalEarned = useMemo(() => {
-    return tableData.reduce((total, item) => {
-      return total + item.total_earned.reward;
-    }, 0);
-  }, [tableData]);
-
-  const getAverageEarned = useMemo(() => {
-    return tableData.reduce((total, item) => {
-      return total + item.average_rewards.reward;
-    }, 0);
-  }, [tableData]);
-
-  const allNodesAreConfigured = useMemo(() => {
-    return tableData.every((td) => td.serverCost);
-  }, [tableData]);
-
-  const getAllServerCost = useMemo(() => {
-    return tableData.reduce((total, item) => {
-      return total + item.serverCost;
-    }, 0);
-  }, [tableData]);
-
-  const getNodes = useMemo(() => {
-    const valid = tableData.filter((i) => !i.invalid);
-    const invalid = tableData.filter((i) => i.invalid);
-    return { valid, invalid };
-  }, [tableData]);
 
   const getTableData = useMemo(() => {
     return getNodes.valid.filter((td) =>
@@ -157,10 +153,7 @@ export const usePage = () => {
     openNodeDialog,
     nodes,
     getCostPerTig,
-    getTotalEarned,
-    getAverageEarned,
-    allNodesAreConfigured,
-    getAllServerCost,
+    validNodesInformation,
     getNodes,
     getTableData,
     onSubmit,

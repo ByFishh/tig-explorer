@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler } from 'react';
+import React, { ChangeEventHandler } from 'react';
 import './DatePicker.css';
 import { Inter } from 'next/font/google';
 
