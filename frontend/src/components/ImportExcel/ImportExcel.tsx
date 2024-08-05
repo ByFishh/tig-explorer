@@ -20,9 +20,9 @@ const ImportExcel = (props: { title: string }) => {
         }}
       />
       <Button
-        style={{ width: '100%' }}
+        style={{ width: '100%', fontSize: '.8rem' }}
         mt="5"
-        size="2"
+        size="3"
         color="grass"
         onClick={() => logic.inpRef.current?.click()}
       >
