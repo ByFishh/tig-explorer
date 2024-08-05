@@ -14,6 +14,8 @@ import { useTableData } from '@/store/tableDataReducer/tableDataReducer';
 import { IAction as TableDataAction } from '@/store/tableDataReducer/tableDataReducer.types';
 import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
 import { getNodePreview } from '@/apis/node/node.action';
+import { getAverageSinceStart } from '@/utils/getAverageSinceStart';
+import { getCostSinceStartPerNode } from '@/utils/getCostSinceStartPerNode';
 
 export const usePage = () => {
   const { handleSubmit, control } = useForm<{ search: string }>();
@@ -64,6 +66,8 @@ export const usePage = () => {
 
     const allAreConfigured = getNodes.valid.every((td) => td.serverCost);
 
+    const allHaveStartDate = getNodes.valid.every((gt) => gt.startDate);
+
     const averageEarned = getNodes.valid.reduce((total, item) => {
       return total + item.average_rewards.reward;
     }, 0);
@@ -72,7 +76,40 @@ export const usePage = () => {
       return total + item.total_earned.reward;
     }, 0);
 
-    return { allServerCost, allAreConfigured, averageEarned, totalEarned };
+    const getTigEanedSinceStart = getNodes.valid.reduce(
+      (acc, item) => {
+        const { hours, total } = getAverageSinceStart(
+          item.startDate ?? '',
+          item.total_earned.reward,
+        );
+        acc.totalHours += hours;
+        acc.grandTotal += total;
+        return acc;
+      },
+      { totalHours: 0, grandTotal: 0 },
+    );
+
+    const costSinceStart = getNodes.valid.reduce((total, item) => {
+      return (
+        total +
+        getCostSinceStartPerNode(
+          item.serverCost,
+          item.startDate ?? '',
+          item.total_earned.reward,
+        )
+      );
+    }, 0);
+
+    return {
+      allServerCost,
+      allAreConfigured,
+      averageEarned,
+      totalEarned,
+      allHaveStartDate,
+      costSinceStart,
+      getTigEanedSinceStart:
+        getTigEanedSinceStart.grandTotal / getTigEanedSinceStart.totalHours,
+    };
   }, [getNodes.valid]);
 
   const handleIsLoading = () => {
