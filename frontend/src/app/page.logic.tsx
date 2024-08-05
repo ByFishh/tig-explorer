@@ -12,10 +12,14 @@ import { convertMonthToHour } from '@/utils/convertMonthToHour';
 import { ITableData } from '@/types/ITableData/ITableData';
 import { useTableData } from '@/store/tableDataReducer/tableDataReducer';
 import { IAction as TableDataAction } from '@/store/tableDataReducer/tableDataReducer.types';
+import { IAction as NotifcationAction } from '@/store/notificationsReducer/notificationsReducer.types';
 import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
 import { getNodePreview } from '@/apis/node/node.action';
 import { getAverageSinceStart } from '@/utils/getAverageSinceStart';
 import { getCostSinceStartPerNode } from '@/utils/getCostSinceStartPerNode';
+import { useNotifications } from '@/store/notificationsReducer/notificationsReducer';
+import { v4 as uuidv4 } from 'uuid';
+import { INotificationState } from '@/types/INotificationState/INotificationState';
 
 export const usePage = () => {
   const { handleSubmit, control } = useForm<{ search: string }>();
@@ -23,6 +27,7 @@ export const usePage = () => {
   const { nodes, dispatch: nodesDispatch } = useNodes();
   const { tigPrice } = useTigPrice();
   const { tableData, dispatch: tableDataDispatch } = useTableData();
+  const { dispatch: notificationsDispatch } = useNotifications();
 
   // Refs
   const tableDataRef = useRef<ITableData[]>([]);
@@ -30,6 +35,7 @@ export const usePage = () => {
   // States
   const [keyword, setKeyword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const notificationsTrigger = useRef<boolean>(false);
   const [showInvalidNodes, setShowInvalidNodes] = useState<boolean>(true);
 
   useEffect(() => {
@@ -151,6 +157,35 @@ export const usePage = () => {
           };
         });
       tableDataRef.current.push(newNode);
+
+      if (
+        tableDataRef.current.length >= nodes.length &&
+        notificationsTrigger.current
+      ) {
+        if (newNode.invalid) {
+          notificationsDispatch({
+            action: NotifcationAction.ADD_NOTIFICATION,
+            payload: {
+              id: uuidv4(),
+              state: INotificationState.FAIL,
+              message: 'Unable to retrieve information from this node',
+            },
+          });
+        } else {
+          notificationsDispatch({
+            action: NotifcationAction.ADD_NOTIFICATION,
+            payload: {
+              id: uuidv4(),
+              state: INotificationState.SUCCESS,
+              message: 'New node added',
+            },
+          });
+        }
+      }
+
+      if (tableDataRef.current.length === nodes.length)
+        notificationsTrigger.current = true;
+
       tableDataDispatch({
         action: TableDataAction.SET_TABLE_DATA,
         payload: JSON.parse(JSON.stringify(nodesPreview)),

@@ -13,6 +13,10 @@ import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
 import { useTableData } from '@/store/tableDataReducer/tableDataReducer';
 import { IAction as TableDataAction } from '@/store/tableDataReducer/tableDataReducer.types';
 import { formatDate } from '@/utils/formatDate';
+import { useNotifications } from '@/store/notificationsReducer/notificationsReducer';
+import { IAction as NotifcationAction } from '@/store/notificationsReducer/notificationsReducer.types';
+import { v4 as uuidv4 } from 'uuid';
+import { INotificationState } from '@/types/INotificationState/INotificationState';
 
 const inputs: INodeInputs = {
   id: '',
@@ -26,6 +30,7 @@ export const useNodeDialog = () => {
   const { isOpen, data, dispatch: dialogsDispatch } = useDialogs();
   const { dispatch: nodesDispatch } = useNodes();
   const { tableData, dispatch: tableDataDispatch } = useTableData();
+  const { dispatch: notificationsDispatch } = useNotifications();
 
   const {
     handleSubmit,
@@ -78,6 +83,15 @@ export const useNodeDialog = () => {
       tableDataDispatch({
         action: TableDataAction.UPDATE_TABLE_DATA,
         payload: updatedItem,
+      });
+
+      notificationsDispatch({
+        action: NotifcationAction.ADD_NOTIFICATION,
+        payload: {
+          id: uuidv4(),
+          state: INotificationState.SUCCESS,
+          message: 'Node edited with success',
+        },
       });
     } else {
       const newItem = { ...item, id };
