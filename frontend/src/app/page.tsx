@@ -27,6 +27,8 @@ import {
 import Address from '@/components/Address/Address';
 import Menu from '@/components/Menu/Menu';
 import { formatDate } from '@/utils/formatDate';
+import ExportNodes from '@/components/ExportNodes/ExportNodes';
+import { getCostPerTig } from '@/utils/getCostPerTig';
 
 export default function Home() {
   const logic = usePage();
@@ -206,8 +208,9 @@ export default function Home() {
 
           <Flex direction="column" py="4" my="6">
             {!!logic.getTableData.length && (
-              <Flex justify="end">
-                <Text size="3">
+              <Flex justify="between" align="center">
+                <ExportNodes />
+                <Text size="2">
                   Total loaded nodes {logic.getNodes.valid.length}/
                   {Number(
                     logic.nodes?.length - logic.getNodes.invalid.length,
@@ -242,7 +245,7 @@ export default function Home() {
                   <Table.Body>
                     {logic.getTableData.map((td) => {
                       const badNodes =
-                        logic.getCostPerTig(
+                        getCostPerTig(
                           td.serverCost,
                           td.average_rewards.reward,
                         ) > logic.tigPrice;
@@ -273,12 +276,10 @@ export default function Home() {
                             {Number(td.average_rewards.reward).toFixed(2)}
                           </Table.Cell>
                           <Table.Cell>
-                            {logic
-                              .getCostPerTig(
-                                td.serverCost,
-                                td.average_rewards.reward,
-                              )
-                              .toFixed(2)}
+                            {getCostPerTig(
+                              td.serverCost,
+                              td.average_rewards.reward,
+                            ).toFixed(2)}
                           </Table.Cell>
                           <Table.Cell>
                             {Number(td.serverCost).toFixed(2)}

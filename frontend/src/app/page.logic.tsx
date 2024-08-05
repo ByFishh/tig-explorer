@@ -200,11 +200,6 @@ export const usePage = () => {
     });
   }, []);
 
-  const getCostPerTig = (serverCost: number, reward: number) => {
-    const serverCostInHour = convertMonthToHour(serverCost);
-    return serverCostInHour / reward;
-  };
-
   const getTableData = useMemo(() => {
     return getNodes.valid.filter((td) =>
       keyword === undefined
@@ -224,7 +219,6 @@ export const usePage = () => {
     control,
     openNodeDialog,
     nodes,
-    getCostPerTig,
     validNodesInformation,
     getNodes,
     getTableData,
