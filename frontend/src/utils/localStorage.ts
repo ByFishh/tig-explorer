@@ -1,5 +1,7 @@
 import { isArray } from './isArray';
 import { tryCatch } from './tryCatch';
+import * as array from '../utils/array';
+import { Immutable } from '@/types/Immutable/Immutable';
 
 const _initializeStorage = (data: { key: string; defaultValue: unknown }) => {
   if (typeof window === 'undefined') return;
@@ -41,13 +43,11 @@ const _removeItem = <T extends { id: string }>(data: {
 
 const _updateItem = <T extends { id: string }>(data: {
   key: string;
-  updatedItem: T;
+  updatedItem: Immutable<T>;
 }): void => {
   if (typeof window === 'undefined') return;
-  const items = getArray<T>(data.key);
-  const newArray = items.map((item) =>
-    item.id === data.updatedItem.id ? data.updatedItem : item,
-  );
+  const items = getArray<Immutable<T>>(data.key);
+  const newArray = array._updateArray(items, data.updatedItem);
   localStorage.setItem(data.key, JSON.stringify(newArray));
 };
 

@@ -36,12 +36,15 @@ export default function Home() {
       data: [
         {
           title: 'Total earned',
-          value: logic.getTotalEarned,
+          value: logic.validNodesInformation.totalEarned,
           unit: IUnit.TIG,
         },
         {
           title: 'Total earned',
-          value: convertUnit(logic.getTotalEarned, logic.tigPrice),
+          value: convertUnit(
+            logic.validNodesInformation.totalEarned,
+            logic.tigPrice,
+          ),
           unit: IUnit.DOLLARD,
         },
       ],
@@ -54,7 +57,7 @@ export default function Home() {
       content: (
         <>
           <Flex pr="2">
-            {logic.allNodesAreConfigured ? (
+            {logic.validNodesInformation.allAreConfigured ? (
               <Flex style={{ flexFlow: 'column' }}>
                 <Text as="p" size="2" mb="0" color="gray">
                   Cost per {IUnit.TIG} ({IUnit.DOLLARD})
@@ -63,8 +66,8 @@ export default function Home() {
                   <span style={{ fontSize: '.825rem' }}>{IUnit.DOLLARD}</span>
                   {logic
                     .getCostPerTig(
-                      logic.getAllServerCost,
-                      logic.getAverageEarned,
+                      logic.validNodesInformation.allServerCost,
+                      logic.validNodesInformation.averageEarned,
                     )
                     .toFixed(2)}
                 </Text>
@@ -81,7 +84,7 @@ export default function Home() {
               Average earned ({IUnit.TIG_PER_HOUR})
             </Text>
             <Text as="p" size="7" weight="medium">
-              {Number(logic.getAverageEarned).toFixed(2)}
+              {Number(logic.validNodesInformation.averageEarned).toFixed(2)}
               <span style={{ fontSize: '.825rem' }}>{IUnit.TIG_PER_HOUR}</span>
             </Text>
           </Flex>

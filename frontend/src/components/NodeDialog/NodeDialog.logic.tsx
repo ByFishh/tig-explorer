@@ -72,9 +72,9 @@ export const useNodeDialog = () => {
     if (!id) return;
     const isAlreadyExist = array._findById(tableData as any[], id);
     if (isAlreadyExist) {
-      const updatedItem = { ...isAlreadyExist, ...data };
-      ls.updateItem({ key: ILocalStorageKey.NODES, updatedItem: data });
-      nodesDispatch({ action: NodesAction.UPDATE_NODE, payload: data });
+      const updatedItem = { ...isAlreadyExist, ...item };
+      ls.updateItem({ key: ILocalStorageKey.NODES, updatedItem: item });
+      nodesDispatch({ action: NodesAction.UPDATE_NODE, payload: item });
       tableDataDispatch({
         action: TableDataAction.UPDATE_TABLE_DATA,
         payload: updatedItem,
