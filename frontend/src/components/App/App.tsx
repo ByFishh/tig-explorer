@@ -4,8 +4,7 @@ import { Container } from '@radix-ui/themes';
 import dynamic from 'next/dynamic';
 import { initializeStorage } from '@/utils/localStorage';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
-import NodeDialog from '../NodeDialog/NodeDialog';
-import DeleteDialog from '../DeleteDialog/DeleteDialog';
+import DialogsContainer from '../DialogsContainer/DialogsContainer';
 
 const Navbar = dynamic(() => import('../Navbar/Navbar'), {
   ssr: false,
@@ -28,8 +27,7 @@ const App = ({
   return (
     <>
       <Navbar />
-      <NodeDialog />
-      <DeleteDialog />
+      <DialogsContainer />
       <Container>{children}</Container>
     </>
   );

@@ -11,7 +11,6 @@ import React from 'react';
 import { useNavbar } from './Navbar.logic';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import { usePathname } from 'next/navigation';
-import DollarDialog from '../DollarDialog/DollarDialog';
 import Link from 'next/link';
 
 const Navbar = () => {
@@ -59,7 +58,6 @@ const Navbar = () => {
           <Separator my="2" size="4" />
         </nav>
       </Box>
-      <DollarDialog />
     </>
   );
 };
