@@ -28,6 +28,7 @@ export const useDeleteDialog = () => {
       key: ILocalStorageKey.NODES,
       id: data.id,
     });
+    data.action(data.id);
     nodesDispatch({ action: NodesAction.REMOVE_NODE, payload: data.id });
     tableDataDispatch({
       action: TableDataAction.REMOVE_TABLE_DATA,

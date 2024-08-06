@@ -288,7 +288,7 @@ export default function Home() {
                           <Table.Cell>{formatDate(td.startDate)}</Table.Cell>
                           <Table.Cell>{String(td.notes)}</Table.Cell>
                           <Table.Cell>
-                            <Menu address={td.id} />
+                            <Menu address={td.id} onAction={logic.onDelete} />
                           </Table.Cell>
                         </Table.Row>
                       );
@@ -376,7 +376,11 @@ export default function Home() {
                           <Table.Row key={uuidv4()}>
                             <Table.RowHeaderCell>{td.id}</Table.RowHeaderCell>
                             <Table.Cell>
-                              <Menu address={td.id} disable={{ edit: true }} />
+                              <Menu
+                                address={td.id}
+                                disable={{ edit: true }}
+                                onAction={logic.onDelete}
+                              />
                             </Table.Cell>
                           </Table.Row>
                         ))}
