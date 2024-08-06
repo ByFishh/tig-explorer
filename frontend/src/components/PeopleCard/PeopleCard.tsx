@@ -8,12 +8,18 @@ const PeopleCard = (props: IPeopleCard) => {
   return (
     <Flex gap="2" align="center">
       <Flex>
-        <Avatar size="3" radius="full" fallback={''} src={props.src} />
+        <Avatar
+          size="1"
+          radius="full"
+          fallback={''}
+          src={props.src}
+          alt={props.name}
+        />
       </Flex>
       <Flex>
         <Flex direction="column">
           <Flex align="center">
-            <Text size="3" weight="medium">
+            <Text size="2" weight="medium">
               {props.name}
             </Text>
             <Flex gap="1" ml="2">
@@ -21,7 +27,12 @@ const PeopleCard = (props: IPeopleCard) => {
                 <a
                   href={props.link.github}
                   target="_blank"
-                  style={{ color: '#A7A7A7' }}
+                  style={{
+                    color: '#A7A7A7',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
                 >
                   <GitHubLogoIcon />
                 </a>
@@ -30,7 +41,12 @@ const PeopleCard = (props: IPeopleCard) => {
                 <a
                   href={props.link.twitter}
                   target="_blank"
-                  style={{ color: '#A7A7A7' }}
+                  style={{
+                    color: '#A7A7A7',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
                 >
                   <TwitterLogoIcon />
                 </a>

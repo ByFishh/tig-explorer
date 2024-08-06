@@ -34,7 +34,7 @@ const DollarDialog = () => {
             </Dialog.Close>
           </Flex>
           <Dialog.Description size="2" color="gray" mb="5">
-            Review here global information about your node
+            You can set here the price of tig
           </Dialog.Description>
           <Flex width="100%" style={{ flexFlow: 'column' }}>
             <Text as="label" size="2" weight="regular" mb="1" color="gray">

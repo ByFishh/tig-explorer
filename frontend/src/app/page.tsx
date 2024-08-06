@@ -29,6 +29,7 @@ import Menu from '@/components/Menu/Menu';
 import { formatDate } from '@/utils/formatDate';
 import ExportNodes from '@/components/ExportNodes/ExportNodes';
 import { getCostPerTig } from '@/utils/getCostPerTig';
+import TableCell from '@/components/TableCell/TableCell';
 
 export default function Home() {
   const logic = usePage();
@@ -228,7 +229,7 @@ export default function Home() {
                   <Table.Header>
                     <Table.Row>
                       {tableHeaders.map((h) => (
-                        <Table.ColumnHeaderCell key={uuidv4()}>
+                        <TableCell key={uuidv4()}>
                           <Text size="2">
                             {h.txt}{' '}
                             {h.unit && (
@@ -237,7 +238,7 @@ export default function Home() {
                               </span>
                             )}
                           </Text>
-                        </Table.ColumnHeaderCell>
+                        </TableCell>
                       ))}
                     </Table.Row>
                   </Table.Header>
@@ -259,7 +260,7 @@ export default function Home() {
                             color: badNodes ? '#ff9592' : 'initial',
                           }}
                         >
-                          <Table.RowHeaderCell>
+                          <TableCell>
                             <a
                               target="_blank"
                               href={`https://tig-explorer.com/node/${td.id}`}
@@ -268,28 +269,29 @@ export default function Home() {
                             >
                               <Address address={td.id} copy />
                             </a>
-                          </Table.RowHeaderCell>
-                          <Table.Cell>
+                          </TableCell>
+
+                          <TableCell>
                             {Number(td.total_earned.reward).toFixed(2)}
-                          </Table.Cell>
-                          <Table.Cell>
+                          </TableCell>
+                          <TableCell>
                             {Number(td.average_rewards.reward).toFixed(2)}
-                          </Table.Cell>
-                          <Table.Cell>
+                          </TableCell>
+                          <TableCell>
                             {getCostPerTig(
                               td.serverCost,
                               td.average_rewards.reward,
                             ).toFixed(2)}
-                          </Table.Cell>
-                          <Table.Cell>
+                          </TableCell>
+                          <TableCell>
                             {Number(td.serverCost).toFixed(2)}
-                          </Table.Cell>
-                          <Table.Cell>{Number(td.coreNumber)}</Table.Cell>
-                          <Table.Cell>{formatDate(td.startDate)}</Table.Cell>
-                          <Table.Cell>{String(td.notes)}</Table.Cell>
-                          <Table.Cell>
+                          </TableCell>
+                          <TableCell>{Number(td.coreNumber)}</TableCell>
+                          <TableCell>{formatDate(td.startDate)}</TableCell>
+                          <TableCell>{String(td.notes)}</TableCell>
+                          <TableCell>
                             <Menu address={td.id} onAction={logic.onDelete} />
-                          </Table.Cell>
+                          </TableCell>
                         </Table.Row>
                       );
                     })}
