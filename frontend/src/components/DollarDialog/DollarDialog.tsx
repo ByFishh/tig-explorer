@@ -65,7 +65,10 @@ const DollarDialog = () => {
               ></Controller>
               <Flex justify={'end'} mt="4">
                 <Box>
-                  <Button onClick={logic.handleSubmit(logic.onSubmit)}>
+                  <Button
+                    onClick={logic.handleSubmit(logic.onSubmit)}
+                    disabled={!logic.isDirty}
+                  >
                     <ArrowTopRightIcon /> Set
                   </Button>
                 </Box>

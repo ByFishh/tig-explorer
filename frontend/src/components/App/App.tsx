@@ -31,7 +31,13 @@ const App = ({
       <Navbar />
       <DialogsContainer />
       <Notifications />
-      <Container>{children}</Container>
+      <Container
+        style={{
+          minHeight: 'calc(100vh - 12rem)',
+        }}
+      >
+        {children}
+      </Container>
       <Footer />
     </>
   );

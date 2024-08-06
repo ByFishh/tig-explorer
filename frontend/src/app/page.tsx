@@ -35,35 +35,38 @@ export default function Home() {
   const logic = usePage();
   const items: ICard[] = [
     {
-      title: 'Total earned',
-      description: 'Review here the total earned by your node',
-      data: [
-        {
-          title: 'Total earned',
-          value: logic.validNodesInformation.totalEarned,
-          unit: IUnit.TIG,
-        },
-        {
-          title: 'Total earned',
-          value: convertUnit(
-            logic.validNodesInformation.totalEarned,
-            logic.tigPrice,
-          ),
-          unit: IUnit.DOLLARD,
-        },
-      ],
-    },
-
-    {
-      title: 'Average rewards',
-      description: 'Review here the average rewards',
+      title: 'Total',
+      description: 'Review here total informations relative to your node(s)',
       data: [],
       content: (
         <>
+          <Flex style={{ flexFlow: 'column' }}>
+            <Text as="p" size="2" mb="0" color="gray">
+              Total earned ({IUnit.TIG})
+            </Text>
+            <Text as="p" size="7" weight="medium">
+              {Number(logic.validNodesInformation.totalEarned).toFixed(2)}
+              <span style={{ fontSize: '.825rem' }}>{IUnit.TIG}</span>
+            </Text>
+          </Flex>
+          <Flex style={{ flexFlow: 'column' }}>
+            <Text as="p" size="2" mb="0" color="gray">
+              Total earned ({IUnit.DOLLARD})
+            </Text>
+            <Text as="p" size="7" weight="medium">
+              <span style={{ fontSize: '.825rem' }}>{IUnit.DOLLARD}</span>
+              {Number(
+                convertUnit(
+                  logic.validNodesInformation.totalEarned,
+                  logic.tigPrice,
+                ),
+              ).toFixed(2)}
+            </Text>
+          </Flex>
           {!!logic.validNodesInformation.allHaveStartDate ? (
             <Flex style={{ flexFlow: 'column' }}>
               <Text as="p" size="2" mb="0" color="gray">
-                Average earned since start
+                Average earned ({IUnit.TIG_PER_HOUR})
               </Text>
               <Text as="p" size="7" weight="medium">
                 {Number(
@@ -75,31 +78,73 @@ export default function Home() {
               </Text>
             </Flex>
           ) : (
-            <Text size="2" color="red">
+            <Text size="2" color="red" mr="3">
               You need to enter a{' '}
               <span style={{ textDecoration: 'underline' }}>Start date</span> on
               ALL your valid nodes before you can access this data.
             </Text>
           )}
-          {!!logic.validNodesInformation.allHaveStartDate ||
+          {!!logic.validNodesInformation.allHaveStartDate &&
           !!logic.validNodesInformation.allAreConfigured ? (
             <Flex style={{ flexFlow: 'column' }}>
               <Text as="p" size="2" mb="0" color="gray">
-                Cost per tig since start
+                Cost per Tig ({IUnit.DOLLARD})
               </Text>
               <Text as="p" size="7" weight="medium">
+                <span style={{ fontSize: '.825rem' }}>{IUnit.DOLLARD}</span>
                 {Number(
                   logic.validNodesInformation.costSinceStart /
                     logic.getNodes.valid.length,
                 ).toFixed(2)}
-                <span style={{ fontSize: '.825rem' }}>{IUnit.DOLLARD}</span>
               </Text>
             </Flex>
           ) : (
-            <Text size="2" color="red">
+            <Text size="2" color="red" mr="3">
               You need to enter a{' '}
               <span style={{ textDecoration: 'underline' }}>Start date</span>{' '}
               and{' '}
+              <span style={{ textDecoration: 'underline' }}>Server cost</span>{' '}
+              on ALL your valid nodes before you can access this data.
+            </Text>
+          )}
+        </>
+      ),
+    },
+
+    {
+      title: 'Last 2 hours',
+      description:
+        'Review here the last 2 hours informations relative to your node(s)',
+      data: [],
+      content: (
+        <>
+          <Flex style={{ flexFlow: 'column' }}>
+            <Text as="p" size="2" mb="0" color="gray">
+              Average earned ({IUnit.TIG_PER_HOUR})
+            </Text>
+            <Text as="p" size="7" weight="medium">
+              {Number(logic.validNodesInformation.averageEarned).toFixed(2)}
+              <span style={{ fontSize: '.825rem' }}>{IUnit.TIG_PER_HOUR}</span>
+            </Text>
+          </Flex>
+          {!!logic.validNodesInformation.allAreConfigured ? (
+            <Flex style={{ flexFlow: 'column' }}>
+              <Text as="p" size="2" mb="0" color="gray">
+                Cost per Tig ({IUnit.DOLLARD})
+              </Text>
+              <Text as="p" size="7" weight="medium">
+                <span style={{ fontSize: '.825rem' }}>{IUnit.DOLLARD}</span>
+                {Number(
+                  getCostPerTig(
+                    logic.validNodesInformation.allServerCost,
+                    logic.validNodesInformation.averageEarned,
+                  ),
+                ).toFixed(2)}
+              </Text>
+            </Flex>
+          ) : (
+            <Text size="2" color="red" mr="3">
+              You need to enter a{' '}
               <span style={{ textDecoration: 'underline' }}>Server cost</span>{' '}
               on ALL your valid nodes before you can access this data.
             </Text>
@@ -157,16 +202,21 @@ export default function Home() {
           Overview
         </Heading>
         <Flex direction="column">
-          <Flex py="4" mt="4">
-            <Heading as="h2" weight="medium">
-              Total
-            </Heading>
-          </Flex>
-          <Grid gap="4" columns={{ sm: '2' }}>
-            {items.map((i) => (
-              <Card key={uuidv4()} {...i} />
-            ))}
-          </Grid>
+          {!!logic.getNodes.valid.length && (
+            <>
+              <Flex py="4" mt="4">
+                <Heading as="h2" weight="medium">
+                  Total
+                </Heading>
+              </Flex>
+              <Grid gap="4" columns={{ sm: '2' }}>
+                {items.map((i) => (
+                  <Card key={uuidv4()} {...i} />
+                ))}
+              </Grid>
+            </>
+          )}
+
           <Flex py="4" mt="6">
             <Heading as="h2" weight="medium">
               Nodes
