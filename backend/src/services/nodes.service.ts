@@ -194,6 +194,7 @@ export class NodesService {
                 c001: blockReward?.c001 || 0,
                 c002: blockReward?.c002 || 0,
                 c003: blockReward?.c003 || 0,
+                c004: blockReward?.c004 || 0,
               };
             })
             .reverse(),

@@ -241,6 +241,13 @@ export default function Page({ params }: { params: { address: string } }) {
                     borderColor: '#FF9592',
                     fill: true,
                   },
+                  {
+                    label: 'c004',
+                    data: logic.node.block_rewards.blocks.map((b) => b.c004),
+                    borderWidth: 1,
+                    borderColor: '#FF9592',
+                    fill: true,
+                  },
                 ],
               }}
             />

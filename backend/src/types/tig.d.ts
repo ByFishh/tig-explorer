@@ -31,6 +31,11 @@ export type Block = {
           min_value: number;
           max_value: number;
         }[];
+        c004: {
+          name: string;
+          min_value: number;
+          max_value: number;
+        }[];
       };
     };
     erc20: {
@@ -102,8 +107,9 @@ export type Player = {
   block_data: {
     num_qualifiers_by_challenge: {
       c001?: number;
-      c003?: number;
       c002?: number;
+      c003?: number;
+      c004?: number;
     };
     cutoff: number;
     deposit: string;

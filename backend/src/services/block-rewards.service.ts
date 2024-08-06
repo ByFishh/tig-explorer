@@ -46,6 +46,7 @@ export class BlockRewardsService {
         c001: player.block_data.num_qualifiers_by_challenge?.c001 ?? 0,
         c002: player.block_data.num_qualifiers_by_challenge?.c002 ?? 0,
         c003: player.block_data.num_qualifiers_by_challenge?.c003 ?? 0,
+        c004: player.block_data.num_qualifiers_by_challenge?.c004 ?? 0,
         reward: Number(formatEther(BigInt(player.block_data.reward))),
       });
     });

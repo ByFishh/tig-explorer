@@ -26,6 +26,9 @@ export class BlockReward {
   @Column()
   c003: number;
 
+  @Column()
+  c004: number;
+
   @Column({
     type: 'decimal',
   })

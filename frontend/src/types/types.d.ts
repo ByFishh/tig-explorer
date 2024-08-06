@@ -45,6 +45,7 @@ export type BlockRewardsResponse = {
     c001: number;
     c002: number;
     c003: number;
+    c004: number;
     reward: number;
   }[][];
 };

@@ -10,5 +10,6 @@ export const blockSchema = z.object({
   c001: z.number(),
   c002: z.number(),
   c003: z.number(),
+  c004: z.number(),
   reward: z.number(),
 });
