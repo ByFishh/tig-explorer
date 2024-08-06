@@ -206,7 +206,7 @@ const NodeDialog = () => {
               <Box>
                 <Button
                   onClick={logic.handleSubmit(logic.onSubmit)}
-                  disabled={!logic.isValid}
+                  disabled={!logic.isValid || !logic.isDirty}
                 >
                   {UI.buttonIcon} {UI.buttonLabel}
                 </Button>

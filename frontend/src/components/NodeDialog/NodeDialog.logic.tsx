@@ -37,7 +37,7 @@ export const useNodeDialog = () => {
     control,
     reset,
     setValue,
-    formState: { isValid },
+    formState: { isValid, isDirty },
   } = useForm<INodeInputs>({
     mode: 'onChange',
     defaultValues: inputs,
@@ -118,5 +118,6 @@ export const useNodeDialog = () => {
     nodeAlreadyExist,
     type: data?.type,
     isValid,
+    isDirty,
   };
 };

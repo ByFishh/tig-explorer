@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Theme appearance="dark" scaling="90%">
+        <Theme appearance="dark" scaling="90%" style={{ minHeight: 'initial' }}>
           <App children={children} />
         </Theme>
       </body>

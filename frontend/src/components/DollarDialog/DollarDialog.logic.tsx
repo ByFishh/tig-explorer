@@ -9,7 +9,11 @@ import * as ls from '../../utils/localStorage';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 
 export const useDollarDialog = () => {
-  const { handleSubmit, control } = useForm<{ tigPrice: number }>();
+  const {
+    handleSubmit,
+    control,
+    formState: { isDirty },
+  } = useForm<{ tigPrice: number }>();
   const { tigPrice, dispatch: tigPriceDispatch } = useTigPrice();
   const { isOpen, dispatch: dialogsDispatch } = useDialogs();
 
@@ -28,5 +32,13 @@ export const useDollarDialog = () => {
     dialogsDispatch({ action: DialogAction.CLOSE_MODAL });
   }, []);
 
-  return { control, handleSubmit, onSubmit, tigPrice, isOpen, closeModal };
+  return {
+    control,
+    handleSubmit,
+    onSubmit,
+    tigPrice,
+    isOpen,
+    closeModal,
+    isDirty,
+  };
 };

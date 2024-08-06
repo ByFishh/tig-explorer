@@ -21,14 +21,13 @@ const Navbar = () => {
     <>
       <Box p="0">
         <nav>
-          <Flex justify="between" p="1">
+          <Flex justify="between" p="2">
             <Flex
               style={{ minWidth: '100px' }}
               justify="between"
               align="center"
             >
               <Text weight="bold">TIG Explorer</Text>
-              <Separator orientation="vertical" size="2" />
             </Flex>
             <Flex justify="between" align="center">
               <Link href="/">
@@ -55,7 +54,6 @@ const Navbar = () => {
               </IconButton>
             </Flex>
           </Flex>
-          <Separator my="2" size="4" />
         </nav>
       </Box>
     </>
