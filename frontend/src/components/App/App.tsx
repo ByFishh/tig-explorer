@@ -6,6 +6,7 @@ import { initializeStorage } from '@/utils/localStorage';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import DialogsContainer from '../DialogsContainer/DialogsContainer';
 import Notifications from '../Notifications/Notifications';
+import Footer from '../Footer/Footer';
 
 const Navbar = dynamic(() => import('../Navbar/Navbar'), {
   ssr: false,
@@ -31,6 +32,7 @@ const App = ({
       <DialogsContainer />
       <Notifications />
       <Container>{children}</Container>
+      <Footer />
     </>
   );
 };
