@@ -21,7 +21,10 @@ export const useMenu = (props: IMenu) => {
   const openDeleteDialog = useCallback(() => {
     dialogsDispatch({
       action: DialogsAction.OPEN_MODAL,
-      payload: { isOpen: IModals.DELETE_NODE, data: { id: props.address } },
+      payload: {
+        isOpen: IModals.DELETE_NODE,
+        data: { id: props.address, action: props.onAction },
+      },
     });
   }, [props.address]);
 

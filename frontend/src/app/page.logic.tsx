@@ -214,6 +214,10 @@ export const usePage = () => {
     ls.setItem({ key: ILocalStorageKey.SHOW_INVALID_NODES, item: newValue });
   };
 
+  const onDelete = useCallback((id: string) => {
+    tableDataRef.current = tableDataRef.current.filter((tdr) => tdr.id !== id);
+  }, []);
+
   return {
     tigPrice,
     control,
@@ -228,5 +232,6 @@ export const usePage = () => {
     keyword,
     showInvalidNodes,
     handleShowInvalidNodes,
+    onDelete,
   };
 };
