@@ -17,7 +17,12 @@ const inputs: INodeInputs = {
 };
 
 export const useConfigure = (props: IConfigure) => {
-  const { handleSubmit, control, setValue } = useForm<INodeInputs>({
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { isDirty },
+  } = useForm<INodeInputs>({
     defaultValues: inputs,
   });
   const { node } = useNode();
@@ -63,5 +68,5 @@ export const useConfigure = (props: IConfigure) => {
     getInitialConfig();
   };
 
-  return { control, handleSubmit, onSubmit };
+  return { control, handleSubmit, onSubmit, isDirty };
 };

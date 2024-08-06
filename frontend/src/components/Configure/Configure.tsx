@@ -129,7 +129,10 @@ const Configure = (props: IConfigure) => {
             </Box>
             <Flex justify={'end'}>
               <Box>
-                <Button onClick={logic.handleSubmit(logic.onSubmit)}>
+                <Button
+                  onClick={logic.handleSubmit(logic.onSubmit)}
+                  disabled={!logic.isDirty}
+                >
                   <ArrowTopRightIcon /> Set
                 </Button>
               </Box>

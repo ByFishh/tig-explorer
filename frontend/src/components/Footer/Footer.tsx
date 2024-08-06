@@ -4,7 +4,7 @@ import PeopleCard from '../PeopleCard/PeopleCard';
 
 const Footer = () => {
   return (
-    <Box style={{ background: '#0B0B0B', borderRadius: '10px' }} p="4">
+    <Box p="4" mt="9">
       <Flex align="center" justify="between">
         <Flex align="center">
           <Text weight="bold" size="2">
@@ -16,10 +16,6 @@ const Footer = () => {
           </Text>
         </Flex>
         <Flex align="center">
-          <Text size="2" weight="regular">
-            Developped by
-          </Text>
-          <Separator orientation="vertical" size="2" mx="3" />
           <Flex gap="5">
             <PeopleCard
               name="ByFish"

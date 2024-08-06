@@ -11,12 +11,8 @@ const Notifications = () => {
     <div className="notifications-container">
       {logic.notifications.map((n) => (
         <Callout.Root
-          className="notifications-card"
-          style={{
-            background:
-              n.state === INotificationState.SUCCESS ? '#3e7949' : '#b54548',
-            color: 'white',
-          }}
+          className={'notifications-card'}
+          color={n.state === INotificationState.SUCCESS ? 'grass' : 'ruby'}
           key={n.id}
           mt="3"
           highContrast
