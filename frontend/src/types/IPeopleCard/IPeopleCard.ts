@@ -5,5 +5,6 @@ export type IPeopleCard = {
     twitter?: string;
     github?: string;
     support?: string;
+    linkedin?: string;
   };
 };
