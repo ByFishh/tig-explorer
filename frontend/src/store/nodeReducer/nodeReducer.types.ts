@@ -1,7 +1,8 @@
 import { INode } from '@/types/INode/INode';
+import { Immutable } from '../../types/Immutable/Immutable';
 
 export type S = {
-  node: INode | null;
+  node: Immutable<INode | null>;
   dispatch: (args: { action: IAction; payload?: unknown }) => void;
 };
 
