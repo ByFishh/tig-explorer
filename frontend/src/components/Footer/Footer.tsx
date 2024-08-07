@@ -23,6 +23,7 @@ const Footer = () => {
               link={{
                 twitter: 'https://twitter.com/ByFishh',
                 github: 'https://github.com/ByFishh',
+                linkedin: 'https://www.linkedin.com/in/theomaringer/',
                 support: '0xf859de92a63070c54d05e33a4e99d707a34fdb12',
               }}
             />
@@ -32,6 +33,8 @@ const Footer = () => {
               link={{
                 github: 'https://github.com/R0BIN0',
                 support: '0x9E15688dFF888A88B35bF602C12ece0275065159',
+                linkedin:
+                  'https://www.linkedin.com/in/robin-blanquart-44107122b/',
               }}
             />
           </Flex>
