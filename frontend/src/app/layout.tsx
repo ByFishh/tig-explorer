@@ -17,11 +17,12 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
+    site: '@tigexplorer',
     title: 'TIG Explorer',
     description:
       'View and manage your TIG nodes with a single click in an all-in-one dashboard',
     images:
-      'https://res.cloudinary.com/e-tech-test/image/upload/v1723055711/tig-frame_indhyd.png',
+      'https://res.cloudinary.com/e-tech-test/image/upload/v1723065076/banner_ip9jdf.png',
   },
   openGraph: {
     type: 'website',
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     title: 'TIG Explorer',
     images:
-      'https://res.cloudinary.com/e-tech-test/image/upload/v1723055711/tig-frame_indhyd.png',
+      'https://res.cloudinary.com/e-tech-test/image/upload/v1723065076/banner_ip9jdf.png',
     description:
       'View and manage your TIG nodes with a single click in an all-in-one dashboard',
     siteName: 'TIG Explorer',
