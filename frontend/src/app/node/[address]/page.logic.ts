@@ -10,6 +10,8 @@ import { INodeInputs } from '@/types/INodeInputs/INodeInputs';
 import { convertMonthToHour } from '@/utils/convertMonthToHour';
 import { getNodeBase } from '@/apis/node/node.action';
 import { getBalance } from '@/apis/balance/balance.action';
+import { getAverageSinceStart } from '@/utils/getAverageSinceStart';
+import { getCostSinceStartPerNode } from '@/utils/getCostSinceStartPerNode';
 
 export const usePage = (address: string) => {
   const { node, dispatch } = useNode();
@@ -46,6 +48,44 @@ export const usePage = (address: string) => {
     return !!item?.serverCost;
   };
 
+  const nodeHasStartDate = () => {
+    if (!ls.getItem({ key: ILocalStorageKey.NODES })) return false;
+    const item: INodeInputs = ls.findItemById({
+      key: ILocalStorageKey.NODES,
+      id: address,
+    });
+    return !!item?.startDate;
+  };
+
+  const getAverageTigSinceStart = (): number | null => {
+    if (!ls.getItem({ key: ILocalStorageKey.NODES })) return null;
+    const item: INodeInputs = ls.findItemById({
+      key: ILocalStorageKey.NODES,
+      id: address,
+    });
+    if (!item.startDate || !node) return null;
+    const { hours, total } = getAverageSinceStart(
+      item.startDate,
+      node.total_earned.reward,
+    );
+    return total / hours;
+  };
+
+  const getCostSinceStart = (): number | null => {
+    if (!ls.getItem({ key: ILocalStorageKey.NODES })) return null;
+    const item: INodeInputs = ls.findItemById({
+      key: ILocalStorageKey.NODES,
+      id: address,
+    });
+    if (!item.startDate || !item.serverCost || !node) return null;
+    const costSinceStart = getCostSinceStartPerNode(
+      item.serverCost,
+      item.startDate ?? '',
+      node?.total_earned.reward,
+    );
+    return costSinceStart;
+  };
+
   const renderCards = () => setRender([]);
 
   const getCostPerTig = (): number => {
@@ -65,5 +105,8 @@ export const usePage = (address: string) => {
     nodeIsConfigured,
     renderCards,
     getCostPerTig,
+    getAverageTigSinceStart,
+    nodeHasStartDate,
+    getCostSinceStart,
   };
 };

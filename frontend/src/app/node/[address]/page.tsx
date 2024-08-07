@@ -98,7 +98,7 @@ export default function Page({ params }: { params: { address: string } }) {
             {logic.nodeIsConfigured() ? (
               <Flex style={{ flexFlow: 'column' }}>
                 <Text as="p" size="2" mb="0" color="gray">
-                  Cost per {IUnit.TIG} ({IUnit.DOLLARD})
+                  Cost per {IUnit.TIG} (Last 2h) ({IUnit.DOLLARD})
                 </Text>
                 <Text as="p" size="7" weight="medium">
                   <span style={{ fontSize: '.825rem' }}>{IUnit.DOLLARD}</span>
@@ -117,12 +117,58 @@ export default function Page({ params }: { params: { address: string } }) {
           </Flex>
           <Flex style={{ flexFlow: 'column' }}>
             <Text as="p" size="2" mb="0" color="gray">
-              Average earned ({IUnit.TIG_PER_HOUR})
+              Average earned (Last 2h) ({IUnit.TIG_PER_HOUR})
             </Text>
             <Text as="p" size="7" weight="medium">
               {Number(logic.node?.average_rewards.reward).toFixed(2)}
               <span style={{ fontSize: '.825rem' }}>{IUnit.TIG_PER_HOUR}</span>
             </Text>
+          </Flex>
+
+          <Flex pr="2">
+            {!!logic.nodeHasStartDate() && !!logic.nodeIsConfigured() ? (
+              <Flex style={{ flexFlow: 'column' }}>
+                <Text as="p" size="2" mb="0" color="gray">
+                  Cost per {IUnit.TIG} (Since start) ({IUnit.DOLLARD})
+                </Text>
+                <Text as="p" size="7" weight="medium">
+                  <span style={{ fontSize: '.825rem' }}>{IUnit.DOLLARD}</span>
+                  {logic.getCostSinceStart()?.toFixed(2)}
+                </Text>
+              </Flex>
+            ) : (
+              <Text size="2" color="red">
+                You must enter a server cost and a start date in the{' '}
+                <span style={{ textDecoration: 'underline' }}>
+                  Configure Node
+                </span>{' '}
+                before you can access this data.
+              </Text>
+            )}
+          </Flex>
+
+          <Flex pr="2">
+            {!!logic.nodeHasStartDate() ? (
+              <Flex style={{ flexFlow: 'column' }}>
+                <Text as="p" size="2" mb="0" color="gray">
+                  Average earned (Since start) ({IUnit.TIG_PER_HOUR})
+                </Text>
+                <Text as="p" size="7" weight="medium">
+                  {logic.getAverageTigSinceStart()?.toFixed(2)}
+                  <span style={{ fontSize: '.825rem' }}>
+                    {IUnit.TIG_PER_HOUR}
+                  </span>
+                </Text>
+              </Flex>
+            ) : (
+              <Text size="2" color="red">
+                You must enter a start date in the{' '}
+                <span style={{ textDecoration: 'underline' }}>
+                  Configure Node
+                </span>{' '}
+                before you can access this data.
+              </Text>
+            )}
           </Flex>
         </>
       ),
