@@ -8,8 +8,32 @@ import App from '@/components/App/App';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Tig explorer',
-  description: 'You will find here all the information about your Tig node',
+  title: {
+    default: 'TIG Explorer',
+    template: '%s - TIG Explorer',
+  },
+  description:
+    'View and manage your TIG nodes with a single click in an all-in-one dashboard',
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TIG Explorer',
+    description:
+      'View and manage your TIG nodes with a single click in an all-in-one dashboard',
+    images:
+      'https://res.cloudinary.com/e-tech-test/image/upload/v1723055711/tig-frame_indhyd.png',
+  },
+  openGraph: {
+    type: 'website',
+    url: 'https://tig-explorer.com/',
+    locale: 'en_US',
+    title: 'TIG Explorer',
+    images:
+      'https://res.cloudinary.com/e-tech-test/image/upload/v1723055711/tig-frame_indhyd.png',
+    description:
+      'View and manage your TIG nodes with a single click in an all-in-one dashboard',
+    siteName: 'TIG Explorer',
+  },
 };
 
 export default function RootLayout({
