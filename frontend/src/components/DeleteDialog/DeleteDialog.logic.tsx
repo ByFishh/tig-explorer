@@ -2,7 +2,7 @@
 import { useDialogs } from '@/store/dialogsReducer/dialogsReducer';
 import { IAction as DialogAction } from '@/store/dialogsReducer/dialogsReducer.types';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import * as ls from '../../utils/localStorage';
 import { IAction as NodesAction } from '../../store/nodesReducer/nodesReducer.types';
 import { useNodes } from '@/store/nodesReducer/nodesReducer';
@@ -12,12 +12,14 @@ import { useNotifications } from '@/store/notificationsReducer/notificationsRedu
 import { IAction as NotifcationAction } from '@/store/notificationsReducer/notificationsReducer.types';
 import { v4 as uuidv4 } from 'uuid';
 import { INotificationState } from '@/types/INotificationState/INotificationState';
+import { useTableDataContext } from '@/context/TableDataContext/TableDataContext';
 
 export const useDeleteDialog = () => {
   const { isOpen, data, dispatch: dialogsDispatch } = useDialogs();
   const { dispatch: nodesDispatch } = useNodes();
   const { dispatch: tableDataDispatch } = useTableData();
   const { dispatch: notificationsDispatch } = useNotifications();
+  const { onNodeDelete } = useTableDataContext();
 
   const closeModal = useCallback(() => {
     dialogsDispatch({ action: DialogAction.CLOSE_MODAL });
@@ -28,7 +30,7 @@ export const useDeleteDialog = () => {
       key: ILocalStorageKey.NODES,
       id: data.id,
     });
-    data.action(data.id);
+    onNodeDelete(data.id);
     nodesDispatch({ action: NodesAction.REMOVE_NODE, payload: data.id });
     tableDataDispatch({
       action: TableDataAction.REMOVE_TABLE_DATA,

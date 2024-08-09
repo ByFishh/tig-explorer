@@ -7,6 +7,7 @@ import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import DialogsContainer from '../DialogsContainer/DialogsContainer';
 import Notifications from '../Notifications/Notifications';
 import Footer from '../Footer/Footer';
+import { TableDataContext } from '@/context/TableDataContext/TableDataContext';
 
 const Navbar = dynamic(() => import('../Navbar/Navbar'), {
   ssr: false,
@@ -27,7 +28,7 @@ const App = ({
   }, []);
 
   return (
-    <>
+    <TableDataContext>
       <Navbar />
       <DialogsContainer />
       <Notifications />
@@ -39,7 +40,7 @@ const App = ({
         {children}
       </Container>
       <Footer />
-    </>
+    </TableDataContext>
   );
 };
 
