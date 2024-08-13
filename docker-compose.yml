@@ -1,0 +1,40 @@
+services:
+  database:
+    image: postgres:latest
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8083:3000"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=${POSTGRES_PORT}
+    networks:
+      - internal
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8084:3000"
+
+networks:
+  internal:
+
+volumes:
+  pgdata:
