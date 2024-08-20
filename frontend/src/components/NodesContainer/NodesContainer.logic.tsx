@@ -34,23 +34,32 @@ export const useNodesContainer = (props: INodesContainer) => {
 
   const getAllServerNodes = async () => {
     const nodesPreview: ITableData[] = tableDataRef.current;
-    for (const n of nodes) {
-      const nodeIsAlreadyHere = tableDataRef.current.find((i) => i.id === n.id);
-      if (nodeIsAlreadyHere) continue;
-      let newNode: ITableData = {} as any;
-      await getNodePreview(n.id)
-        .then((node) => {
-          newNode = { ...node, ...n, invalid: false };
-        })
-        .catch(() => {
-          newNode = {
+    const batchSize = 10;
+
+    for (let i = 0; i < nodes.length; i += batchSize) {
+      const nodeBatch = nodes.slice(i, i + batchSize);
+
+      const batchPromises = nodeBatch.map(async (n: any) => {
+        const nodeIsAlreadyHere = tableDataRef.current.find((i: any) => i.id === n.id);
+        if (nodeIsAlreadyHere) return null;
+
+        try {
+          const nodePreview = await getNodePreview(n.id);
+          return { ...nodePreview, ...n, invalid: false } as ITableData;
+        } catch {
+          return {
             total_earned: { address: n.id, reward: 0 },
             average_rewards: { address: n.id, reward: 0 },
             ...n,
             invalid: true,
-          };
-        });
-      tableDataRef.current.push(newNode);
+          } as ITableData;
+        }
+      });
+
+      const newNodes = await Promise.all(batchPromises);
+      const validNewNodes = newNodes.filter((node: any) => node !== null) as ITableData[];
+
+      tableDataRef.current.push(...validNewNodes);
 
       tableDataDispatch({
         action: TableDataAction.SET_TABLE_DATA,
@@ -58,4 +67,5 @@ export const useNodesContainer = (props: INodesContainer) => {
       });
     }
   };
+
 };
