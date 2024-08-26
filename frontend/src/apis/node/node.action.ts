@@ -28,7 +28,7 @@ const _getNodePreview = z
     ),
   )
   .implement(async (params) => {
-    const res = await axios.get(`${BASE_API_URL}/nodes/${params}/preview`);
+    const res = await axios.get(`${BASE_API_URL}/benchmarker/${params}/preview`);
     return res.data.node;
   });
 
