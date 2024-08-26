@@ -12,7 +12,7 @@ const _getNodeBase = z
   .args(addressSchema.shape.id)
   .returns(z.promise(baseNodeSchema))
   .implement(async (params) => {
-    const res = await axios.get(`${BASE_API_URL}/nodes/${params}`);
+    const res = await axios.get(`${BASE_API_URL}/benchmarker/${params}`);
     return res.data.node;
   });
 
