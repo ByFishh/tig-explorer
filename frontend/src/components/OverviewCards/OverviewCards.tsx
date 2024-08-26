@@ -8,7 +8,7 @@ const OverviewCards = () => {
   const logic = useOverviewCards();
   return (
     <>
-      {!!logic.getNodes.valid.length && (
+      {!!logic.getBenchmarkers.valid.length && (
         <>
           <Flex py="4" mt="4">
             <Heading as="h2" weight="medium">

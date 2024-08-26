@@ -19,10 +19,10 @@ const App = ({
   children: React.ReactNode;
 }>) => {
   useEffect(() => {
-    initializeStorage({ key: ILocalStorageKey.NODES, defaultValue: [] });
+    initializeStorage({ key: ILocalStorageKey.BENCHMARKERS, defaultValue: [] });
     initializeStorage({ key: ILocalStorageKey.TIG_PRICE, defaultValue: 0 });
     initializeStorage({
-      key: ILocalStorageKey.SHOW_INVALID_NODES,
+      key: ILocalStorageKey.SHOW_INVALID_BENCHMARKERS,
       defaultValue: true,
     });
   }, []);

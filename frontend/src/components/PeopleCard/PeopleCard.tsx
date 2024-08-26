@@ -44,7 +44,7 @@ const PeopleCard = (props: IPeopleCard) => {
             </Text>
             <Flex gap="1" ml="2">
               {links.map((item) => {
-                if (!item.link) return <></>;
+                if (!item.link) return <div key={uuidv4()}></div>;
                 return (
                   <a
                     key={uuidv4()}

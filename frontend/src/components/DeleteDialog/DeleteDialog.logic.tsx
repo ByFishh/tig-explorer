@@ -4,8 +4,8 @@ import { IAction as DialogAction } from '@/store/dialogsReducer/dialogsReducer.t
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { useCallback, useContext } from 'react';
 import * as ls from '../../utils/localStorage';
-import { IAction as NodesAction } from '../../store/nodesReducer/nodesReducer.types';
-import { useNodes } from '@/store/nodesReducer/nodesReducer';
+import { IAction as BenchmarkersAction } from '../../store/benchmarkersReducer/benchmarkersReducer.types';
+import { usebenchmarkers } from '@/store/benchmarkersReducer/benchmarkersReducer';
 import { useTableData } from '@/store/tableDataReducer/tableDataReducer';
 import { IAction as TableDataAction } from '@/store/tableDataReducer/tableDataReducer.types';
 import { useNotifications } from '@/store/notificationsReducer/notificationsReducer';
@@ -16,10 +16,10 @@ import { useTableDataContext } from '@/context/TableDataContext/TableDataContext
 
 export const useDeleteDialog = () => {
   const { isOpen, data, dispatch: dialogsDispatch } = useDialogs();
-  const { dispatch: nodesDispatch } = useNodes();
+  const { dispatch: benchmarkersDispatch } = usebenchmarkers();
   const { dispatch: tableDataDispatch } = useTableData();
   const { dispatch: notificationsDispatch } = useNotifications();
-  const { onNodeDelete } = useTableDataContext();
+  const { onBenchmarkerDelete: onBenchmarkerDelete } = useTableDataContext();
 
   const closeModal = useCallback(() => {
     dialogsDispatch({ action: DialogAction.CLOSE_MODAL });
@@ -27,11 +27,11 @@ export const useDeleteDialog = () => {
 
   const handleSubmit = () => {
     ls.removeItem({
-      key: ILocalStorageKey.NODES,
+      key: ILocalStorageKey.BENCHMARKERS,
       id: data.id,
     });
-    onNodeDelete(data.id);
-    nodesDispatch({ action: NodesAction.REMOVE_NODE, payload: data.id });
+    onBenchmarkerDelete(data.id);
+    benchmarkersDispatch({ action: BenchmarkersAction.REMOVE_BENCHMARKER, payload: data.id });
     tableDataDispatch({
       action: TableDataAction.REMOVE_TABLE_DATA,
       payload: data.id,
@@ -42,7 +42,7 @@ export const useDeleteDialog = () => {
       payload: {
         id: uuidv4(),
         state: INotificationState.SUCCESS,
-        message: 'Node deleted with success',
+        message: 'Benchmarker deleted with success',
       },
     });
 

@@ -13,14 +13,14 @@ export const metadata: Metadata = {
     template: '%s - TIG Explorer',
   },
   description:
-    'View and manage your TIG nodes with a single click in an all-in-one dashboard',
+    'View and manage your TIG benchmarkers with a single click in an all-in-one dashboard',
 
   twitter: {
     card: 'summary_large_image',
     site: '@tigexplorer',
     title: 'TIG Explorer',
     description:
-      'View and manage your TIG nodes with a single click in an all-in-one dashboard',
+      'View and manage your TIG benchmarkers with a single click in an all-in-one dashboard',
     images:
       'https://res.cloudinary.com/e-tech-test/image/upload/v1723065076/banner_ip9jdf.png',
   },
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     images:
       'https://res.cloudinary.com/e-tech-test/image/upload/v1723065076/banner_ip9jdf.png',
     description:
-      'View and manage your TIG nodes with a single click in an all-in-one dashboard',
+      'View and manage your TIG benchmarkers with a single click in an all-in-one dashboard',
     siteName: 'TIG Explorer',
   },
 };

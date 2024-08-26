@@ -1,7 +1,7 @@
 import { useDialogs } from '@/store/dialogsReducer/dialogsReducer';
 import { IModals } from '@/types/IModals/IModals';
 import { useMemo } from 'react';
-import NodeDialog from '../NodeDialog/NodeDialog';
+import BenchmarkerDialog from '../BenchmarkerDialog/BenchmarkerDialog';
 import DollarDialog from '../DollarDialog/DollarDialog';
 import DeleteDialog from '../DeleteDialog/DeleteDialog';
 
@@ -11,13 +11,13 @@ export const useDialogsContainer = () => {
   const displayDialogs = useMemo(
     () => [
       {
-        key: IModals.NODE,
-        show: isOpen === IModals.NODE,
-        content: <NodeDialog />,
+        key: IModals.BENCHMARKER,
+        show: isOpen === IModals.BENCHMARKER,
+        content: <BenchmarkerDialog />,
       },
       {
-        key: IModals.DELETE_NODE,
-        show: isOpen === IModals.DELETE_NODE,
+        key: IModals.DELETE_BENCHMARKER,
+        show: isOpen === IModals.DELETE_BENCHMARKER,
         content: <DeleteDialog />,
       },
       {

@@ -2,18 +2,18 @@ import { useCallback } from 'react';
 import { IAction as DialogsAction } from '@/store/dialogsReducer/dialogsReducer.types';
 import { useDialogs } from '@/store/dialogsReducer/dialogsReducer';
 import { IModals } from '@/types/IModals/IModals';
-import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
+import { IbenchmarkerDialogType } from '@/types/IBenchmarkerDialogType/IBenchmarkerDialogType';
 import { IMenu } from '@/types/IMenu/IMenu';
 
 export const useMenu = (props: IMenu) => {
   const { dispatch: dialogsDispatch } = useDialogs();
 
-  const openNodeDialog = useCallback(() => {
+  const openBenchmarkerDialog = useCallback(() => {
     dialogsDispatch({
       action: DialogsAction.OPEN_MODAL,
       payload: {
-        isOpen: IModals.NODE,
-        data: { type: INodeDialogType.EDIT, id: props.address },
+        isOpen: IModals.BENCHMARKER,
+        data: { type: IbenchmarkerDialogType.EDIT, id: props.address },
       },
     });
   }, [props.address]);
@@ -22,11 +22,11 @@ export const useMenu = (props: IMenu) => {
     dialogsDispatch({
       action: DialogsAction.OPEN_MODAL,
       payload: {
-        isOpen: IModals.DELETE_NODE,
+        isOpen: IModals.DELETE_BENCHMARKER,
         data: { id: props.address, action: props.onAction },
       },
     });
   }, [props.address]);
 
-  return { openNodeDialog, openDeleteDialog };
+  return { openBenchmarkerDialog, openDeleteDialog };
 };

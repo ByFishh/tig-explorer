@@ -30,7 +30,7 @@ const Menu = (props: IMenu) => {
             color="gray"
             variant="soft"
             style={styles}
-            onClick={logic.openNodeDialog}
+            onClick={logic.openBenchmarkerDialog}
           >
             <Pencil1Icon /> Edit
           </Button>

@@ -15,12 +15,14 @@ export const TableDataContext: React.FC<{ children: ReactNode }> = ({
 }) => {
   const tableDataRef = useRef<ITableData[]>([]);
 
-  const onNodeDelete = useCallback((id: string) => {
+  const onBenchmarkerDelete = useCallback((id: string) => {
     tableDataRef.current = tableDataRef.current.filter((tdr) => tdr.id !== id);
   }, []);
 
   return (
-    <Context.Provider value={{ tableDataRef, onNodeDelete }}>
+    <Context.Provider
+      value={{ tableDataRef, onBenchmarkerDelete: onBenchmarkerDelete }}
+    >
       {children}
     </Context.Provider>
   );

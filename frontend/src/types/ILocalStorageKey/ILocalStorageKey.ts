@@ -1,5 +1,5 @@
 export enum ILocalStorageKey {
-  NODES = 'nodes',
+  BENCHMARKERS = 'benchmarkers',
   TIG_PRICE = 'tig_price',
-  SHOW_INVALID_NODES = 'show_invalid_nodes',
+  SHOW_INVALID_BENCHMARKERS = 'show_invalid_benchmarkers',
 }

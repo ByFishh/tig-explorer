@@ -24,10 +24,10 @@ const Configure = (props: IConfigure) => {
         <Flex gap="3" align="center" mb="7">
           <Box>
             <Text as="p" size="6" weight="medium" mb="1">
-              Configure Node
+              Configure Benchmarker
             </Text>
             <Text as="p" size="2" color="gray">
-              Setup all personnal datas relative to your node
+              Setup all personnal datas relative to your benchmarker
             </Text>
           </Box>
         </Flex>
@@ -63,7 +63,7 @@ const Configure = (props: IConfigure) => {
               Personnal server
             </Text>
             <Text as="p" size="2" color="gray">
-              Setup all personnal datas relative to your node
+              Setup all personnal datas relative to your benchmarker
             </Text>
           </Box>
           <Grid columns="2" gap="6">

@@ -18,7 +18,7 @@ const ImportExcelTemplate = () => {
       >
         download template from this link
       </span>{' '}
-      and import your nodes with Excel
+      and import your benchmarkers with Excel
     </Text>
   );
 };
