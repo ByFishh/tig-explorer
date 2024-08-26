@@ -1,4 +1,4 @@
-import { INodeInputs } from '@/types/INodeInputs/INodeInputs';
+import { IBenchmarkerInputs } from '@/types/IBenchmarkerInputs/IBenchmarkerInputs';
 import { useRef } from 'react';
 import * as ls from '../../utils/localStorage';
 import { format } from 'date-fns';
@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 import { z } from 'zod';
 import { removeDuplicate } from '@/utils/removeDuplicates';
 
-const nodeSchema = z.object({
+const benchmarkerSchema = z.object({
   id: z.string().max(42).min(1),
   notes: z.string().optional().default(''),
   startDate: z.string().optional().nullable().default(null),
@@ -35,32 +35,32 @@ export const useImportExcel = () => {
       const wb = XLSX.read(binaryStr, { type: 'binary' });
       const ws = wb.Sheets[wb.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1 }) as any[][];
-      const nodes = jsonData.slice(1).map((row: any[]) => ({
+      const benchmarkers = jsonData.slice(1).map((row: any[]) => ({
         id: row[0],
         notes: row[1],
         startDate: row[2] ? excelDateToDate(row[2]) : undefined,
         coreNumber: row[3] ? Number(row[3]) : undefined,
         serverCost: row[4] ? Number(row[4]) : 0,
       }));
-      const removeBlanks = nodes.filter((i) => i.id);
+      const removeBlanks = benchmarkers.filter((i) => i.id);
       const filteredData = removeDuplicate(removeBlanks);
       if (!filteredData) return;
-      const datas = filteredData.map((node) => nodeSchema.parse(node));
-      setNodesToLocalStorage(datas);
+      const datas = filteredData.map((benchmarker) => benchmarkerSchema.parse(benchmarker));
+      setBenchmarkersToLocalStorage(datas);
     };
     reader.readAsBinaryString(file);
   };
 
-  const setNodesToLocalStorage = (data: INodeInputs[]) => {
+  const setBenchmarkersToLocalStorage = (data: IBenchmarkerInputs[]) => {
     data.forEach((d) => {
       const isAlreadyHere = ls.findItemById({
-        key: ILocalStorageKey.NODES,
+        key: ILocalStorageKey.BENCHMARKERS,
         id: d.id,
       });
       if (isAlreadyHere) {
-        ls.updateItem({ key: ILocalStorageKey.NODES, updatedItem: d });
+        ls.updateItem({ key: ILocalStorageKey.BENCHMARKERS, updatedItem: d });
       } else {
-        ls.pushItem({ key: ILocalStorageKey.NODES, item: d });
+        ls.pushItem({ key: ILocalStorageKey.BENCHMARKERS, item: d });
       }
     });
 

@@ -15,10 +15,10 @@ import { useDeleteDialog } from './DeleteDialog.logic';
 const DeleteDialog = () => {
   const logic = useDeleteDialog();
   return (
-    <Dialog.Root open={logic.isOpen === IModals.DELETE_NODE}>
+    <Dialog.Root open={logic.isOpen === IModals.DELETE_BENCHMARKER}>
       <Dialog.Content size="4">
         <Flex justify="between" align="center">
-          <Dialog.Title size="5">Delete node</Dialog.Title>
+          <Dialog.Title size="5">Delete benchmarker</Dialog.Title>
           <Dialog.Close>
             <Flex>
               <IconButton
@@ -37,8 +37,9 @@ const DeleteDialog = () => {
             </Callout.Icon>
             <Callout.Text>
               <span style={{ textDecoration: 'underline' }}>WARNING</span> If
-              you delete your node, there will be no way of recovering it. You
-              will of course be able to recreate it with the same information.
+              you delete your benchmarker, there will be no way of recovering
+              it. You will of course be able to recreate it with the same
+              information.
             </Callout.Text>
           </Callout.Root>
         </Dialog.Description>

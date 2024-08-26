@@ -1,14 +1,14 @@
-import { INodeInputs } from '@/types/INodeInputs/INodeInputs';
+import { IBenchmarkerInputs } from '@/types/IBenchmarkerInputs/IBenchmarkerInputs';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { handleFormData } from './Configure.utils';
 import * as ls from '../../utils/localStorage';
-import { useNode } from '@/store/nodeReducer/nodeReducer';
+import { useBenchmarker } from '@/store/benchmarkerReducer/benchmarkerReducer';
 import { ILocalStorageKey } from '@/types/ILocalStorageKey/ILocalStorageKey';
 import { useEffect, useState } from 'react';
 import { IConfigure } from '@/types/IConfigure/IConfigure';
 import { formatDate } from '@/utils/formatDate';
 
-const inputs: INodeInputs = {
+const inputs: IBenchmarkerInputs = {
   id: '',
   notes: '',
   serverCost: 0,
@@ -22,44 +22,52 @@ export const useConfigure = (props: IConfigure) => {
     control,
     setValue,
     formState: { isDirty },
-  } = useForm<INodeInputs>({
+  } = useForm<IBenchmarkerInputs>({
     defaultValues: inputs,
   });
-  const { node } = useNode();
+  const { benchmarker: benchmarker } = useBenchmarker();
 
   useEffect(() => {
-    const id = node?.wallet_balance.address;
+    const id = benchmarker?.address;
     if (!id) return;
     getInitialConfig();
-  }, [node?.wallet_balance.address]);
+  }, [benchmarker?.address]);
 
   const getInitialConfig = () => {
-    const id = node?.wallet_balance.address;
+    const id = benchmarker?.address;
     if (!id) return;
-    const currentConfig: INodeInputs = ls.findItemById({
-      key: ILocalStorageKey.NODES,
+    const currentConfig: IBenchmarkerInputs = ls.findItemById({
+      key: ILocalStorageKey.BENCHMARKERS,
       id,
     });
-    const config: INodeInputs = handleFormData(currentConfig);
+    const config: IBenchmarkerInputs = handleFormData(currentConfig);
     Object.keys(inputs).map((i) =>
-      setValue(i as any, config[i as keyof INodeInputs]),
+      setValue(i as any, config[i as keyof IBenchmarkerInputs]),
     );
   };
 
-  const onSubmit: SubmitHandler<INodeInputs> = (data: INodeInputs) => {
+  const onSubmit: SubmitHandler<IBenchmarkerInputs> = (
+    data: IBenchmarkerInputs,
+  ) => {
     data.startDate = formatDate(data.startDate);
     const item = handleFormData(data);
-    const id = node?.wallet_balance.address;
+    const id = benchmarker?.address;
     if (!id) return;
-    const isAlreadyExist = ls.findItemById({ key: ILocalStorageKey.NODES, id });
-    const newItem = { ...item, id: node.wallet_balance.address };
+    const isAlreadyExist = ls.findItemById({
+      key: ILocalStorageKey.BENCHMARKERS,
+      id,
+    });
+    const newItem = { ...item, id: benchmarker.address };
     if (isAlreadyExist) {
       // Edit
-      ls.updateItem({ key: ILocalStorageKey.NODES, updatedItem: newItem });
+      ls.updateItem({
+        key: ILocalStorageKey.BENCHMARKERS,
+        updatedItem: newItem,
+      });
     } else {
       // Add
       ls.pushItem({
-        key: ILocalStorageKey.NODES,
+        key: ILocalStorageKey.BENCHMARKERS,
         item: newItem,
       });
     }

@@ -1,7 +1,9 @@
-import { INodeInputs } from '@/types/INodeInputs/INodeInputs';
+import { IBenchmarkerInputs } from '@/types/IBenchmarkerInputs/IBenchmarkerInputs';
 import { unformatDate } from '../../utils/formatDate';
 
-export const handleFormData = (data: INodeInputs): INodeInputs => {
+export const handleFormData = (
+  data: IBenchmarkerInputs,
+): IBenchmarkerInputs => {
   return {
     id: data?.id ?? '',
     notes: data?.notes ?? '',

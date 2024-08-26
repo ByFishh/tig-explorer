@@ -1,8 +1,8 @@
 import { IAverageRewards } from '../IAverageRewards/IAverageRewards';
-import { INodeInputs } from '../INodeInputs/INodeInputs';
+import { IBenchmarkerInputs } from '../IBenchmarkerInputs/IBenchmarkerInputs';
 import { ITotalEarned } from '../ITotalEarned/ITotalEarned';
 
-export type ITableData = INodeInputs & {
+export type ITableData = IBenchmarkerInputs & {
   total_earned: ITotalEarned;
   average_rewards: IAverageRewards;
   invalid: boolean;

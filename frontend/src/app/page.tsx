@@ -2,7 +2,7 @@
 import { Flex, Heading, Section } from '@radix-ui/themes';
 import { usePage } from './page.logic';
 import Loader from '@/components/Loader/Loader';
-import NodesContainer from '@/components/NodesContainer/NodesContainer';
+import BenchmarkersContainer from '@/components/BenchmarkersContainer/BenchmarkersContainer';
 
 export default function Home() {
   const logic = usePage();
@@ -17,7 +17,7 @@ export default function Home() {
           <Heading as="h1" size="8" weight="medium">
             Overview
           </Heading>
-          <NodesContainer trigger={logic.triggerLoader} />
+          <BenchmarkersContainer trigger={logic.triggerLoader} />
         </Flex>
       </Section>
     </>

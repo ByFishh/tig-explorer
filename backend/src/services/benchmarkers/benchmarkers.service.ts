@@ -168,6 +168,7 @@ export class BenchmarkersService {
     ]);
 
     return {
+      address,
       round,
       round_rewards: roundRewards,
       total_earned: totalEarned,
@@ -184,6 +185,7 @@ export class BenchmarkersService {
     ]);
 
     return {
+      address,
       total_earned: totalEarned,
       average_rewards: averageRewards,
     };
