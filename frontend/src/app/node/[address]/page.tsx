@@ -259,7 +259,7 @@ export default function Page({ params }: { params: { address: string } }) {
           <Flex gap="4" style={{ flexFlow: 'column' }}>
             <ChartContainer
               title="Qualifiers"
-              description="The numlber of qualifiers during the last 120 blocks (2 hours)"
+              description="The number of qualifiers during the last 120 blocks (2 hours)"
               type={IChartType.LINE}
               data={{
                 labels: logic.node.block_rewards.blocks.map((b) =>

@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { RoundRewardsService } from '../services';
+import { RoundRewardsService } from '../../services/round-rewards/round-rewards.service';
 
 @Controller('round-rewards')
 export class RoundRewardsController {

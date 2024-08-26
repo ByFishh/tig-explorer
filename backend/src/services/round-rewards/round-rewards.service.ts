@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { TigService } from './tig.service';
+import { TigService } from '../tig/tig.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RoundReward } from '../entities';
+import { RoundReward } from '../../entities/round-reward.entity';
 import { formatEther } from 'viem';
 
 @Injectable()

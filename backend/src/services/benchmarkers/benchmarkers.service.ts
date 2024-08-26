@@ -2,11 +2,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Address, createPublicClient, formatEther, http, parseAbi } from 'viem';
 import { base } from 'viem/chains';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BlockReward, RoundReward } from '../entities';
+import { BlockReward, RoundReward } from '../../entities';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class NodesService {
+export class BenchmarkersService {
   private _publicClient = createPublicClient({
     chain: base,
     transport: http(),
@@ -85,7 +85,7 @@ export class NodesService {
       where: {},
       order: { height: 'DESC' },
     });
-    return await Promise.all(
+    const tmp = await Promise.all(
       addresses.map(async (address) => {
         const blockRewards = await this.blockRewardsRepository.find({
           where: { address: address.toLowerCase() },
@@ -162,6 +162,7 @@ export class NodesService {
         return tmp;
       }),
     );
+    return tmp;
   }
 
   async getBlockRewards(addresses: string[], length: number) {
@@ -172,7 +173,7 @@ export class NodesService {
     const latestBlock = latestBlockReward?.height || 0;
     const emptyArray = Array.from({ length }, (_, i) => latestBlock - i);
 
-    return await Promise.all(
+    const tmp = await Promise.all(
       addresses.map(async (address) => {
         const blockRewards = await this.blockRewardsRepository.find({
           where: { address: address.toLowerCase() },
@@ -201,6 +202,8 @@ export class NodesService {
         };
       }),
     );
+
+    return tmp;
   }
 
   async getAverageRewards(addresses: string[], length: number) {
@@ -230,18 +233,26 @@ export class NodesService {
     if (!address || address.length !== 42)
       throw new BadRequestException('Invalid address');
 
-    const roundRewards = (await this.getRoundRewards([address]))[0];
-    const totalEarned = (await this.getTotalEarned([address]))[0];
-    const lastRewards = (await this.getLastRewards([address]))[0];
-    const averageRewards = (await this.getAverageRewards([address], 120))[0];
-    const blockRewards = (await this.getBlockRewards([address], 120))[0];
+    const [
+      roundRewards,
+      totalEarned,
+      lastRewards,
+      averageRewards,
+      blockRewards,
+    ] = await Promise.all([
+      this.getRoundRewards([address]),
+      this.getTotalEarned([address]),
+      this.getLastRewards([address]),
+      this.getAverageRewards([address], 120),
+      this.getBlockRewards([address], 120),
+    ]);
 
     return {
-      round_rewards: roundRewards,
-      total_earned: totalEarned,
-      last_rewards: lastRewards,
-      average_rewards: averageRewards,
-      block_rewards: blockRewards,
+      round_rewards: roundRewards[0],
+      total_earned: totalEarned[0],
+      last_rewards: lastRewards[0],
+      average_rewards: averageRewards[0],
+      block_rewards: blockRewards[0],
     };
   }
 
@@ -249,8 +260,10 @@ export class NodesService {
     if (!address || address.length !== 42)
       throw new BadRequestException('Invalid address');
 
-    const totalEarned = (await this.getTotalEarned([address]))[0];
-    const averageRewards = (await this.getAverageRewards([address], 120))[0];
+    const [totalEarned, averageRewards] = await Promise.all([
+      this.getTotalEarned([address]),
+      this.getAverageRewards([address], 120),
+    ]);
 
     return {
       total_earned: totalEarned,

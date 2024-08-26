@@ -1,6 +1,6 @@
 import { IsArray, IsNumber } from 'class-validator';
 
-export class GetBlockRewardsDto {
+export class GetBlockRewardsRequestDto {
   @IsArray()
   addresses: string[];
 

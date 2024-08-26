@@ -1,19 +1,24 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
+@Index(['address', 'round'])
 @Entity()
 export class BlockReward {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column()
   height: number;
 
+  @Index()
   @Column()
   round: number;
 
+  @Index()
   @Column()
   block_id: string;
 
+  @Index()
   @Column()
   address: string;
 
