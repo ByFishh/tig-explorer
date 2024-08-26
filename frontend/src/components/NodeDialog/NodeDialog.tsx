@@ -24,6 +24,7 @@ import DatePicker from '../DatePicker/DatePicker';
 import { INodeDialogType } from '@/types/INodeDialogType/INodeDialogType';
 import ImportExcel from '../ImportExcel/ImportExcel';
 import ImportExcelTemplate from '../ImportExcelTemplate/ImportExcelTemplate';
+import { NOTES_MAX_LENGTH } from '@/const/const';
 
 const NodeDialog = () => {
   const logic = useNodeDialog();
@@ -118,7 +119,7 @@ const NodeDialog = () => {
                     Notes (optional)
                   </Text>
                   <Text as="span" size="2" weight="medium" mb="1">
-                    {field.value ? field.value.length : 0}/100
+                    {field.value ? field.value.length : 0}/{NOTES_MAX_LENGTH}
                   </Text>
                 </Flex>
                 <TextArea
