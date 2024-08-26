@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { BlockRewardsService } from '../services';
+import { BlockRewardsService } from '../../services';
 
 @Controller('block-rewards')
 export class BlockRewardsController {
@@ -11,3 +11,4 @@ export class BlockRewardsController {
     await this.blockRewardsService.retrieveLatestBlockRewards();
   }
 }
+

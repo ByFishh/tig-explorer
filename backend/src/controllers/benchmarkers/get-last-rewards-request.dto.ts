@@ -1,6 +1,6 @@
 import { IsArray } from 'class-validator';
 
-export class GetLastRewardsDto {
+export class GetLastRewardsRequestDto {
   @IsArray()
   addresses: string[];
 }

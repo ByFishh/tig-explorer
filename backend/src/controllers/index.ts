@@ -1,11 +1,15 @@
-import { BlockRewardsController } from './block-rewards.controller';
-import { NodesController } from './nodes.controller';
-import { RoundRewardsController } from './round-rewards.controller';
+import { BlockRewardsController } from './block-rewards/block-rewards.controller';
+import { BenchmarkersController } from './benchmarkers/benchmarkers.controller';
+import { RoundRewardsController } from './round-rewards/round-rewards.controller';
 
-export { RoundRewardsController, BlockRewardsController, NodesController };
+export {
+  BlockRewardsController,
+  BenchmarkersController,
+  RoundRewardsController,
+};
 
 export default [
-  RoundRewardsController,
   BlockRewardsController,
-  NodesController,
+  BenchmarkersController,
+  RoundRewardsController,
 ];

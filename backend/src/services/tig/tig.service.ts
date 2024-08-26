@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GetBlockResponse, GetPlayersResponse } from '../types/tig';
+import { GetBlockResponse, GetPlayersResponse } from '@/types/tig';
 import axios from 'axios';
 
 @Injectable()

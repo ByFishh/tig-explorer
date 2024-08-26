@@ -1,8 +1,8 @@
+import { BlockReward } from '../../entities';
 import { Injectable } from '@nestjs/common';
-import { TigService } from './tig.service';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TigService } from '../../services/tig/tig.service';
 import { Repository } from 'typeorm';
-import { BlockReward } from '../entities';
 import { formatEther } from 'viem';
 
 @Injectable()
@@ -20,9 +20,7 @@ export class BlockRewardsService {
     const blockRewardsExist = await this.blockRewardsRepository.findOne({
       where: { block_id: id },
     });
-
     if (blockRewardsExist) return;
-
     const blockRewards = await this.getBlockRewards(id);
     await this.blockRewardsRepository.save(blockRewards);
   }
@@ -35,9 +33,7 @@ export class BlockRewardsService {
     let blockRewards = [];
     getPlayersResponse.players.forEach((player) => {
       const challenges = player.block_data.num_qualifiers_by_challenge;
-
       if (!challenges) return;
-
       blockRewards.push({
         height: getPlayersResponse.block_details.height,
         round: getPlayersResponse.block_details.round,
