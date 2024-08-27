@@ -95,10 +95,10 @@ export class BenchmarkersService {
 
     tmp.hourly.change =
       ((tmp.hourly.current - tmp.hourly.previous) / tmp.hourly.previous || 1) *
-      100;
+        100 || 0;
     tmp.daily.change =
       ((tmp.daily.current - tmp.daily.previous) / tmp.daily.previous || 1) *
-      100;
+        100 || 0;
     return tmp;
   }
 
@@ -172,7 +172,7 @@ export class BenchmarkersService {
       round,
       round_rewards: roundRewards,
       total_earned: totalEarned,
-      average_rewards: averageRewards,
+      average_rewards: averageRewards || 0,
       last_rewards: lastRewards,
       block_rewards: blockRewards,
     };
@@ -187,7 +187,7 @@ export class BenchmarkersService {
     return {
       address,
       total_earned: totalEarned,
-      average_rewards: averageRewards,
+      average_rewards: averageRewards || 0,
     };
   }
 }

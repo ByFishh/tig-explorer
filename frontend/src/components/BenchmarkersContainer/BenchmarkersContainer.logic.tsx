@@ -50,6 +50,9 @@ export const useBenchmarkersContainer = (props: IBenchmarkersContainer) => {
         if (benchmarkerIsAlreadyHere) return null;
 
         try {
+          const regex = new RegExp('^(0x)?[0-9a-fA-F]{40}$');
+          if (!regex.test(n.id)) throw new Error('Invalid address');
+
           const benchmarkerPreview = await getBenchmarkerPreview(n.id);
           return { ...benchmarkerPreview, ...n, invalid: false } as ITableData;
         } catch {
